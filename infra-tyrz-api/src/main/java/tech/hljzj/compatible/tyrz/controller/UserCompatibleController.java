@@ -1,9 +1,11 @@
 package tech.hljzj.compatible.tyrz.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,16 +14,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import tech.hljzj.compatible.tyrz.util.AppHelper;
 import tech.hljzj.compatible.tyrz.vo.user.userDetails.UserDetails;
-
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.security.BasicAuthenticationManager;
 import tech.hljzj.framework.security.an.Anonymous;
 import tech.hljzj.framework.security.bean.LoginUser;
+import tech.hljzj.framework.util.app.AppScopeHolder;
 import tech.hljzj.framework.util.password.ParamEncryption;
 import tech.hljzj.infrastructure.domain.VSysUser;
 import tech.hljzj.infrastructure.service.SysDeptService;
 import tech.hljzj.infrastructure.service.SysUserService;
-import tech.hljzj.framework.util.app.AppScopeHolder;
 
 /**
  * 这里是统一认证的兼容接口
@@ -39,6 +40,12 @@ public class UserCompatibleController extends MController {
     private SysUserService sysUserService;
     @Autowired
     private SysDeptService sysDeptService;
+
+    @RequestMapping("server/time")
+    public String serverTime() {
+        return DateUtil.now();
+    }
+
 
     /**
      * 这里需要调用登录
@@ -61,6 +68,9 @@ public class UserCompatibleController extends MController {
             //这里直接响应token
             return success(details.getAccessToken());
         } catch (IllegalArgumentException e) {
+            log.warn("客户端请求登录认证失败", e);
+            return BeanUtil.copyProperties(R.code(902).setMsg(e.getMessage()), R.class);
+        } catch (AuthenticationServiceException e) {
             log.warn("客户端请求登录认证失败", e);
             return BeanUtil.copyProperties(R.code(902).setMsg(e.getMessage()), R.class);
         } catch (Exception e) {

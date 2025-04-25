@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -140,14 +141,27 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
     @Override
     public SysConfig getByKey(String key) {
-        return getOne(Wrappers
+        String firstQueryAppId = StrUtil.blankToDefault(AppScopeHolder.getScopeAppId(), AppConst.ID);
+        SysConfig config = getOne(Wrappers
                         .<SysConfig>lambdaQuery()
                         .eq(SysConfig::getKey, key)
-                        .eq(SysConfig::getOwnerAppId, StrUtil.blankToDefault(AppScopeHolder.getScopeAppId(), AppConst.ID))
+                        .eq(SysConfig::getOwnerAppId, firstQueryAppId)
                         .orderByAsc(SysConfig::getSort)
                         .orderByDesc(SysConfig::getCreateTime)
                         .orderByDesc(SysConfig::getId)
                 , false);
+
+        if (config == null && !StrUtil.equals(AppConst.ID, firstQueryAppId)) {
+            return getOne(Wrappers
+                            .<SysConfig>lambdaQuery()
+                            .eq(SysConfig::getKey, key)
+                            .eq(SysConfig::getOwnerAppId, AppConst.ID)
+                            .orderByAsc(SysConfig::getSort)
+                            .orderByDesc(SysConfig::getCreateTime)
+                            .orderByDesc(SysConfig::getId)
+                    , false);
+        }
+        return config;
     }
 
     @Override

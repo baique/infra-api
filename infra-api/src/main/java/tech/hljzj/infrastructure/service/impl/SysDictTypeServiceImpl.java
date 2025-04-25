@@ -7,9 +7,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.service.IDictService;
 import tech.hljzj.framework.service.SortService;
 import tech.hljzj.framework.service.entity.DictData;
+import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.infrastructure.domain.SysDictData;
 import tech.hljzj.infrastructure.domain.SysDictType;
 import tech.hljzj.infrastructure.mapper.SysDictTypeMapper;
@@ -51,6 +53,11 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
 
     @Override
     public boolean entityCreate(SysDictType entity) {
+        if (baseMapper.exists(Wrappers.lambdaQuery(SysDictType.class)
+                .eq(SysDictType::getKey, entity.getKey())
+        )) {
+            throw UserException.defaultError(MsgUtil.t("data.exists", "字典组标识"));
+        }
         return save(entity);
     }
 
@@ -58,6 +65,12 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
     @Override
     public boolean entityUpdate(SysDictType entity) {
         SysDictType existsEntity = getById(entity.getId());
+        if (baseMapper.exists(Wrappers.lambdaQuery(SysDictType.class)
+                .eq(SysDictType::getKey, entity.getKey())
+                .ne(SysDictType::getId, existsEntity.getId())
+        )) {
+            throw UserException.defaultError(MsgUtil.t("data.exists", "字典组标识"));
+        }
         existsEntity.updateForm(entity);
         return updateById(existsEntity);
     }

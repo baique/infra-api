@@ -13,6 +13,7 @@ import tech.hljzj.framework.service.IDictService;
 import tech.hljzj.framework.service.SortService;
 import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.infrastructure.code.AppConst;
+import tech.hljzj.infrastructure.domain.SysApp;
 import tech.hljzj.infrastructure.domain.SysDictData;
 import tech.hljzj.infrastructure.mapper.SysDictDataMapper;
 import tech.hljzj.infrastructure.service.SysDictDataService;
@@ -49,6 +50,11 @@ public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataMapper, SysDi
 
     @Override
     public boolean entityCreate(SysDictData entity) {
+        if (baseMapper.exists(Wrappers.lambdaQuery(SysDictData.class)
+                .eq(SysDictData::getKey, entity.getKey())
+        )) {
+            throw UserException.defaultError(MsgUtil.t("data.exists", "字典数据标识"));
+        }
         return save(entity);
     }
 
@@ -59,6 +65,12 @@ public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataMapper, SysDi
         // 如果数据依然是锁定的
         if (Objects.equals(AppConst.YES, existsEntity.getLocked()) && Objects.equals(existsEntity.getLocked(), entity.getLocked())) {
             throw UserException.defaultError(MsgUtil.t("data.locked", "字典数据"));
+        }
+        if (baseMapper.exists(Wrappers.lambdaQuery(SysDictData.class)
+                .eq(SysDictData::getKey, entity.getKey())
+                .ne(SysDictData::getId, existsEntity.getId())
+        )) {
+            throw UserException.defaultError(MsgUtil.t("data.exists", "字典数据标识"));
         }
         existsEntity.updateForm(entity);
         return updateById(existsEntity);

@@ -3,9 +3,12 @@ package tech.hljzj.infrastructure.config;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import tech.hljzj.framework.cache.CommonCache;
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.security.AppObtainPassword;
 import tech.hljzj.framework.security.SecurityProvider;
@@ -24,9 +27,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class LocalSecurityProvider implements SecurityProvider {
 
     @Autowired
@@ -41,15 +46,30 @@ public class LocalSecurityProvider implements SecurityProvider {
     private SysAppService sysAppService;
     @Autowired
     private SysMenuService sysMenuService;
+    @Autowired
+    private CommonCache commonCache;
+    @Autowired
+    private SysConfigService sysConfigService;
+    @Autowired
+    private SysUserLockService sysUserLockService;
+
 
     @Override
     public UserInfo login(Authentication authentication) throws Exception {
         String scopeAppId = StrUtil.blankToDefault(AppScopeHolder.getScopeAppId(), "0");
-        SysApp app = sysAppService.getById(scopeAppId);
+        SysApp app = sysAppService.getOne(Wrappers.<SysApp>lambdaQuery()
+                        .eq(SysApp::getId, scopeAppId)
+                        .or()
+                        .eq(SysApp::getKey, scopeAppId)
+                , false);
         if (app == null) {
             throw UserException.defaultError(MsgUtil.t("auth.illegalLoginRequests"));
         }
         String username = (String) authentication.getPrincipal();
+        if (sysUserLockService.isLocked(username)) {
+            // 这里不考虑跨年情况，以展示为主
+            throw UserException.defaultError("由于您多次登录失败，当前账号已被锁定");
+        }
 
         // 获取用户输入的明文密码
         String password = obtainPassword.obtainPassword((String) authentication.getCredentials());
@@ -62,6 +82,22 @@ public class LocalSecurityProvider implements SecurityProvider {
         }
         // 用户密码校验,这里如果当前密码为空，代表了这个迁移而来的数据，需要使用旧密码登录，旧密码需要携带加密方式和盐
         if (!validatePassword(password, principal)) {
+            String key = "login:fail:" + username;
+            Object v = commonCache.get(key);
+            int prevFailCount = 0;
+            if (!StrUtil.isBlankIfStr(v)) {
+                prevFailCount = Integer.parseInt(v.toString());
+            }
+            prevFailCount += 1;
+            // 如果用户持续失败
+            commonCache.put(key, prevFailCount, 1, TimeUnit.HOURS);
+
+            String mxLockCount = sysConfigService.getValueByKey(AppConst.CONFIG_MAX_TRY_LOGIN_COUNT);
+
+            if (prevFailCount > Integer.parseInt(mxLockCount)) {
+                sysUserLockService.lock(username);
+                throw UserException.defaultError("由于您多次登录失败，当前账号已被锁定");
+            }
             return null;
         }
 
@@ -71,7 +107,6 @@ public class LocalSecurityProvider implements SecurityProvider {
 
     public UserInfo buildLoginInfo(VSysUser principal, SysApp scopeApp) {
         String scopeAppId = scopeApp.getId();
-
         SysDept deptInfo = sysDeptService.entityGet(principal.getDeptId());
 
         List<SysRole> sysRoles = sysUserService.listGrantRoleOfUser(principal.getId(), scopeAppId);

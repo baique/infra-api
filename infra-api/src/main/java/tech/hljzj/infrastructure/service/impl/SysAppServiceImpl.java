@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.hljzj.framework.exception.UserException;
+import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.infrastructure.domain.*;
 import tech.hljzj.infrastructure.mapper.SysAppMapper;
 import tech.hljzj.infrastructure.mapper.SysConfigMapper;
@@ -64,6 +65,16 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     @Override
     @CacheEvict(cacheNames = CAHCE_NAME, allEntries = true)
     public boolean entityCreate(SysApp entity) {
+        if (baseMapper.exists(Wrappers.lambdaQuery(SysApp.class)
+                .eq(SysApp::getKey, entity.getKey())
+        )) {
+            throw UserException.defaultError(MsgUtil.t("data.exists", "应用标识"));
+        }
+        if (baseMapper.exists(Wrappers.lambdaQuery(SysApp.class)
+                .eq(SysApp::getName, entity.getName())
+        )) {
+            throw UserException.defaultError(MsgUtil.t("data.exists", "应用名称"));
+        }
         return save(entity);
     }
 
@@ -72,6 +83,18 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     @CacheEvict(cacheNames = CAHCE_NAME, allEntries = true)
     public boolean entityUpdate(SysApp entity) {
         SysApp existsEntity = getById(entity.getId());
+        if (baseMapper.exists(Wrappers.lambdaQuery(SysApp.class)
+                .eq(SysApp::getKey, entity.getKey())
+                .ne(SysApp::getId, existsEntity.getId())
+        )) {
+            throw UserException.defaultError(MsgUtil.t("data.exists", "应用标识"));
+        }
+        if (baseMapper.exists(Wrappers.lambdaQuery(SysApp.class)
+                .eq(SysApp::getName, entity.getName())
+                .ne(SysApp::getId, existsEntity.getId())
+        )) {
+            throw UserException.defaultError(MsgUtil.t("data.exists", "应用名称"));
+        }
         existsEntity.updateForm(entity);
         return updateById(existsEntity);
     }
@@ -81,7 +104,6 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     @Transactional(rollbackFor = Exception.class)
     public boolean entityDelete(SysApp entity) {
         //如果需要删除应用，那么必须保证该应用下的数据已经完全无用
-
         if (sysUserRoleService.exists(Wrappers
                 .<SysUserRole>lambdaQuery()
                 .eq(SysUserRole::getAppId, entity.getId())
@@ -90,7 +112,7 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         }
 
         //删除角色菜单关联
-        sysRoleMenuService.remove(Wrappers.<SysRoleMenu>query().eq("owner_app_id_", entity.getId()));
+        sysRoleMenuService.remove(Wrappers.<SysRoleMenu>query().eq("app_id_", entity.getId()));
         //删除角色
         sysRoleService.remove(Wrappers.<SysRole>query().eq("owner_app_id_", entity.getId()));
         //删除菜单
@@ -104,7 +126,8 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(cacheNames = CAHCE_NAME, allEntries = true)
     public boolean entityBatchDelete(Collection<Serializable> ids) {
-        return removeBatchByIds(ids);
+        listByIds(ids).forEach(this::entityDelete);
+        return true;
     }
 
 

@@ -348,6 +348,11 @@ public class SysUserController extends BaseController {
         ));
     }
 
+    /**
+     * 重置密码
+     *
+     * @param userId 用户标识
+     */
     @Log(title = MODULE_NAME, functionName = "重置密码", operType = BusinessType.UPDATE, isSaveRequestData = false, isSaveResponseData = false)
     @PostMapping("resetPassword")
     public R<Void> resetPassword(String userId) {
@@ -355,6 +360,13 @@ public class SysUserController extends BaseController {
         return R.ok();
     }
 
+    /**
+     * 修改密码
+     *
+     * @param userId      用户标识
+     * @param oldPassword 原密码
+     * @param newPassword 新密码
+     */
     @Log(title = MODULE_NAME, functionName = "修改密码", operType = BusinessType.UPDATE, isSaveRequestData = false, isSaveResponseData = false)
     @PostMapping("changePassword")
     public R<Void> changePassword(String userId, String oldPassword, String newPassword) {

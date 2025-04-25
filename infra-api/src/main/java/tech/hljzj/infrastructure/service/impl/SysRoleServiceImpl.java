@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.service.SortService;
+import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.infrastructure.domain.SysMenu;
 import tech.hljzj.infrastructure.domain.SysRole;
 import tech.hljzj.infrastructure.domain.SysRoleMenu;
@@ -62,6 +63,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public boolean entityCreate(SysRole entity) {
+        if (baseMapper.exists(Wrappers.lambdaQuery(SysRole.class)
+                .eq(SysRole::getKey, entity.getKey())
+        )) {
+            throw UserException.defaultError(MsgUtil.t("data.exists", "角色标识"));
+        }
         return save(entity);
     }
 
@@ -69,6 +75,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public boolean entityUpdate(SysRole entity) {
         SysRole existsEntity = getById(entity.getId());
+        if (baseMapper.exists(Wrappers.lambdaQuery(SysRole.class)
+                .eq(SysRole::getKey, entity.getKey())
+                .ne(SysRole::getId, entity.getId())
+        )) {
+            throw UserException.defaultError(MsgUtil.t("data.exists", "角色标识"));
+        }
         existsEntity.updateForm(entity);
         return updateById(existsEntity);
     }

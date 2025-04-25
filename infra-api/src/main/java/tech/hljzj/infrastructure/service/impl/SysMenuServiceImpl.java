@@ -18,6 +18,7 @@ import tech.hljzj.framework.pojo.vo.RouterMeta;
 import tech.hljzj.framework.security.SystemUser;
 import tech.hljzj.framework.security.bean.LoginUser;
 import tech.hljzj.framework.security.bean.TokenAuthentication;
+import tech.hljzj.framework.security.bean.UserInfo;
 import tech.hljzj.framework.service.IRouterService;
 import tech.hljzj.framework.service.SortService;
 import tech.hljzj.framework.util.app.AppScopeHolder;
@@ -210,10 +211,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<Router> getRouters() {
         TokenAuthentication authentication = AuthUtil.getAuthentication();
-        LoginUser u = authentication.getPrincipal();
+        UserInfo u = authentication.getPrincipal().getUserInfo();
         SysMenuQueryVo queryVo = new SysMenuQueryVo();
-        queryVo.setOwnerAppId(StrUtil.blankToDefault(AppScopeHolder.getScopeAppId(), "0"));
-        boolean isSuperSuperSuperSuperSuperVeryVeryVeryVeryVeryVeryNbClassAdmin = u.getUserInfo().getRole().contains(SystemUser.GLOBAL_PERM);
+        queryVo.setOwnerAppId(StrUtil.blankToDefault(u.getAppId(), "0"));
+        boolean isSuperSuperSuperSuperSuperVeryVeryVeryVeryVeryVeryNbClassAdmin = u.getRole().contains(SystemUser.GLOBAL_PERM);
         if (!isSuperSuperSuperSuperSuperVeryVeryVeryVeryVeryVeryNbClassAdmin) {
             queryVo.setKeyIn(authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)

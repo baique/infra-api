@@ -337,7 +337,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         );
     }
 
-
     @Override
     public void changePassword(String userId, String oldPassword, String newPassword) {
         SysUser user = getById(userId);
