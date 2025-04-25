@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.hljzj.infrastructure.mapper.SysMenuMapper">
+
+	<resultMap type="SysMenu" id="SysMenuResult">
+		<id     property="id"        column="id_"       />
+		<result property="ownerAppId"        column="owner_app_id_"     />
+		<result property="key"        column="key_"     />
+		<result property="name"        column="name_"     />
+		<result property="status"        column="status_"     />
+		<result property="desc"        column="desc_"     />
+		<result property="defaultGrant"        column="default_grant_"     />
+		<result property="visible"        column="visible_"     />
+		<result property="menuType"        column="menu_type_"     />
+		<result property="path"        column="path_"     />
+		<result property="component"        column="component_"     />
+		<result property="icon"        column="icon_"     />
+		<result property="tag"        column="tag_"     />
+		<result property="classes"        column="classes_"     />
+		<result property="sort"        column="sort_"     />
+		<result property="parentId"        column="parent_id_"     />
+		<result property="createBy"      column="create_by"     />
+		<result property="createTime"    column="create_time"   />
+		<result property="updateBy"      column="update_by"     />
+		<result property="updateTime"    column="update_time"   />
+		<result property="remark"        column="remark"        />
+    <result property="ownerUserId" column="owner_user_id_"            />
+    <result property="ownerUserAccount" column="owner_user_account_"  />
+    <result property="ownerDeptId" column="owner_dept_id_"            />
+	</resultMap>
+	
+	<sql id="selectAllField">
+        select 
+		    id_,
+		    owner_app_id_,
+		    key_,
+		    name_,
+		    status_,
+		    desc_,
+		    default_grant_,
+		    visible_,
+		    menu_type_,
+		    path_,
+		    component_,
+		    icon_,
+		    tag_,
+		    classes_,
+		    sort_,
+		    parent_id_,
+        create_by,
+        create_time,
+        update_by,
+        update_time,
+        remark,
+        owner_user_id_,
+        owner_user_account_,
+        owner_dept_id_
+		    from sys_menu_
+    </sql>
+</mapper>

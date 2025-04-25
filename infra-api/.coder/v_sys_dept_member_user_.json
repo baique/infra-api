@@ -1,0 +1,746 @@
+{
+  "server": {
+    "serverAddress": "",
+    "author": "wa",
+    "codeSelector": [
+      "new-admin",
+      "web-new"
+    ]
+  },
+  "genConfig": {
+    "perm": "v_sys_dept_member_user_",
+    "key": "v_sys_dept_member_user_",
+    "name": "部门成员",
+    "packageName": "tech.hljzj.infrastructure",
+    "author": "",
+    "description": "",
+    "primaryKeyColumn": "id",
+    "dateTime": "",
+    "params": {
+      "extendBizBaseEntity": "biz"
+    }
+  },
+  "genColumn": [
+    {
+      "key": "id_",
+      "name": "id_",
+      "type": "String",
+      "description": null,
+      "list": false,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_id_",
+      "name": "dept_id_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "username_",
+      "name": "username_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "password_",
+      "name": "password_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 65535,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "old_password_",
+      "name": "old_password_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 65535,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "nickname_",
+      "name": "nickname_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "realname_",
+      "name": "realname_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "sex_",
+      "name": "sex_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "card_type_",
+      "name": "card_type_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "card_no_",
+      "name": "card_no_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "phone_",
+      "name": "phone_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 50,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "email_",
+      "name": "email_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "work_addr_",
+      "name": "work_addr_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 65535,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "work_unit_",
+      "name": "work_unit_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "work_pos_",
+      "name": "work_pos_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "work_rank_",
+      "name": "work_rank_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "home_addr_",
+      "name": "home_addr_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 65535,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "home_phone_",
+      "name": "home_phone_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "source_",
+      "name": "source_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "sort_",
+      "name": "sort_",
+      "type": "Integer",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 10,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "status_",
+      "name": "status_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "account_lock_",
+      "name": "account_lock_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "owner_user_id_",
+      "name": "owner_user_id_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "owner_user_account_",
+      "name": "owner_user_account_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "owner_dept_id_",
+      "name": "owner_dept_id_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "owner_dept_code_",
+      "name": "owner_dept_code_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "owner_dept_name_",
+      "name": "owner_dept_name_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "create_by_",
+      "name": "create_by_",
+      "type": "String",
+      "description": null,
+      "list": false,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "create_time_",
+      "name": "create_time_",
+      "type": "Date",
+      "description": null,
+      "list": false,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 19,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "update_by_",
+      "name": "update_by_",
+      "type": "String",
+      "description": null,
+      "list": false,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "update_time_",
+      "name": "update_time_",
+      "type": "Date",
+      "description": null,
+      "list": false,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 19,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "last_change_password_",
+      "name": "last_change_password_",
+      "type": "Date",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 19,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_key_",
+      "name": "dept_key_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 100,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_name_",
+      "name": "dept_name_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_alias_",
+      "name": "dept_alias_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 100,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_short_name_",
+      "name": "dept_short_name_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 100,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_type_",
+      "name": "dept_type_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_usc_no_",
+      "name": "dept_usc_no_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 100,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_addr_no_",
+      "name": "dept_addr_no_",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "owner_type",
+      "name": "owner_type",
+      "type": "Long",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 19,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    }
+  ],
+  "serverConfig": {}
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="FacetManager">
+    <facet type="Spring" name="Spring">
+      <configuration>
+        <fileset id="fileset" name="Spring 应用程序上下文" removed="false">
+          <file>jar://$MODULE_DIR$/../../../../../maven/repo/tech/hljzj/framework-core/1.0/framework-core-1.0.jar!/tech/hljzj/framework/Bootstrap.class</file>
+          <file>jar://$MODULE_DIR$/../../../../../maven/repo/tech/hljzj/framework-core/1.0/framework-core-1.0.jar!/tech/hljzj/framework/config/DataSourceConfig.class</file>
+          <file>jar://$MODULE_DIR$/../../../../../maven/repo/tech/hljzj/framework-core/1.0/framework-core-1.0.jar!/tech/hljzj/framework/config/properties/DruidProperties.class</file>
+          <file>jar://$MODULE_DIR$/../../../../../maven/repo/tech/hljzj/framework-core/1.0/framework-core-1.0.jar!/tech/hljzj/framework/config/InfrastructureConfig.class</file>
+          <file>jar://$MODULE_DIR$/../../../../../maven/repo/tech/hljzj/framework-core/1.0/framework-core-1.0.jar!/tech/hljzj/framework/config/JacksonConfig.class</file>
+          <file>jar://$MODULE_DIR$/../../../../../maven/repo/tech/hljzj/framework-core/1.0/framework-core-1.0.jar!/tech/hljzj/framework/config/mybatis/MybatisPlusConfig.class</file>
+          <file>jar://$MODULE_DIR$/../../../../../maven/repo/tech/hljzj/framework-core/1.0/framework-core-1.0.jar!/tech/hljzj/framework/config/RedisConfig.class</file>
+          <file>jar://$MODULE_DIR$/../../../../../maven/repo/tech/hljzj/framework-core/1.0/framework-core-1.0.jar!/tech/hljzj/framework/config/RedisSerializationConfig.class</file>
+          <file>jar://$MODULE_DIR$/../../../../../maven/repo/tech/hljzj/framework-core/1.0/framework-core-1.0.jar!/tech/hljzj/framework/config/RedisTemplateRegister.class</file>
+          <file>jar://$MODULE_DIR$/../../../../../maven/repo/tech/hljzj/framework-core/1.0/framework-core-1.0.jar!/tech/hljzj/framework/security/SecurityConfig.class</file>
+          <file>file://$MODULE_DIR$/../../../../../maven/repo/tech/hljzj/framework-core/1.0/framework-core-1.0.jar</file>
+        </fileset>
+      </configuration>
+    </facet>
+  </component>
+</module>

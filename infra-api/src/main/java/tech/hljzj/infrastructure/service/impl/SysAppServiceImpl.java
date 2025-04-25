@@ -1,0 +1,163 @@
+package tech.hljzj.infrastructure.service.impl;
+
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import tech.hljzj.framework.exception.UserException;
+import tech.hljzj.infrastructure.domain.*;
+import tech.hljzj.infrastructure.mapper.SysAppMapper;
+import tech.hljzj.infrastructure.mapper.SysConfigMapper;
+import tech.hljzj.infrastructure.service.*;
+import tech.hljzj.infrastructure.vo.SysApp.SysAppExport;
+import tech.hljzj.infrastructure.vo.SysApp.SysAppQueryVo;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+/**
+ * 应用管理 sys_app
+ * 业务实现
+ *
+ * @author wa
+ */
+@Service
+public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> implements SysAppService {
+
+    public static final String CAHCE_NAME = "sys:app";
+    private final SysUserRoleService sysUserRoleService;
+    private final SysRoleService sysRoleService;
+    private final SysRoleMenuService sysRoleMenuService;
+    private final SysMenuService sysMenuService;
+    private final SysConfigMapper sysConfigMapper;
+    private final SysConfigService sysConfigService;
+
+
+    public SysAppServiceImpl(SysUserRoleService sysUserRoleService, SysRoleService sysRoleService, SysRoleMenuService sysRoleMenuService, SysMenuService sysMenuService, SysConfigMapper sysConfigMapper, SysConfigService sysConfigService) {
+        this.sysUserRoleService = sysUserRoleService;
+        this.sysRoleService = sysRoleService;
+        this.sysRoleMenuService = sysRoleMenuService;
+        this.sysMenuService = sysMenuService;
+        this.sysConfigMapper = sysConfigMapper;
+        this.sysConfigService = sysConfigService;
+    }
+
+    @Override
+    public SysApp entityGet(SysApp entity) {
+        return getOne(Wrappers.query(entity));
+    }
+
+    @Override
+    @Cacheable(cacheNames = CAHCE_NAME, key = "#id")
+    public SysApp entityGet(Serializable id) {
+        return getById(id);
+    }
+
+
+    @Override
+    @CacheEvict(cacheNames = CAHCE_NAME, allEntries = true)
+    public boolean entityCreate(SysApp entity) {
+        return save(entity);
+    }
+
+
+    @Override
+    @CacheEvict(cacheNames = CAHCE_NAME, allEntries = true)
+    public boolean entityUpdate(SysApp entity) {
+        SysApp existsEntity = getById(entity.getId());
+        existsEntity.updateForm(entity);
+        return updateById(existsEntity);
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean entityDelete(SysApp entity) {
+        //如果需要删除应用，那么必须保证该应用下的数据已经完全无用
+
+        if (sysUserRoleService.exists(Wrappers
+                .<SysUserRole>lambdaQuery()
+                .eq(SysUserRole::getAppId, entity.getId())
+        )) {
+            throw UserException.defaultError("如要删除应用必须先清空应用中已授予用户的角色、菜单信息。");
+        }
+
+        //删除角色菜单关联
+        sysRoleMenuService.remove(Wrappers.<SysRoleMenu>query().eq("owner_app_id_", entity.getId()));
+        //删除角色
+        sysRoleService.remove(Wrappers.<SysRole>query().eq("owner_app_id_", entity.getId()));
+        //删除菜单
+        sysMenuService.remove(Wrappers.<SysMenu>query().eq("owner_app_id_", entity.getId()));
+        //最后删除应用
+        return removeById(entity);
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(cacheNames = CAHCE_NAME, allEntries = true)
+    public boolean entityBatchDelete(Collection<Serializable> ids) {
+        return removeBatchByIds(ids);
+    }
+
+
+    @Override
+    public Page<SysApp> page(SysAppQueryVo query) {
+        Page<SysApp> pageConfig = query.buildPagePlus();
+        // add default order
+        pageConfig.addOrder(OrderItem.asc("sort_"));
+        pageConfig.addOrder(OrderItem.desc("create_time_"));
+        pageConfig.addOrder(OrderItem.desc("id_"));
+        // add default order
+        return super.page(pageConfig, query.buildQueryWrapper());
+    }
+
+    @Override
+    public List<SysApp> list(SysAppQueryVo query) {
+        query.setEnablePage(false);
+        return this.page(query).getRecords();
+    }
+
+
+    @Override
+    public SysAppExport exportAppData(String appId) {
+        SysApp appInfo = getById(appId);
+        List<SysConfig> config = sysConfigService.list(Wrappers.<SysConfig>lambdaQuery()
+                .eq(SysConfig::getOwnerAppId, appId)
+        );
+        List<SysRole> role = sysRoleService.list(Wrappers.<SysRole>lambdaQuery()
+                .eq(SysRole::getOwnerAppId, appId)
+        );
+        List<SysMenu> menu = sysMenuService.list(Wrappers.<SysMenu>lambdaQuery()
+                .eq(SysMenu::getOwnerAppId, appId)
+        );
+        List<SysRoleMenu> roleMenuGrantList = sysRoleMenuService.list(Wrappers.<SysRoleMenu>lambdaQuery()
+                .in(SysRoleMenu::getRoleId, role.stream().map(SysRole::getId).collect(Collectors.toList()))
+        );
+        // 传输为一组加密的json数据
+        SysAppExport export = new SysAppExport();
+        export.setSysApp(appInfo);
+        export.setConfigList(config);
+        export.setRoleList(role);
+        export.setMenuList(menu);
+        export.setRoleMenuGrantList(roleMenuGrantList);
+        return export;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void importData(SysAppExport data) {
+        saveOrUpdate(data.getSysApp());
+        sysConfigService.saveOrUpdateBatch(data.getConfigList());
+        sysMenuService.saveOrUpdateBatch(data.getMenuList());
+        sysRoleService.saveOrUpdateBatch(data.getRoleList());
+        sysRoleMenuService.saveOrUpdateBatch(data.getRoleMenuGrantList());
+    }
+}

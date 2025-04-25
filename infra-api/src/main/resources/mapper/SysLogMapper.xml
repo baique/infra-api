@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.hljzj.infrastructure.mapper.SysLogMapper">
+
+	<resultMap type="SysLog" id="SysLogResult">
+		<id     property="id"        column="id_"       />
+		<result property="appName"        column="app_name_"     />
+		<result property="moduleName"        column="module_name_"     />
+		<result property="functionName"        column="function_name_"     />
+		<result property="operType"        column="oper_type_"     />
+		<result property="operContent"        column="oper_content_"     />
+		<result property="errorCode"        column="error_code_"     />
+		<result property="params"        column="params_"     />
+		<result property="result"        column="result_"     />
+		<result property="opAppId"        column="op_app_id_"     />
+		<result property="opUserId"        column="op_user_id_"     />
+		<result property="opUserUsername"        column="op_user_username_"     />
+		<result property="opUserRealname"        column="op_user_realname_"     />
+		<result property="opOrgId"        column="op_org_id_"     />
+		<result property="opOrgName"        column="op_org_name_"     />
+		<result property="opTime"        column="op_time_"     />
+		<result property="createBy"      column="create_by"     />
+		<result property="createTime"    column="create_time"   />
+		<result property="updateBy"      column="update_by"     />
+		<result property="updateTime"    column="update_time"   />
+		<result property="remark"        column="remark"        />
+    <result property="ownerUserId" column="owner_user_id_"            />
+    <result property="ownerUserAccount" column="owner_user_account_"  />
+    <result property="ownerDeptId" column="owner_dept_id_"            />
+	</resultMap>
+	
+	<sql id="selectAllField">
+        select 
+		    id_,
+		    app_name_,
+		    module_name_,
+		    function_name_,
+		    oper_type_,
+		    oper_content_,
+		    error_code_,
+		    params_,
+		    result_,
+		    op_app_id_,
+		    op_user_id_,
+		    op_user_username_,
+		    op_user_realname_,
+		    op_org_id_,
+		    op_org_name_,
+		    op_time_,
+        create_by,
+        create_time,
+        update_by,
+        update_time,
+        remark,
+        owner_user_id_,
+        owner_user_account_,
+        owner_dept_id_
+		    from sys_log_
+    </sql>
+</mapper>

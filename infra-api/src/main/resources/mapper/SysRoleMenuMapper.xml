@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.hljzj.infrastructure.mapper.SysRoleMenuMapper">
+
+	<resultMap type="SysRoleMenu" id="SysRoleMenuResult">
+		<id     property="id"        column="id_"       />
+		<result property="roleId"        column="role_id_"     />
+		<result property="appId"        column="app_id_"     />
+		<result property="menuId"        column="menu_id_"     />
+		<result property="createBy"      column="create_by"     />
+		<result property="createTime"    column="create_time"   />
+		<result property="updateBy"      column="update_by"     />
+		<result property="updateTime"    column="update_time"   />
+		<result property="remark"        column="remark"        />
+    <result property="ownerUserId" column="owner_user_id_"            />
+    <result property="ownerUserAccount" column="owner_user_account_"  />
+    <result property="ownerDeptId" column="owner_dept_id_"            />
+	</resultMap>
+	
+	<sql id="selectAllField">
+        select 
+		    id_,
+		    role_id_,
+		    app_id_,
+		    menu_id_,
+        create_by,
+        create_time,
+        update_by,
+        update_time,
+        remark,
+        owner_user_id_,
+        owner_user_account_,
+        owner_dept_id_
+		    from sys_role_menu_
+    </sql>
+</mapper>

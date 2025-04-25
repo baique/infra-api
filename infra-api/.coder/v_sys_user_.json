@@ -1,0 +1,765 @@
+{
+  "server": {
+    "serverAddress": "",
+    "author": "",
+    "codeSelector": [
+      "new-admin",
+      "web-new"
+    ]
+  },
+  "genConfig": {
+    "perm": "v_sys_user_",
+    "key": "v_sys_user_",
+    "name": "用户详细信息视图",
+    "packageName": "tech.hljzj.infrastructure",
+    "author": "",
+    "description": "",
+    "primaryKeyColumn": "id_",
+    "dateTime": "",
+    "params": {
+      "extendBizBaseEntity": "biz"
+    },
+    "used": true
+  },
+  "genColumn": [
+    {
+      "key": "id_",
+      "name": "id_",
+      "type": "String",
+      "description": null,
+      "list": false,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_id_",
+      "name": "所属部门",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "username_",
+      "name": "账号",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "password_",
+      "name": "密码",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1000,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "old_password_",
+      "name": "旧密码",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1000,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "nickname_",
+      "name": "昵称",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "realname_",
+      "name": "真实姓名",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "sex_",
+      "name": "性别",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "card_type_",
+      "name": "证件类型",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "card_no_",
+      "name": "证件号码",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "phone_",
+      "name": "手机号码",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 50,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "email_",
+      "name": "邮箱",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "work_addr_",
+      "name": "工作地点",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 2000,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "work_unit_",
+      "name": "工作单位",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "work_pos_",
+      "name": "工作职务",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "work_rank_",
+      "name": "工作职级",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "home_addr_",
+      "name": "家庭住址",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 2000,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "home_phone_",
+      "name": "家庭电话",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "source_",
+      "name": "用户来源",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "sort_",
+      "name": "排序编号",
+      "type": "Integer",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 10,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "status_",
+      "name": "用户状态",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "account_lock_",
+      "name": "账户是否锁定",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "owner_user_id_",
+      "name": "所属用户标识",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "owner_user_account_",
+      "name": "所属用户账号",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "owner_dept_id_",
+      "name": "所属部门标识",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "owner_dept_code_",
+      "name": "所属部门编码",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "owner_dept_name_",
+      "name": "所属部门名称",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "create_by_",
+      "name": "创建人姓名",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "create_time_",
+      "name": "创建时间",
+      "type": "Date",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 19,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "update_by_",
+      "name": "修改人姓名",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "update_time_",
+      "name": "修改时间",
+      "type": "Date",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 19,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "last_change_password_",
+      "name": "上一次修改密码时间（这里配置了一段时间仍然可以使用旧密码来登录）",
+      "type": "Date",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 19,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "node_key_",
+      "name": "本级节点标识",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 16,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "node_path_",
+      "name": "祖先节点路径",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 2000,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_key_",
+      "name": "组织标识",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_name_",
+      "name": "组织名称",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_alias_",
+      "name": "组织别名",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_short_name_",
+      "name": "组织简称",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_type_",
+      "name": "组织类型",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_usc_no_",
+      "name": "统一社会信用代码",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    },
+    {
+      "key": "dept_addr_no_",
+      "name": "所在地点编码",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false
+    }
+  ],
+  "serverConfig": {}
+}
