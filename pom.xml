@@ -28,7 +28,6 @@
 
     <modules>
         <module>infra-api</module>
-        <module>infra-tyrz-api</module>
     </modules>
 
     <dependencies>

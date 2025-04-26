@@ -364,6 +364,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                     .set(SysUser::getPassword, SMUtil.sm3(newPassword))
                     .set(SysUser::getLastChangePassword, new Date())
             );
+            return;
         }
         throw UserException.defaultError("原密码错误");
     }

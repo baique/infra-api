@@ -65,6 +65,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public boolean entityCreate(SysRole entity) {
         if (baseMapper.exists(Wrappers.lambdaQuery(SysRole.class)
                 .eq(SysRole::getKey, entity.getKey())
+                .eq(SysRole::getOwnerAppId, entity.getOwnerAppId())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "角色标识"));
         }
@@ -77,7 +78,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         SysRole existsEntity = getById(entity.getId());
         if (baseMapper.exists(Wrappers.lambdaQuery(SysRole.class)
                 .eq(SysRole::getKey, entity.getKey())
-                .ne(SysRole::getId, entity.getId())
+                .eq(SysRole::getOwnerAppId, existsEntity.getOwnerAppId())
+                .ne(SysRole::getId, existsEntity.getId())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "角色标识"));
         }

@@ -101,11 +101,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public boolean entityUpdate(SysMenu entity) {
-
-
         SysMenu existsEntity = getById(entity.getId());
-
-
         if (baseMapper.exists(Wrappers.<SysMenu>lambdaQuery()
                 .eq(SysMenu::getOwnerAppId, existsEntity.getOwnerAppId())
                 .eq(SysMenu::getKey, entity.getKey())
