@@ -2,6 +2,3 @@ root = true
 
 [*]
 charset = utf-8
-
-[*.properties]
-charset = utf-8
