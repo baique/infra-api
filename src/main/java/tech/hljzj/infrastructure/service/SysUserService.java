@@ -171,4 +171,13 @@ public interface SysUserService extends IService<SysUser> {
      * @param newPassword 新密码 ，如果新密码传入空，则由系统自动读取默认密码
      */
     void changePassword(String userId, String oldPassword, String newPassword);
+
+    /**
+     * 更新数据排序
+     *
+     * @param id       数据id
+     * @param toPrevId 前一个元素
+     * @param toNextId 后一个元素
+     */
+    void updateSortData(String id, String toPrevId, String toNextId);
 }

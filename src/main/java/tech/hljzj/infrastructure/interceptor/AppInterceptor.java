@@ -50,7 +50,7 @@ public class AppInterceptor implements BaseInterceptor {
             JWT.require(Algorithm.HMAC384(sysApp.getSecret())).build().verify(token);
             if (AuthUtil.isLogin()) {
                 LoginUser loginUser = AuthUtil.getLoginUser();
-                AppLoginUserInfo userInfo = (AppLoginUserInfo)loginUser.getUserInfo();
+                AppLoginUserInfo userInfo = (AppLoginUserInfo) loginUser.getUserInfo();
                 String s = userInfo.getLoginAppId();
                 if (!StrUtil.equals(s, id)) {
                     ReqUtil.writeResponse(response, R.fail().setMsg("非法的请求:用户会话与登录凭据不匹配"));
@@ -58,7 +58,7 @@ public class AppInterceptor implements BaseInterceptor {
             }
             return true;
         } catch (Exception e) {
-            ReqUtil.writeResponse(response, R.fail().setMsg("非法的请求"));
+            ReqUtil.writeResponse(response, R.fail().setMsg("非法的请求:无法正确解析请求客户端!"));
             return false;
         }
     }

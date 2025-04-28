@@ -87,15 +87,7 @@ public class LocalSecurityProvider implements SecurityProvider {
         if (!validatePassword(password, principal)) {
             int mxLockCount = Integer.parseInt(sysConfigService.getValueByKey(AppConst.CONFIG_MAX_TRY_LOGIN_COUNT));
             if (mxLockCount > 0) {
-                String key = "login:fail:" + username;
-                Object v = commonCache.get(key);
-                int prevFailCount = 0;
-                if (!StrUtil.isBlankIfStr(v)) {
-                    prevFailCount = Integer.parseInt(v.toString());
-                }
-                prevFailCount += 1;
-                // 如果用户持续失败
-                commonCache.put(key, prevFailCount, 1L, TimeUnit.HOURS);
+                int prevFailCount = sysUserLockService.incrLoginFail(username);
                 if (prevFailCount > mxLockCount) {
                     sysUserLockService.lock(username);
                     throw UserException.defaultError("由于您多次登录失败，当前账号已被锁定");

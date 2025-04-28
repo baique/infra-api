@@ -135,9 +135,7 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     public Page<SysApp> page(SysAppQueryVo query) {
         Page<SysApp> pageConfig = query.buildPagePlus();
         // add default order
-        pageConfig.addOrder(OrderItem.asc("sort_"));
-        pageConfig.addOrder(OrderItem.desc("create_time_"));
-        pageConfig.addOrder(OrderItem.desc("id_"));
+
         // add default order
         return super.page(pageConfig, query.buildQueryWrapper());
     }

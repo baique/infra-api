@@ -22,7 +22,14 @@ public class CompatibleSecurityProvider extends LocalSecurityProvider {
         if (super.validatePassword(password, principal)) {
             return true;
         }
-        //这里升级一下，兼容统一认证的密码校验方式
+        //首先还是检查旧的密码
+        if (principal.getOldPassword().startsWith("tyrz:")) {
+            //但这一次是直接使用用户输入的密码和加密后比较
+            if (password.equals(principal.getOldPassword().substring(5))) {
+                return true;
+            }
+        }
+        //兼容统一认证的密码校验方式
         String maskV = principal.getMaskV();
         if (StrUtil.isBlank(maskV)) {
             return false;
@@ -35,7 +42,5 @@ public class CompatibleSecurityProvider extends LocalSecurityProvider {
         } catch (Exception e) {
             return false;
         }
-
-
     }
 }

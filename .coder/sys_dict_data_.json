@@ -19,7 +19,8 @@
     "params": {
       "extendBizBaseEntity": "biz"
     },
-    "used": true
+    "used": true,
+    "hasChange": false
   },
   "genColumn": [
     {

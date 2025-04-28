@@ -1,6 +1,5 @@
 package tech.hljzj.infrastructure.controller;
 
-import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -15,11 +14,10 @@ import tech.hljzj.framework.bean.R;
 import tech.hljzj.framework.logger.BusinessType;
 import tech.hljzj.framework.logger.Log;
 import tech.hljzj.framework.util.excel.ExcelUtil;
-import tech.hljzj.infrastructure.domain.SysUser;
-import tech.hljzj.infrastructure.domain.SysUserExtAttr;
-import tech.hljzj.infrastructure.domain.SysUserManagerDept;
-import tech.hljzj.infrastructure.domain.VSysUser;
+import tech.hljzj.infrastructure.code.AppConst;
+import tech.hljzj.infrastructure.domain.*;
 import tech.hljzj.infrastructure.service.SysUserExtAttrService;
+import tech.hljzj.infrastructure.service.SysUserLockService;
 import tech.hljzj.infrastructure.service.SysUserManagerDeptService;
 import tech.hljzj.infrastructure.service.SysUserService;
 import tech.hljzj.infrastructure.vo.SysRole.GrantAppRoleVo;
@@ -50,12 +48,14 @@ public class SysUserController extends BaseController {
     private final SysUserManagerDeptService sysUserManagerDeptService;
     public static final String MODULE_NAME = "用户管理";
     private final SysUserExtAttrService sysUserExtAttrService;
+    private final SysUserLockService sysUserLockService;
 
     @Autowired
-    public SysUserController(SysUserService service, SysUserManagerDeptService sysUserManagerDeptService, SysUserExtAttrService sysUserExtAttrService) {
+    public SysUserController(SysUserService service, SysUserManagerDeptService sysUserManagerDeptService, SysUserExtAttrService sysUserExtAttrService, SysUserLockService sysUserLockService) {
         this.service = service;
         this.sysUserManagerDeptService = sysUserManagerDeptService;
         this.sysUserExtAttrService = sysUserExtAttrService;
+        this.sysUserLockService = sysUserLockService;
     }
 
     /**
@@ -67,8 +67,8 @@ public class SysUserController extends BaseController {
     @PreAuthorize("auth('sys:user:query')")
     @GetMapping("/{id}")
     @Log(title = MODULE_NAME, operType = BusinessType.DETAIL)
-    public R<SysUserDetailVo> entityGet(@PathVariable Serializable id,Boolean fetchExtAttr) {
-        SysUser dto = this.service.entityGet(id,fetchExtAttr);
+    public R<SysUserDetailVo> entityGet(@PathVariable Serializable id, Boolean fetchExtAttr) {
+        SysUser dto = this.service.entityGet(id, fetchExtAttr);
         return R.ok(new SysUserDetailVo().fromDto(dto));
     }
 
@@ -105,6 +105,26 @@ public class SysUserController extends BaseController {
         Map<String, Object> attribution = entity.getAttribution();
         updateAttribution(attribution, dto);
         return R.ok(new SysUserDetailVo().fromDto(dto));
+    }
+
+    /**
+     * 用户锁定状态调整
+     *
+     * @param userId      用户标识
+     * @param accountLock 锁定状态
+     * @return 修改后
+     */
+    @PreAuthorize("auth('sys:user:edit')")
+    @Log(title = MODULE_NAME, functionName = "修改锁定状态", operType = BusinessType.UPDATE)
+    @PostMapping("/updateLockStatus")
+    public R<Void> updateLockStatus(String userId, String accountLock) {
+        SysUser u = this.service.getById(userId);
+        if (AppConst.NOT.equals(accountLock)) {
+            sysUserLockService.unLock(u.getUsername());
+        } else {
+            sysUserLockService.lock(u.getUsername());
+        }
+        return R.ok();
     }
 
     private void updateAttribution(Map<String, Object> attribution, SysUser dto) {
@@ -183,7 +203,10 @@ public class SysUserController extends BaseController {
 
         List<SysUserListVo> list = page.getRecords().stream().map((Function<SysUser, SysUserListVo>) entity -> {
             SysUserListVo vo = new SysUserListVo();
-            return vo.fromDto(entity);
+            vo.fromDto(entity);
+            //验证当前用户是否被锁定
+            vo.setAccountLock(sysUserLockService.isLocked(entity.getUsername()) ? AppConst.YES : AppConst.NOT);
+            return vo;
         }).collect(Collectors.toList());
 
         pageVo.setRecords(list);
@@ -324,8 +347,7 @@ public class SysUserController extends BaseController {
                 .eq(SysUserManagerDept::getDeptId, deptId)
         ));
     }
-
-
+    
     /**
      * 获取用户的管辖组织
      *
@@ -366,6 +388,21 @@ public class SysUserController extends BaseController {
     @PostMapping("changePassword")
     public R<Void> changePassword(String userId, String oldPassword, String newPassword) {
         service.changePassword(userId, oldPassword, newPassword);
+        return R.ok();
+    }
+
+    /**
+     * 修改数据
+     *
+     * @param rowId     当前行ID
+     * @param prevRowId 目标位置上一行ID
+     * @param nextRowId 目标位置下一行ID
+     * @return 修改后
+     */
+    @Log(title = MODULE_NAME, operType = BusinessType.UPDATE, functionName = "排序")
+    @PostMapping("/sort")
+    public R<SysDictData> applySort(String rowId, String prevRowId, String nextRowId) {
+        this.service.updateSortData(rowId, prevRowId, nextRowId);
         return R.ok();
     }
 

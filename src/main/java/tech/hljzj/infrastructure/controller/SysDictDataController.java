@@ -98,7 +98,6 @@ public class SysDictDataController extends BaseController {
      * @param nextRowId 目标位置下一行ID
      * @return 修改后
      */
-    @PreAuthorize("auth('sys:dict:edit')")
     @Log(title = MODULE_NAME, operType = BusinessType.UPDATE, functionName = "排序")
     @PostMapping("/sort")
     public R<SysDictData> applySort(String rowId, String prevRowId, String nextRowId) {

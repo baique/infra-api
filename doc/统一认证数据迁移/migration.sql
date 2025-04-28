@@ -121,6 +121,7 @@ INSERT INTO frm_base_v1.sys_menu_ (
     key_,
     name_,
     status_,
+    visible_,
     desc_,
     tag_,
     classes_,
@@ -137,6 +138,7 @@ SELECT
     Permission_Value,                 -- key_
     Permission_Name,                  -- name_
     '1',                             -- status_ (默认启用)
+    '1',                             -- visible_（默认显示）
     Permission_DESC,                  -- desc_
     Permission_Tag,                   -- tag_
     Permission_Class,                 -- classes_

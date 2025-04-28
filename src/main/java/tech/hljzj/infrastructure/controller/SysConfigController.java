@@ -95,7 +95,6 @@ public class SysConfigController extends BaseController {
      * @return 操作结果
      */
 
-    @PreAuthorize("auth('sys:config:edit')")
     @Log(title = MODULE_NAME, operType = BusinessType.UPDATE, functionName = "排序")
     @PostMapping("/sort")
     public R<Void> applySort(String id, String toPrevId, String toNextId) {

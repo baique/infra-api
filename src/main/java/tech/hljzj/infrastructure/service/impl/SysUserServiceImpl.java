@@ -19,6 +19,7 @@ import reactor.util.annotation.Nullable;
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.security.SessionStoreDecorator;
 import tech.hljzj.framework.security.bean.TokenAuthentication;
+import tech.hljzj.framework.service.SortService;
 import tech.hljzj.framework.util.password.SMUtil;
 import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.infrastructure.code.AppConst;
@@ -72,6 +73,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private LocalSecurityProvider localSecurityProvider;
     @Autowired
     private SwapEncoder swapEncoder;
+    @Autowired
+    private SortService sortService;
 
     @Override
     public VSysUser entityGet(VSysUser entity, boolean fetchExtAttr) {
@@ -382,5 +385,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return;
         }
         throw UserException.defaultError("原密码错误");
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateSortData(String id, String toPrevId, String toNextId) {
+        updateBatchById(sortService.applySort(
+                id, toPrevId, toNextId,
+                baseMapper,
+                q -> q.where()
+                        .setEntityClass(SysUser.class)
+                        .orderByAsc(SysUser::getSort)
+                        .orderByDesc(SysUser::getCreateTime)
+                        .orderByDesc(SysUser::getId)
+        ));
     }
 }

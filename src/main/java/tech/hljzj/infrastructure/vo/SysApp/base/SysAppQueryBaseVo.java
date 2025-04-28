@@ -24,7 +24,7 @@ import tech.hljzj.framework.pojo.form.PageDomain;
  */
 @Getter
 @Setter
-public class SysAppQueryBaseVo extends PageDomain implements Serializable {
+public class SysAppQueryBaseVo<T extends SysApp> extends PageDomain implements Serializable {
     private static final long serialVersionUID = 1L;
     /** bigint     */
     private String id,idNot,idLike,idPrefix,idSuffix;
@@ -60,7 +60,7 @@ public class SysAppQueryBaseVo extends PageDomain implements Serializable {
 
 
     
-    public <T extends SysApp> Consumer<LambdaQueryWrapper<T>> conditionId() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionId() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getId()),SysApp::getId, StrUtil.trim(this.getId()));
@@ -78,7 +78,7 @@ public class SysAppQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysApp> Consumer<LambdaQueryWrapper<T>> conditionKey() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionKey() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getKey()),SysApp::getKey, StrUtil.trim(this.getKey()));
@@ -96,7 +96,7 @@ public class SysAppQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysApp> Consumer<LambdaQueryWrapper<T>> conditionName() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionName() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getName()),SysApp::getName, StrUtil.trim(this.getName()));
@@ -114,7 +114,7 @@ public class SysAppQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysApp> Consumer<LambdaQueryWrapper<T>> conditionMainPagePath() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionMainPagePath() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getMainPagePath()),SysApp::getMainPagePath, StrUtil.trim(this.getMainPagePath()));
@@ -132,7 +132,7 @@ public class SysAppQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysApp> Consumer<LambdaQueryWrapper<T>> conditionSecret() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionSecret() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getSecret()),SysApp::getSecret, StrUtil.trim(this.getSecret()));
@@ -150,7 +150,7 @@ public class SysAppQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysApp> Consumer<LambdaQueryWrapper<T>> conditionStatus() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionStatus() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getStatus()),SysApp::getStatus, StrUtil.trim(this.getStatus()));
@@ -168,7 +168,7 @@ public class SysAppQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysApp> Consumer<LambdaQueryWrapper<T>> conditionDesc() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionDesc() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getDesc()),SysApp::getDesc, StrUtil.trim(this.getDesc()));
@@ -186,7 +186,7 @@ public class SysAppQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysApp> Consumer<LambdaQueryWrapper<T>> conditionSort() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionSort() {
         return (builder)->{
 
           builder.eq( null != this.getSort(),SysApp::getSort, (this.getSort()));
@@ -203,18 +203,28 @@ public class SysAppQueryBaseVo extends PageDomain implements Serializable {
     }
 
     /**
+     * 默认排序
+     */
+    public Consumer<LambdaQueryWrapper<? extends T>> defaultSortBy() {
+        return (builder) -> {
+            builder.orderByDesc(T::getId);
+        };
+    }
+
+    /**
      * 构建查询条件
      */
-    public <T extends SysApp> LambdaQueryWrapper<T> buildQueryWrapper() {
-        LambdaQueryWrapper<T> builder = Wrappers.<T>lambdaQuery();
-        this.<T>conditionId().accept(builder);
-        this.<T>conditionKey().accept(builder);
-        this.<T>conditionName().accept(builder);
-        this.<T>conditionMainPagePath().accept(builder);
-        this.<T>conditionSecret().accept(builder);
-        this.<T>conditionStatus().accept(builder);
-        this.<T>conditionDesc().accept(builder);
-        this.<T>conditionSort().accept(builder);
+    public <R extends T> LambdaQueryWrapper<R> buildQueryWrapper() {
+        LambdaQueryWrapper<R> builder = Wrappers.lambdaQuery();
+        this.conditionId().accept(builder);
+        this.conditionKey().accept(builder);
+        this.conditionName().accept(builder);
+        this.conditionMainPagePath().accept(builder);
+        this.conditionSecret().accept(builder);
+        this.conditionStatus().accept(builder);
+        this.conditionDesc().accept(builder);
+        this.conditionSort().accept(builder);
+        this.defaultSortBy().accept(builder);
         return builder;
     }
 

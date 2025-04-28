@@ -240,7 +240,7 @@ public class VSysUserQueryBaseVo<T extends VSysUser> extends SysUserQueryVo<T> {
     public Consumer<MPJLambdaWrapper<? extends T>> conditionBelongDeptId() {
         //这里构建条件方式要重写
         return query -> {
-            String belongDeptId = super.getBelongDeptId();
+            String belongDeptId = StrUtil.blankToDefault(super.getBelongDeptId(), "0");
             if (Objects.nonNull(belongDeptId) && !Objects.equals("0", belongDeptId)) {
                 SysDept queryDept = SpringUtil.getBean(SysDeptService.class).getById(belongDeptId);
                 if (Objects.isNull(queryDept)) {
