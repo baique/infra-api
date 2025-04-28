@@ -49,13 +49,26 @@ public class SysUser extends BizBaseEntity implements ISort {
     @TableField(value = "password_")
     private String password;
     /**
+     * mask_v_
+     */
+    @TableField(value = "mask_v_")
+    private String maskV;
+    /**
+     * 密码策略
+     */
+    @TableField(value = "password_policy_")
+    private String passwordPolicy;
+    /**
+     * 现有密码过期时间
+     */
+    @TableField(value = "password_expired_")
+    private Date passwordExpired;
+    /**
      * 旧密码
      */
     @TableField(value = "old_password_")
     private String oldPassword;
 
-    @TableField(value = "mask_v_")
-    private String maskV;
     /**
      * 昵称
      */
@@ -155,6 +168,8 @@ public class SysUser extends BizBaseEntity implements ISort {
         this.setDeptId(entity.getDeptId());
         this.setDeptIdentity(entity.getDeptIdentity());
         this.setUsername(entity.getUsername());
+        this.setPasswordPolicy(entity.getPasswordPolicy());
+        this.setPasswordExpired(entity.getPasswordExpired());
         this.setNickname(entity.getNickname());
         this.setRealname(entity.getRealname());
         this.setSex(entity.getSex());

@@ -1,5 +1,6 @@
 package tech.hljzj.infrastructure.controller;
 
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -68,7 +69,7 @@ public class SysUserController extends BaseController {
     @GetMapping("/{id}")
     @Log(title = MODULE_NAME, operType = BusinessType.DETAIL)
     public R<SysUserDetailVo> entityGet(@PathVariable Serializable id, Boolean fetchExtAttr) {
-        SysUser dto = this.service.entityGet(id, fetchExtAttr);
+        SysUser dto = this.service.entityGet(id, ObjUtil.defaultIfNull(fetchExtAttr,false));
         return R.ok(new SysUserDetailVo().fromDto(dto));
     }
 
@@ -347,7 +348,7 @@ public class SysUserController extends BaseController {
                 .eq(SysUserManagerDept::getDeptId, deptId)
         ));
     }
-    
+
     /**
      * 获取用户的管辖组织
      *

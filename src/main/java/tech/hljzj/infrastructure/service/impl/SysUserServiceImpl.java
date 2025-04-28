@@ -101,15 +101,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (exists(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, entity.getUsername()))) {
             throw UserException.defaultError(MsgUtil.t("user.exists", "账号"));
         }
-        if (exists(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getRealname, entity.getRealname()))) {
-            throw UserException.defaultError(MsgUtil.t("user.exists", "姓名"));
-        }
-        if (exists(Wrappers.<SysUser>lambdaQuery()
+
+        if (StrUtil.isNotBlank(entity.getCardNo()) && exists(Wrappers.<SysUser>lambdaQuery()
                 .eq(SysUser::getCardType, entity.getCardType())
                 .eq(SysUser::getCardNo, entity.getCardNo()))) {
             throw UserException.defaultError(MsgUtil.t("user.exists", "证件号码"));
         }
-        if (exists(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, entity.getPhone()))) {
+        if (StrUtil.isNotBlank(entity.getPhone()) && exists(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, entity.getPhone()))) {
             throw UserException.defaultError(MsgUtil.t("user.exists", "手机号码"));
         }
         // 密码加密存储，使用sm3方式加密
@@ -124,16 +122,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (exists(Wrappers.<SysUser>lambdaQuery().ne(SysUser::getId, entity.getId()).eq(SysUser::getUsername, entity.getUsername()))) {
             throw UserException.defaultError(MsgUtil.t("user.exists", "账号"));
         }
-        if (exists(Wrappers.<SysUser>lambdaQuery().ne(SysUser::getId, entity.getId()).eq(SysUser::getRealname, entity.getRealname()))) {
-            throw UserException.defaultError(MsgUtil.t("user.exists", "姓名"));
-        }
-        if (exists(Wrappers.<SysUser>lambdaQuery()
+
+        if (StrUtil.isNotBlank(entity.getCardNo()) && exists(Wrappers.<SysUser>lambdaQuery()
                 .ne(SysUser::getId, entity.getId())
                 .eq(SysUser::getCardType, entity.getCardType())
                 .eq(SysUser::getCardNo, entity.getCardNo()))) {
             throw UserException.defaultError(MsgUtil.t("user.exists", "证件号码"));
         }
-        if (exists(Wrappers.<SysUser>lambdaQuery().ne(SysUser::getId, entity.getId()).eq(SysUser::getPhone, entity.getPhone()))) {
+        if (StrUtil.isNotBlank(entity.getPhone()) && exists(Wrappers.<SysUser>lambdaQuery().ne(SysUser::getId, entity.getId()).eq(SysUser::getPhone, entity.getPhone()))) {
             throw UserException.defaultError(MsgUtil.t("user.exists", "手机号码"));
         }
 

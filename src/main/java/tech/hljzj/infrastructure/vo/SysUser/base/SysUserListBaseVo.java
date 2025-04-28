@@ -40,6 +40,16 @@ public class SysUserListBaseVo implements Serializable {
     @ExcelProperty(value = "账号")
     private String username;
     /**
+     * 密码策略
+     */
+    @ExcelProperty(value = "密码策略")
+    private String passwordPolicy;
+    /**
+     * 现有密码过期时间
+     */
+    @ExcelProperty(value = "现有密码过期时间")
+    private Date passwordExpired;
+    /**
      * 昵称
      */
     @ExcelProperty(value = "昵称")
@@ -135,6 +145,8 @@ public class SysUserListBaseVo implements Serializable {
         this.setDeptId(dto.getDeptId());
         this.setDeptIdentity(dto.getDeptIdentity());
         this.setUsername(dto.getUsername());
+        this.setPasswordPolicy(dto.getPasswordPolicy());
+        this.setPasswordExpired(dto.getPasswordExpired());
         this.setNickname(dto.getNickname());
         this.setRealname(dto.getRealname());
         this.setSex(dto.getSex());
@@ -163,6 +175,8 @@ public class SysUserListBaseVo implements Serializable {
         dto.setDeptId(this.getDeptId());
         dto.setDeptIdentity(this.getDeptIdentity());
         dto.setUsername(this.getUsername());
+        dto.setPasswordPolicy(this.getPasswordPolicy());
+        dto.setPasswordExpired(this.getPasswordExpired());
         dto.setNickname(this.getNickname());
         dto.setRealname(this.getRealname());
         dto.setSex(this.getSex());

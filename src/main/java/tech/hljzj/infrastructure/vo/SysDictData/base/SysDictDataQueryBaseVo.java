@@ -24,7 +24,7 @@ import tech.hljzj.framework.pojo.form.PageDomain;
  */
 @Getter
 @Setter
-public class SysDictDataQueryBaseVo extends PageDomain implements Serializable {
+public class SysDictDataQueryBaseVo<T extends SysDictData> extends PageDomain implements Serializable {
     private static final long serialVersionUID = 1L;
     /** bigint     */
     private String id,idNot,idLike,idPrefix,idSuffix;
@@ -80,7 +80,7 @@ public class SysDictDataQueryBaseVo extends PageDomain implements Serializable {
 
 
     
-    public <T extends SysDictData> Consumer<LambdaQueryWrapper<T>> conditionId() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionId() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getId()),SysDictData::getId, StrUtil.trim(this.getId()));
@@ -98,7 +98,7 @@ public class SysDictDataQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysDictData> Consumer<LambdaQueryWrapper<T>> conditionOwnerAppId() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionOwnerAppId() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getOwnerAppId()),SysDictData::getOwnerAppId, StrUtil.trim(this.getOwnerAppId()));
@@ -116,7 +116,7 @@ public class SysDictDataQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysDictData> Consumer<LambdaQueryWrapper<T>> conditionOwnerTypeId() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionOwnerTypeId() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getOwnerTypeId()),SysDictData::getOwnerTypeId, StrUtil.trim(this.getOwnerTypeId()));
@@ -134,7 +134,7 @@ public class SysDictDataQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysDictData> Consumer<LambdaQueryWrapper<T>> conditionKey() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionKey() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getKey()),SysDictData::getKey, StrUtil.trim(this.getKey()));
@@ -152,7 +152,7 @@ public class SysDictDataQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysDictData> Consumer<LambdaQueryWrapper<T>> conditionName() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionName() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getName()),SysDictData::getName, StrUtil.trim(this.getName()));
@@ -170,7 +170,7 @@ public class SysDictDataQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysDictData> Consumer<LambdaQueryWrapper<T>> conditionValue() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionValue() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getValue()),SysDictData::getValue, StrUtil.trim(this.getValue()));
@@ -188,7 +188,7 @@ public class SysDictDataQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysDictData> Consumer<LambdaQueryWrapper<T>> conditionListClass() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionListClass() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getListClass()),SysDictData::getListClass, StrUtil.trim(this.getListClass()));
@@ -206,7 +206,25 @@ public class SysDictDataQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysDictData> Consumer<LambdaQueryWrapper<T>> conditionStatus() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionSelectable() {
+        return (builder)->{
+
+          builder.eq(StrUtil.isNotBlank(this.getSelectable()),SysDictData::getSelectable, StrUtil.trim(this.getSelectable()));
+          builder.ne(StrUtil.isNotBlank(this.getSelectableNot()),T::getSelectable, StrUtil.trim(this.getSelectableNot()));
+          builder.in(null != this.getSelectableIn() && this.getSelectableIn().size() > 0,T::getSelectable, this.getSelectableIn());
+          builder.notIn(null != this.getSelectableNotIn() && this.getSelectableNotIn().size() > 0,T::getSelectable, this.getSelectableNotIn());
+          if (StrUtil.isNotBlank(this.getSelectableLike())) {
+              builder.like(T::getSelectable, StrUtil.trim(this.getSelectableLike()));
+          } else {
+              builder.likeRight(StrUtil.isNotBlank(this.getSelectablePrefix()),T::getSelectable, StrUtil.trim(this.getSelectablePrefix()));
+              builder.likeLeft(StrUtil.isNotBlank(this.getSelectableSuffix()),T::getSelectable, StrUtil.trim(this.getSelectableSuffix()));
+          }
+
+
+        };
+    }
+
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionStatus() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getStatus()),SysDictData::getStatus, StrUtil.trim(this.getStatus()));
@@ -224,7 +242,25 @@ public class SysDictDataQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysDictData> Consumer<LambdaQueryWrapper<T>> conditionDesc() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionHelpMessage() {
+        return (builder)->{
+
+          builder.eq(StrUtil.isNotBlank(this.getHelpMessage()),SysDictData::getHelpMessage, StrUtil.trim(this.getHelpMessage()));
+          builder.ne(StrUtil.isNotBlank(this.getHelpMessageNot()),T::getHelpMessage, StrUtil.trim(this.getHelpMessageNot()));
+          builder.in(null != this.getHelpMessageIn() && this.getHelpMessageIn().size() > 0,T::getHelpMessage, this.getHelpMessageIn());
+          builder.notIn(null != this.getHelpMessageNotIn() && this.getHelpMessageNotIn().size() > 0,T::getHelpMessage, this.getHelpMessageNotIn());
+          if (StrUtil.isNotBlank(this.getHelpMessageLike())) {
+              builder.like(T::getHelpMessage, StrUtil.trim(this.getHelpMessageLike()));
+          } else {
+              builder.likeRight(StrUtil.isNotBlank(this.getHelpMessagePrefix()),T::getHelpMessage, StrUtil.trim(this.getHelpMessagePrefix()));
+              builder.likeLeft(StrUtil.isNotBlank(this.getHelpMessageSuffix()),T::getHelpMessage, StrUtil.trim(this.getHelpMessageSuffix()));
+          }
+
+
+        };
+    }
+
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionDesc() {
         return (builder)->{
 
           builder.eq(StrUtil.isNotBlank(this.getDesc()),SysDictData::getDesc, StrUtil.trim(this.getDesc()));
@@ -242,7 +278,25 @@ public class SysDictDataQueryBaseVo extends PageDomain implements Serializable {
         };
     }
 
-    public <T extends SysDictData> Consumer<LambdaQueryWrapper<T>> conditionSort() {
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionLocked() {
+        return (builder)->{
+
+          builder.eq(StrUtil.isNotBlank(this.getLocked()),SysDictData::getLocked, StrUtil.trim(this.getLocked()));
+          builder.ne(StrUtil.isNotBlank(this.getLockedNot()),T::getLocked, StrUtil.trim(this.getLockedNot()));
+          builder.in(null != this.getLockedIn() && this.getLockedIn().size() > 0,T::getLocked, this.getLockedIn());
+          builder.notIn(null != this.getLockedNotIn() && this.getLockedNotIn().size() > 0,T::getLocked, this.getLockedNotIn());
+          if (StrUtil.isNotBlank(this.getLockedLike())) {
+              builder.like(T::getLocked, StrUtil.trim(this.getLockedLike()));
+          } else {
+              builder.likeRight(StrUtil.isNotBlank(this.getLockedPrefix()),T::getLocked, StrUtil.trim(this.getLockedPrefix()));
+              builder.likeLeft(StrUtil.isNotBlank(this.getLockedSuffix()),T::getLocked, StrUtil.trim(this.getLockedSuffix()));
+          }
+
+
+        };
+    }
+
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionSort() {
         return (builder)->{
 
           builder.eq( null != this.getSort(),SysDictData::getSort, (this.getSort()));
@@ -259,20 +313,33 @@ public class SysDictDataQueryBaseVo extends PageDomain implements Serializable {
     }
 
     /**
+     * 默认排序
+     */
+    public Consumer<LambdaQueryWrapper<? extends T>> defaultSortBy() {
+        return (builder) -> {
+            builder.orderByDesc(T::getId);
+        };
+    }
+
+    /**
      * 构建查询条件
      */
-    public <T extends SysDictData> LambdaQueryWrapper<T> buildQueryWrapper() {
-        LambdaQueryWrapper<T> builder = Wrappers.<T>lambdaQuery();
-        this.<T>conditionId().accept(builder);
-        this.<T>conditionOwnerAppId().accept(builder);
-        this.<T>conditionOwnerTypeId().accept(builder);
-        this.<T>conditionKey().accept(builder);
-        this.<T>conditionName().accept(builder);
-        this.<T>conditionValue().accept(builder);
-        this.<T>conditionListClass().accept(builder);
-        this.<T>conditionStatus().accept(builder);
-        this.<T>conditionDesc().accept(builder);
-        this.<T>conditionSort().accept(builder);
+    public <R extends T> LambdaQueryWrapper<R> buildQueryWrapper() {
+        LambdaQueryWrapper<R> builder = Wrappers.lambdaQuery();
+        this.conditionId().accept(builder);
+        this.conditionOwnerAppId().accept(builder);
+        this.conditionOwnerTypeId().accept(builder);
+        this.conditionKey().accept(builder);
+        this.conditionName().accept(builder);
+        this.conditionValue().accept(builder);
+        this.conditionListClass().accept(builder);
+        this.conditionSelectable().accept(builder);
+        this.conditionStatus().accept(builder);
+        this.conditionHelpMessage().accept(builder);
+        this.conditionDesc().accept(builder);
+        this.conditionLocked().accept(builder);
+        this.conditionSort().accept(builder);
+        this.defaultSortBy().accept(builder);
         return builder;
     }
 

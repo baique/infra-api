@@ -36,6 +36,11 @@ public class SysDictData extends DictData implements ISort {
      */
     @TableField(value = "owner_type_id_")
     private String ownerTypeId;
+        /**
+     * 是否锁定
+     */
+    @TableField(value = "locked_")
+    private String locked;
 
 
     /**
@@ -46,8 +51,11 @@ public class SysDictData extends DictData implements ISort {
         this.setName(entity.getName());
         this.setValue(entity.getValue());
         this.setListClass(entity.getListClass());
+        this.setSelectable(entity.getSelectable());
         this.setStatus(entity.getStatus());
+        this.setHelpMessage(entity.getHelpMessage());
         this.setDesc(entity.getDesc());
+        this.setLocked(entity.getLocked());
         this.setSort(entity.getSort());
     }
 }

@@ -48,6 +48,18 @@ public class SysUserQueryBaseVo<T extends SysUser> extends PageDomain implements
     private List<String> usernameIn, usernameNotIn;
 
     /**
+     * 密码策略
+     */
+    private String passwordPolicy, passwordPolicyNot, passwordPolicyLike, passwordPolicyPrefix, passwordPolicySuffix;
+    private List<String> passwordPolicyIn, passwordPolicyNotIn;
+
+    /**
+     * 现有密码过期时间
+     */
+    private Date passwordExpired, passwordExpiredNot, passwordExpiredGt, passwordExpiredGte, passwordExpiredLt, passwordExpiredLte;
+    private List<Date> passwordExpiredIn, passwordExpiredNotIn;
+
+    /**
      * 昵称
      */
     private String nickname, nicknameNot, nicknameLike, nicknamePrefix, nicknameSuffix;
@@ -224,6 +236,38 @@ public class SysUserQueryBaseVo<T extends SysUser> extends PageDomain implements
                 builder.likeRight(StrUtil.isNotBlank(this.getUsernamePrefix()), T::getUsername, StrUtil.trim(this.getUsernamePrefix()));
                 builder.likeLeft(StrUtil.isNotBlank(this.getUsernameSuffix()), T::getUsername, StrUtil.trim(this.getUsernameSuffix()));
             }
+
+
+        };
+    }
+
+
+    public Consumer<MPJLambdaWrapper<? extends T>> conditionPasswordPolicy() {
+        return (builder) -> {
+            builder.eq(StrUtil.isNotBlank(this.getPasswordPolicy()), SysUser::getPasswordPolicy, StrUtil.trim(this.getPasswordPolicy()));
+            builder.ne(StrUtil.isNotBlank(this.getPasswordPolicyNot()), T::getPasswordPolicy, StrUtil.trim(this.getPasswordPolicyNot()));
+            builder.in(null != this.getPasswordPolicyIn() && this.getPasswordPolicyIn().size() > 0, T::getPasswordPolicy, this.getPasswordPolicyIn());
+            builder.notIn(null != this.getPasswordPolicyNotIn() && this.getPasswordPolicyNotIn().size() > 0, T::getPasswordPolicy, this.getPasswordPolicyNotIn());
+            if (StrUtil.isNotBlank(this.getPasswordPolicyLike())) {
+                builder.like(T::getPasswordPolicy, StrUtil.trim(this.getPasswordPolicyLike()));
+            } else {
+                builder.likeRight(StrUtil.isNotBlank(this.getPasswordPolicyPrefix()), T::getPasswordPolicy, StrUtil.trim(this.getPasswordPolicyPrefix()));
+                builder.likeLeft(StrUtil.isNotBlank(this.getPasswordPolicySuffix()), T::getPasswordPolicy, StrUtil.trim(this.getPasswordPolicySuffix()));
+            }
+        };
+    }
+
+    public Consumer<MPJLambdaWrapper<? extends T>> conditionPasswordExpired() {
+        return (builder) -> {
+
+            builder.eq(null != this.getPasswordExpired(), SysUser::getPasswordExpired, (this.getPasswordExpired()));
+            builder.ne(null != this.getPasswordExpiredNot(), T::getPasswordExpired, (this.getPasswordExpiredNot()));
+            builder.in(null != this.getPasswordExpiredIn() && this.getPasswordExpiredIn().size() > 0, T::getPasswordExpired, this.getPasswordExpiredIn());
+            builder.notIn(null != this.getPasswordExpiredNotIn() && this.getPasswordExpiredNotIn().size() > 0, T::getPasswordExpired, this.getPasswordExpiredNotIn());
+            builder.gt(this.getPasswordExpiredGt() != null, T::getPasswordExpired, this.getPasswordExpiredGt());
+            builder.ge(this.getPasswordExpiredGte() != null, T::getPasswordExpired, this.getPasswordExpiredGte());
+            builder.lt(this.getPasswordExpiredLt() != null, T::getPasswordExpired, this.getPasswordExpiredLt());
+            builder.le(this.getPasswordExpiredLte() != null, T::getPasswordExpired, this.getPasswordExpiredLte());
 
 
         };
@@ -565,6 +609,8 @@ public class SysUserQueryBaseVo<T extends SysUser> extends PageDomain implements
         this.conditionDeptId().accept(builder);
         this.conditionDeptIdentity().accept(builder);
         this.conditionUsername().accept(builder);
+        this.conditionPasswordPolicy().accept(builder);
+        this.conditionPasswordExpired().accept(builder);
         this.conditionNickname().accept(builder);
         this.conditionRealname().accept(builder);
         this.conditionSex().accept(builder);

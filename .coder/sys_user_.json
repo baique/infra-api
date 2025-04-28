@@ -4,7 +4,6 @@
     "author": "wa",
     "codeSelector": [
       "new-admin",
-      "sql",
       "web-new"
     ]
   },
@@ -41,7 +40,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": false
+      "keep": true,
+      "id": "OHbqG8mYfTtC5ia1z-QKU"
     },
     {
       "key": "dept_id_",
@@ -60,7 +60,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": false
+      "keep": true,
+      "id": "xr-uouIwILfBpeixYq7Vz"
     },
     {
       "key": "dept_identity_",
@@ -78,7 +79,9 @@
         "type": "none",
         "param": {}
       },
-      "hasDataSource": false
+      "hasDataSource": false,
+      "keep": true,
+      "id": "8Qv-4Ka0xLnICtg10_poi"
     },
     {
       "key": "username_",
@@ -97,7 +100,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "1OgUB8oCps5ABGVwRy1Du"
     },
     {
       "key": "password_",
@@ -116,7 +120,69 @@
         "param": {}
       },
       "hasDataSource": false,
+      "keep": true,
+      "id": "ZeCCYOdn2CkBCNlimvkzl"
+    },
+    {
+      "key": "mask_v_",
+      "name": "mask_v_",
+      "type": "String",
+      "description": null,
+      "list": false,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 1000,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "id": "B7BvX4O8RaL5bdoYMMbqU",
+      "keep": true
+    },
+    {
+      "key": "password_policy_",
+      "name": "密码策略",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 4,
+      "component": "Select",
+      "rule": [],
+      "dataSource": {
+        "type": "dict",
+        "param": {
+          "key": "sys_user_password_expir_policy"
+        }
+      },
+      "hasDataSource": false,
+      "id": "Ejo7fBlN6iF2PAdQw4FyA",
       "keep": false
+    },
+    {
+      "key": "password_expired_",
+      "name": "现有密码过期时间",
+      "type": "Date",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 10,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "id": "JJu_gN1BsPt-Rsa9Fj3wP"
     },
     {
       "key": "old_password_",
@@ -135,7 +201,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "V0rBUqlWvO8fKa7g1QmP_"
     },
     {
       "key": "nickname_",
@@ -154,7 +221,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "qquKrOvIkttvpQ8KIGz-Z"
     },
     {
       "key": "realname_",
@@ -173,7 +241,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "IVabDak-AGsKBExI8V-vV"
     },
     {
       "key": "sex_",
@@ -194,7 +263,8 @@
         }
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "DWdH5SUjqNPaxlwm5CCpW"
     },
     {
       "key": "card_type_",
@@ -215,7 +285,8 @@
         }
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "aul_1oyDLWgDo2LTlRm-G"
     },
     {
       "key": "card_no_",
@@ -234,7 +305,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "4lUt5B0EMv4ajlN-5u_Gx"
     },
     {
       "key": "phone_",
@@ -253,7 +325,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "Xd4VF5nfDixEscXn_KkrW"
     },
     {
       "key": "email_",
@@ -272,7 +345,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "oIYTIdxKhP3Y4benqUxk1"
     },
     {
       "key": "work_addr_",
@@ -291,7 +365,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "Rc7wccn2cot6LYSIohLFE"
     },
     {
       "key": "work_unit_",
@@ -310,7 +385,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "8LRQayhblsgUUbxgNQ5bD"
     },
     {
       "key": "work_pos_",
@@ -329,7 +405,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "yV5VG-XcNamj_dB0s5cmX"
     },
     {
       "key": "work_rank_",
@@ -348,7 +425,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "7Fw3cRz3wO_sB7eRMHGhc"
     },
     {
       "key": "home_addr_",
@@ -367,7 +445,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "rnOk2RK4SWZp0o8uw9bc8"
     },
     {
       "key": "home_phone_",
@@ -386,7 +465,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "fgiZaY0mUur0meXNUEIJ4"
     },
     {
       "key": "source_",
@@ -405,7 +485,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "QogkVcuaQaDNZmhM_IoFl"
     },
     {
       "key": "sort_",
@@ -424,7 +505,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "wqhYipzceH4OA8sIi0R52"
     },
     {
       "key": "status_",
@@ -445,7 +527,8 @@
         }
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "v9S52ZgJWxbX-MxPXV_EW"
     },
     {
       "key": "account_lock_",
@@ -466,7 +549,8 @@
         }
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "-G8JhDoYiHdyGNW00vbS5"
     },
     {
       "key": "last_change_password_",
@@ -485,7 +569,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "ihC-LtN9eYQrO6CSnJ1Tw"
     },
     {
       "key": "create_by_",
@@ -503,7 +588,9 @@
         "type": "none",
         "param": {}
       },
-      "hasDataSource": false
+      "hasDataSource": false,
+      "keep": true,
+      "id": "dgYK9NYNweh8X5YvWBgMT"
     },
     {
       "key": "create_time_",
@@ -521,7 +608,9 @@
         "type": "none",
         "param": {}
       },
-      "hasDataSource": false
+      "hasDataSource": false,
+      "keep": true,
+      "id": "Bryx9eAkmQW_fJ1CD9H9a"
     },
     {
       "key": "update_by_",
@@ -539,7 +628,9 @@
         "type": "none",
         "param": {}
       },
-      "hasDataSource": false
+      "hasDataSource": false,
+      "keep": true,
+      "id": "ZXxBGUqqD9zdKCXNgiaHb"
     },
     {
       "key": "update_time_",
@@ -557,7 +648,9 @@
         "type": "none",
         "param": {}
       },
-      "hasDataSource": false
+      "hasDataSource": false,
+      "keep": true,
+      "id": "DHfs95axCHBYpkBxKoEYD"
     },
     {
       "key": "owner_user_id_",
@@ -575,7 +668,9 @@
         "type": "none",
         "param": {}
       },
-      "hasDataSource": false
+      "hasDataSource": false,
+      "keep": true,
+      "id": "MngXP_ax5WQ5S24bz3IAG"
     },
     {
       "key": "owner_user_account_",
@@ -593,7 +688,9 @@
         "type": "none",
         "param": {}
       },
-      "hasDataSource": false
+      "hasDataSource": false,
+      "keep": true,
+      "id": "Aos6xjrznv7Jxm8rZqb8U"
     },
     {
       "key": "owner_dept_id_",
@@ -611,7 +708,9 @@
         "type": "none",
         "param": {}
       },
-      "hasDataSource": false
+      "hasDataSource": false,
+      "keep": true,
+      "id": "1VHk3cEsJ-3E3Ut02Getg"
     },
     {
       "key": "owner_dept_code_",
@@ -629,7 +728,9 @@
         "type": "none",
         "param": {}
       },
-      "hasDataSource": false
+      "hasDataSource": false,
+      "keep": true,
+      "id": "lvgu38SB8GkgE9z_wT1xy"
     },
     {
       "key": "owner_dept_name_",
@@ -647,7 +748,9 @@
         "type": "none",
         "param": {}
       },
-      "hasDataSource": false
+      "hasDataSource": false,
+      "keep": true,
+      "id": "ly0OlbfGFz3TGdUh7J5Er"
     }
   ],
   "serverConfig": {}

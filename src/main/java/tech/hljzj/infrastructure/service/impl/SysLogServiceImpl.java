@@ -11,11 +11,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.hljzj.framework.logger.SysLogEntity;
 import tech.hljzj.framework.service.ILoggerService;
+import tech.hljzj.infrastructure.compatible.util.AppHelper;
 import tech.hljzj.infrastructure.domain.SysApp;
 import tech.hljzj.infrastructure.domain.SysLog;
 import tech.hljzj.infrastructure.mapper.SysLogMapper;
 import tech.hljzj.infrastructure.service.SysAppService;
 import tech.hljzj.infrastructure.service.SysLogService;
+import tech.hljzj.infrastructure.util.AppScopeHolder;
 import tech.hljzj.infrastructure.vo.SysLog.SysLogQueryVo;
 
 import java.io.Serializable;
@@ -97,6 +99,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     @Override
     public void recordLog(SysLogEntity entity) {
         SysLog log = new SysLog();
+        log.setOpAppId(AppScopeHolder.getScopeAppId());
         BeanUtil.copyProperties(entity, log);
         //使用一个异步线程完成
         asyncTaskExecutor.submit(() -> {

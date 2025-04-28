@@ -35,6 +35,14 @@ public class SysUserUpdateBaseVo implements Serializable {
      */
     private String username;
     /**
+     * 密码策略
+     */
+    private String passwordPolicy;
+    /**
+     * 现有密码过期时间
+     */
+    private Date passwordExpired;
+    /**
      * 昵称
      */
     private String nickname;
@@ -113,6 +121,8 @@ public class SysUserUpdateBaseVo implements Serializable {
         dto.setDeptId(this.getDeptId());
         dto.setDeptIdentity(this.getDeptIdentity());
         dto.setUsername(this.getUsername());
+        dto.setPasswordPolicy(this.getPasswordPolicy());
+        dto.setPasswordExpired(this.getPasswordExpired());
         dto.setNickname(this.getNickname());
         dto.setRealname(this.getRealname());
         dto.setSex(this.getSex());
