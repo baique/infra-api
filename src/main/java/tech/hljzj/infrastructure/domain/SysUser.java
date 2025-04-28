@@ -52,6 +52,9 @@ public class SysUser extends BizBaseEntity {
      */
     @TableField(value = "old_password_")
     private String oldPassword;
+
+    @TableField(value = "mask_v_")
+    private String maskV;
     /**
      * 昵称
      */

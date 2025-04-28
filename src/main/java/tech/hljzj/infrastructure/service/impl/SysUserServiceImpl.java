@@ -24,6 +24,7 @@ import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.config.AppLoginUserInfo;
 import tech.hljzj.infrastructure.config.LocalSecurityProvider;
+import tech.hljzj.infrastructure.config.SwapEncoder;
 import tech.hljzj.infrastructure.domain.*;
 import tech.hljzj.infrastructure.mapper.SysUserMapper;
 import tech.hljzj.infrastructure.mapper.SysUserRoleMapper;
@@ -69,6 +70,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Autowired
     @Lazy
     private LocalSecurityProvider localSecurityProvider;
+    @Autowired
+    private SwapEncoder swapEncoder;
 
     @Override
     public VSysUser entityGet(VSysUser entity, boolean fetchExtAttr) {
@@ -332,11 +335,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (StrUtil.isBlank(defaultPassword)) {
             throw UserException.defaultError("管理员尚未配置默认密码，请联系管理配置后使用此功能！");
         }
-        update(Wrappers.lambdaUpdate(SysUser.class)
-                .eq(SysUser::getId, userId)
-                .set(SysUser::getPassword, SMUtil.sm3(defaultPassword))
-                .set(SysUser::getLastChangePassword, new Date())
-        );
+        try {
+            update(Wrappers.lambdaUpdate(SysUser.class)
+                    .eq(SysUser::getId, userId)
+                    .set(SysUser::getPassword, SMUtil.sm3(defaultPassword))
+                    .set(SysUser::getMaskV, swapEncoder.encode(defaultPassword))
+                    .set(SysUser::getLastChangePassword, new Date())
+            );
+        } catch (Exception e) {
+            throw UserException.defaultError("密码修改失败", e);
+        }
     }
 
     @Override
@@ -361,11 +369,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         //这里需要使用登录认证的类似逻辑
         if (localSecurityProvider.validatePassword(oldPassword, user)) {
-            update(Wrappers.lambdaUpdate(SysUser.class)
-                    .eq(SysUser::getId, user.getId())
-                    .set(SysUser::getPassword, SMUtil.sm3(newPassword))
-                    .set(SysUser::getLastChangePassword, new Date())
-            );
+            try {
+                update(Wrappers.lambdaUpdate(SysUser.class)
+                        .eq(SysUser::getId, user.getId())
+                        .set(SysUser::getPassword, SMUtil.sm3(newPassword))
+                        .set(SysUser::getMaskV, swapEncoder.encode(newPassword))
+                        .set(SysUser::getLastChangePassword, new Date())
+                );
+            } catch (Exception e) {
+                throw UserException.defaultError("密码修改失败", e);
+            }
             return;
         }
         throw UserException.defaultError("原密码错误");

@@ -14,6 +14,9 @@ ENV XMS=256m
 ENV XMX=256m
 ENV server.port=80
 ENV spring.profiles.active=prd
+ENV spring.devtools.restart.enabled=false
+ENV spring.devtools.livereload.enabled=false
+
 RUN echo "#!/bin/bash" >> /app/Start.sh ;\
 echo "java -cp \"/app/*:/app/lib/*\" -Xms\$XMS -Xmx\$XMX -Dproject.name=\$PROJ_NAME  -Dfile.encoding=UTF-8 \$PROJ_PARAM tech.hljzj.framework.Bootstrap" >> /app/Start.sh ;\
 ln -sf /app/Start.sh /usr/bin/ZZ-FW-CMD ;\

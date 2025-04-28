@@ -1,6 +1,8 @@
 package tech.hljzj.infrastructure.compatible.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 
 @Anonymous
 @Controller
+@Slf4j
 public class AppAdminController extends MController {
     private final SysDeptService sysDeptService;
     private final SysUserService sysUserService;
@@ -62,6 +65,27 @@ public class AppAdminController extends MController {
         return R.ok(Collections.singletonList(
                 tk
         ));
+    }
+
+    @RequestMapping("/admin/updatePassWordInLogin")
+    @ResponseBody
+    @Anonymous
+
+    public Object updatePassword(String userAccount, String userPassword, String initialPassWord) {
+        SysUser u = null;
+        try {
+            u = sysUserService.getOne(Wrappers.<SysUser>lambdaQuery()
+                            .eq(SysUser::getUsername, userAccount),
+                    true
+            );
+        } catch (Exception e) {
+            log.error("用户信息查找失败", e);
+        }
+        if (u == null) {
+            return R.fail().setMsg("未找到用户");
+        }
+        sysUserService.changePassword(u.getId(), initialPassWord, userPassword);
+        return R.ok();
     }
 
     @RequestMapping("/tyrz/getroles")

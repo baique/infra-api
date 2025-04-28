@@ -19,6 +19,7 @@ import tech.hljzj.framework.security.bean.LoginUser;
 import tech.hljzj.framework.util.password.ParamEncryption;
 import tech.hljzj.infrastructure.compatible.util.AppHelper;
 import tech.hljzj.infrastructure.compatible.vo.user.userDetails.UserDetails;
+import tech.hljzj.infrastructure.config.CompatibleSecurityProvider;
 import tech.hljzj.infrastructure.domain.VSysUser;
 import tech.hljzj.infrastructure.service.SysDeptService;
 import tech.hljzj.infrastructure.service.SysUserService;
@@ -40,6 +41,8 @@ public class UserCompatibleController extends MController {
     private SysUserService sysUserService;
     @Autowired
     private SysDeptService sysDeptService;
+    @Autowired
+    private CompatibleSecurityProvider compatibleSecurityProvider;
 
     @RequestMapping("server/time")
     public String serverTime() {
@@ -61,7 +64,8 @@ public class UserCompatibleController extends MController {
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(account, encryption.encrypt(password));
             // 因为这里是使用统一认证登录
             AppScopeHolder.setScopeAppId(AppHelper.getLoginApp(request));
-            Authentication authenticate = basicAuthenticationManager.authenticate(auth);
+
+            Authentication authenticate = basicAuthenticationManager.authenticate(auth, compatibleSecurityProvider);
             // 3. 设置认证信息到上下文
             SecurityContextHolder.getContext().setAuthentication(authenticate);
             LoginUser details = (LoginUser) authenticate.getPrincipal();
@@ -97,7 +101,7 @@ public class UserCompatibleController extends MController {
         try {
             LoginUser loginUser = AppHelper.getLoginUser(request);
             if (loginUser == null) {
-                throw UserException.defaultError("登录会话失效");
+                return BeanUtil.copyProperties(R.code(902).setMsg("登录会话失效"), R.class);
             }
             return BeanUtil.copyProperties(R.ok(), R.class);
         } catch (Exception e) {

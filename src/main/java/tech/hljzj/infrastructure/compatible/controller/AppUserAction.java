@@ -2,9 +2,12 @@ package tech.hljzj.infrastructure.compatible.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
+import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.compatible.util.AppHelper;
+import tech.hljzj.infrastructure.compatible.vo.ManagerInfo;
 import tech.hljzj.infrastructure.compatible.vo.bean.PageUtil;
 import tech.hljzj.infrastructure.compatible.vo.permission.Permission;
 import tech.hljzj.infrastructure.compatible.vo.role.Role;
@@ -14,13 +17,19 @@ import tech.hljzj.infrastructure.compatible.vo.user.userWithRolePermission.UserR
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.security.an.Anonymous;
 import tech.hljzj.framework.security.bean.LoginUser;
+import tech.hljzj.infrastructure.domain.SysDept;
+import tech.hljzj.infrastructure.domain.SysUserManagerDept;
 import tech.hljzj.infrastructure.domain.VSysDeptMemberUser;
 import tech.hljzj.infrastructure.domain.VSysUser;
 import tech.hljzj.infrastructure.service.*;
+import tech.hljzj.infrastructure.vo.SysDept.SysDeptQueryVo;
 import tech.hljzj.infrastructure.vo.VSysDeptMemberUser.VSysDeptMemberUserQueryVo;
 import tech.hljzj.infrastructure.vo.VSysUser.VSysUserQueryVo;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequestMapping("/app")
@@ -175,17 +184,6 @@ public class AppUserAction extends MController {
     @PostMapping("/user/changePassword")
     @ResponseBody
     public Object changePassword(String password, String newPassword) {
-//        try {
-//            UserInfo user = UserUtil.getUser(request, true);
-//            if (!user.getUserPassword().equals(PasswordUtil.Encryption(password))) {
-//                return ApiMsgUtil.failure(BaseCode.ROLLBACK, UserErrorCode.PASSWORDNOTOK);
-//            }
-//            user.setUserPassword(PasswordUtil.Encryption(newPassword));
-//            service(UserInfoService.class).save(user);
-//            return ApiMsgUtil.success();
-//        } catch (Exception e) {
-//            return ApiMsgUtil.failure(BaseCode.USERAUTHENTICATION);
-//        }
         //修改密码
         LoginUser user = AppHelper.getLoginUser(request);
         sysUserService.changePassword(user.getUserInfo().getId(), password, newPassword);
@@ -196,7 +194,36 @@ public class AppUserAction extends MController {
     @PostMapping("/user/getManagerDept")
     @ResponseBody
     public Object getManagerDept(String userId) {
-        //TODO 实现
-        return success(null);
+        //获取用户的管辖单位
+        List<SysUserManagerDept> deptList = sysUserManagerDeptService.list(
+                Wrappers.<SysUserManagerDept>lambdaQuery()
+                        .eq(SysUserManagerDept::getUserId, userId)
+        );
+        Set<ManagerInfo> depts = new LinkedHashSet<>();
+        for (SysUserManagerDept sysUserManagerDept : deptList) {
+            ManagerInfo managerInfo = new ManagerInfo();
+            managerInfo.setId(sysUserManagerDept.getDeptId());
+            // 管辖全部
+            managerInfo.setAllUser(Objects.equals("1", sysUserManagerDept.getDataAccessScope()));
+
+            if (Objects.equals(AppConst.YES, sysUserManagerDept.getContainSub())) {
+                //查所有子部门
+                SysDept dept = sysDeptService.getById(managerInfo.getId());
+                if (dept == null) {
+                    continue;
+                }
+                SysDeptQueryVo q = new SysDeptQueryVo();
+                q.setNodePathPrefix(dept.getNodePath());
+                q.setIdNot(sysUserManagerDept.getDeptId());
+                List<SysDept> childrenDepts = sysDeptService.list(q);
+                childrenDepts.forEach(child -> {
+                    ManagerInfo cManagerInfo = BeanUtil.copyProperties(managerInfo, ManagerInfo.class);
+                    cManagerInfo.setId(child.getId());
+                    depts.add(cManagerInfo);
+                });
+            }
+            depts.add(managerInfo);
+        }
+        return success(depts);
     }
 }

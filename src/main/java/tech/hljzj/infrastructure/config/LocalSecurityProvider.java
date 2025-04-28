@@ -85,21 +85,21 @@ public class LocalSecurityProvider implements SecurityProvider {
         }
         // 用户密码校验,这里如果当前密码为空，代表了这个迁移而来的数据，需要使用旧密码登录，旧密码需要携带加密方式和盐
         if (!validatePassword(password, principal)) {
-            String key = "login:fail:" + username;
-            Object v = commonCache.get(key);
-            int prevFailCount = 0;
-            if (!StrUtil.isBlankIfStr(v)) {
-                prevFailCount = Integer.parseInt(v.toString());
-            }
-            prevFailCount += 1;
-            // 如果用户持续失败
-            commonCache.put(key, prevFailCount, 1, TimeUnit.HOURS);
-
-            String mxLockCount = sysConfigService.getValueByKey(AppConst.CONFIG_MAX_TRY_LOGIN_COUNT);
-
-            if (prevFailCount > Integer.parseInt(mxLockCount)) {
-                sysUserLockService.lock(username);
-                throw UserException.defaultError("由于您多次登录失败，当前账号已被锁定");
+            int mxLockCount = Integer.parseInt(sysConfigService.getValueByKey(AppConst.CONFIG_MAX_TRY_LOGIN_COUNT));
+            if (mxLockCount > 0) {
+                String key = "login:fail:" + username;
+                Object v = commonCache.get(key);
+                int prevFailCount = 0;
+                if (!StrUtil.isBlankIfStr(v)) {
+                    prevFailCount = Integer.parseInt(v.toString());
+                }
+                prevFailCount += 1;
+                // 如果用户持续失败
+                commonCache.put(key, prevFailCount, 1L, TimeUnit.HOURS);
+                if (prevFailCount > mxLockCount) {
+                    sysUserLockService.lock(username);
+                    throw UserException.defaultError("由于您多次登录失败，当前账号已被锁定");
+                }
             }
             return null;
         }
