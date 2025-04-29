@@ -14,6 +14,7 @@ import tech.hljzj.framework.base.BaseController;
 import tech.hljzj.framework.bean.R;
 import tech.hljzj.framework.logger.BusinessType;
 import tech.hljzj.framework.logger.Log;
+import tech.hljzj.framework.security.an.Anonymous;
 import tech.hljzj.framework.util.excel.ExcelUtil;
 import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.domain.*;
@@ -69,7 +70,7 @@ public class SysUserController extends BaseController {
     @GetMapping("/{id}")
     @Log(title = MODULE_NAME, operType = BusinessType.DETAIL)
     public R<SysUserDetailVo> entityGet(@PathVariable Serializable id, Boolean fetchExtAttr) {
-        SysUser dto = this.service.entityGet(id, ObjUtil.defaultIfNull(fetchExtAttr,false));
+        SysUser dto = this.service.entityGet(id, ObjUtil.defaultIfNull(fetchExtAttr, false));
         return R.ok(new SysUserDetailVo().fromDto(dto));
     }
 
@@ -389,6 +390,21 @@ public class SysUserController extends BaseController {
     @PostMapping("changePassword")
     public R<Void> changePassword(String userId, String oldPassword, String newPassword) {
         service.changePassword(userId, oldPassword, newPassword);
+        return R.ok();
+    }
+
+    /**
+     * 修改密码
+     *
+     * @param username    用户账号
+     * @param oldPassword 原密码
+     * @param newPassword 新密码
+     */
+    @Log(title = MODULE_NAME, functionName = "修改密码", operType = BusinessType.UPDATE, isSaveRequestData = false, isSaveResponseData = false)
+    @PostMapping("changePasswordByUsername")
+    @Anonymous
+    public R<Void> changePasswordByUsername(String username, String oldPassword, String newPassword) {
+        service.changePasswordByUsername(username, oldPassword, newPassword);
         return R.ok();
     }
 

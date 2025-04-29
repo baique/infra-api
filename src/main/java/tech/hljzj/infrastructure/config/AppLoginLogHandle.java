@@ -1,6 +1,7 @@
 package tech.hljzj.infrastructure.config;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -9,10 +10,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
+import tech.hljzj.framework.bean.R;
 import tech.hljzj.framework.logger.SysLogEntity;
 import tech.hljzj.framework.security.handler.AppLoginFailHandler;
 import tech.hljzj.framework.security.handler.AppLoginSuccessHandler;
 import tech.hljzj.framework.service.ILoggerService;
+import tech.hljzj.framework.util.web.MsgUtil;
+import tech.hljzj.framework.util.web.ReqUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -53,6 +57,11 @@ public class AppLoginLogHandle {
         @Override
         public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
             try {
+                if (exception instanceof LocalSecurityProvider.PasswordExpiredException) {
+                    //密码已经过期，需要修改后再登录
+                    ReqUtil.writeResponse(response, R.fail().setCode(402).setMsg(exception.getMessage()));
+                    return;
+                }
                 super.onAuthenticationFailure(request, response, exception);
             } catch (Exception x) {
                 SysLogEntity sysLogEntity = loggerService.buildLog();

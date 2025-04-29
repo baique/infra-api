@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import tech.hljzj.framework.cache.CommonCache;
 import tech.hljzj.framework.exception.UserException;
@@ -25,7 +26,6 @@ import tech.hljzj.infrastructure.util.AppScopeHolder;
 import tech.hljzj.infrastructure.vo.SysMenu.SysMenuQueryVo;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Component
@@ -61,10 +61,10 @@ public class LocalSecurityProvider implements SecurityProvider {
     public UserInfo login(Authentication authentication) throws Exception {
         String scopeAppId = AppScopeHolder.requiredScopeAppId();
         SysApp app = sysAppService.getOne(Wrappers.<SysApp>lambdaQuery()
-                        .eq(SysApp::getId, scopeAppId)
-                        .or()
-                        .eq(SysApp::getKey, scopeAppId)
-                , false);
+                .eq(SysApp::getId, scopeAppId)
+                .or()
+                .eq(SysApp::getKey, scopeAppId)
+            , false);
         if (app == null) {
             throw UserException.defaultError(MsgUtil.t("auth.illegalLoginRequests"));
         }
@@ -95,26 +95,37 @@ public class LocalSecurityProvider implements SecurityProvider {
             }
             return null;
         }
+        if (AppConst.PASSWORD_POLICY.EXPIRED.equals(principal.getPasswordPolicy())) {
+            throw new PasswordExpiredException("密码已过期，请修改后重新登录；或联系管理员进行解锁");
+        } else if (AppConst.PASSWORD_POLICY.EXPIRED_AT.equals(principal.getPasswordPolicy())) {
+            if (principal.getPasswordExpired() == null || principal.getPasswordExpired().before(new Date())) {
+                throw new PasswordExpiredException("密码已过期，请修改后重新登录；或联系管理员进行解锁");
+            }
+        } else if (AppConst.PASSWORD_POLICY.NEXT_LOGIN_TIME_MUST_UPDATE.equals(principal.getPasswordPolicy())) {
+            throw new PasswordExpiredException("密码已过期，请修改后重新登录；或联系管理员进行解锁");
+        }
 
         return buildLoginInfo(principal, app);
     }
 
     public UserInfo buildLoginInfo(VSysUser principal, SysApp scopeApp) {
         String scopeAppId = scopeApp.getId();
-
-        List<SysRole> sysRoles = sysUserService.listGrantRoleOfUser(principal.getId(), scopeAppId);
-        Map<String, RoleInfo> roleMapping = sysRoles.stream()
-                .map(f -> {
-                    RoleInfo roleInfo = new RoleInfo();
-                    roleInfo.setId(f.getId());
-                    roleInfo.setKey(f.getKey());
-                    roleInfo.setName(f.getName());
-                    roleInfo.setMainHomePage(f.getMainPagePath());
-                    roleInfo.setPriority(f.getPriority());
-                    return roleInfo;
-                }).collect(Collectors.toMap(RoleInfo::getKey, f -> f));
         //信息拼装
         AppLoginUserInfo loginUser = new AppLoginUserInfo();
+        loginUser.setEnabled(Objects.equals(AppConst.YES, principal.getStatus()));
+        loginUser.setLock(Objects.equals(AppConst.YES, principal.getAccountLock()));
+        List<SysRole> sysRoles = sysUserService.listGrantRoleOfUser(principal.getId(), scopeAppId);
+        Map<String, RoleInfo> roleMapping = sysRoles.stream()
+            .map(f -> {
+                RoleInfo roleInfo = new RoleInfo();
+                roleInfo.setId(f.getId());
+                roleInfo.setKey(f.getKey());
+                roleInfo.setName(f.getName());
+                roleInfo.setMainHomePage(f.getMainPagePath());
+                roleInfo.setPriority(f.getPriority());
+                return roleInfo;
+            }).collect(Collectors.toMap(RoleInfo::getKey, f -> f));
+
         Set<RoleInfo> roleInfoList = loginUser.getRoleInfos();
         loginUser.getRole().addAll(roleMapping.keySet());
         roleInfoList.addAll(roleMapping.values());
@@ -127,34 +138,28 @@ public class LocalSecurityProvider implements SecurityProvider {
             sysMenus = sysMenuService.list(q);
         } else {
             sysMenus = sysRoleService.listGrantOfRoles(sysRoles.stream()
-                    .map(SysRole::getId)
-                    .collect(Collectors.toList()), scopeAppId, f -> f);
+                .map(SysRole::getId)
+                .collect(Collectors.toList()), scopeAppId, f -> f);
         }
 
         loginUser.setLoginAppId(scopeAppId);
         loginUser.setId(principal.getId())
-                .setAccount(principal.getUsername())
-                .setName(principal.getRealname())
-                .setIdCard(principal.getCardNo())
-                .setPhone(principal.getPhone())
-                .setEmail(principal.getEmail())
-                .setOwnerDeptId(principal.getDeptId())
-                .setOwnerDeptCode(principal.getDeptKey())
-                .setOwnerDeptName(principal.getDeptName())
-                .setUnit(principal.getWorkUnit())
-                .setPost(principal.getWorkPos())
-                .setRank(principal.getWorkRank())
-                .setEnabled(Objects.equals(AppConst.YES, principal.getStatus()))
-                .setLock(Objects.equals(AppConst.YES, principal.getAccountLock()))
-        ;
+            .setAccount(principal.getUsername())
+            .setName(principal.getRealname())
+            .setIdCard(principal.getCardNo())
+            .setPhone(principal.getPhone())
+            .setEmail(principal.getEmail())
+            .setOwnerDeptId(principal.getDeptId())
+            .setOwnerDeptCode(principal.getDeptKey())
+            .setOwnerDeptName(principal.getDeptName())
+            .setUnit(principal.getWorkUnit())
+            .setPost(principal.getWorkPos())
+            .setRank(principal.getWorkRank());
 
         //设置用户主页路径
         loginUser.setMainHomePath(CollUtil.isEmpty(roleInfoList) ? scopeApp.getMainPagePath() : roleInfoList.stream().findFirst().map(RoleInfo::getMainHomePage).orElse(""));
         loginUser.setMainHomePath(StrUtil.blankToDefault(loginUser.getMainHomePath(), scopeApp.getMainPagePath()));
-
-        loginUser.setPermission(sysMenus.stream()
-                .map(SysMenu::getKey).collect(Collectors.toSet())
-        );
+        loginUser.setPermission(sysMenus.stream().map(SysMenu::getKey).collect(Collectors.toSet()));
         return loginUser;
     }
 
@@ -179,5 +184,10 @@ public class LocalSecurityProvider implements SecurityProvider {
         return false;
     }
 
+    public static class PasswordExpiredException extends AuthenticationException {
+        public PasswordExpiredException(String msg) {
+            super(msg);
+        }
+    }
 }
 

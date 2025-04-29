@@ -1,8 +1,0 @@
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog">
-
-    <changeSet id="1745817259865-1" author="wa">
-        <sqlFile path="db-changelog/V1/struct.sql"/>
-
-        <sqlFile path="db-changelog/V1/data.sql"/>
-    </changeSet>
-</databaseChangeLog>

@@ -12,7 +12,7 @@ import tech.hljzj.framework.service.sort.ISort;
 /**
  * 系统配置 sys_config
  * DTO实体
- * 
+ *
  * @author wa
  */
 @Getter
@@ -71,7 +71,7 @@ public class SysConfig extends BizBaseEntity implements ISort {
     /**
      * 从新的实体中更新属性
      */
-    public void updateForm(SysConfig entity){
+    public void updateForm(SysConfig entity) {
         this.setKey(entity.getKey());
         this.setName(entity.getName());
         this.setValue(entity.getValue());

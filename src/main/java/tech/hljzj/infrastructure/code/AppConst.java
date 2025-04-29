@@ -10,4 +10,30 @@ public class AppConst {
     public static final String CONFIG_AUTO_UNLOCK = "auto_un_lock";
     public static final String CONFIG_PASSWORD_STRENGTH = "password_strength";
     public static final String CONFIG_PASSWORD_STRENGTH_DESC = "password_strength_desc";
+
+    /**
+     * 密码策略
+     */
+    public static class PASSWORD_POLICY {
+        /**
+         * 永不过期
+         */
+        public static final String NEVER = "1";
+        /**
+         * 下次登录时需要用户修改
+         */
+        public static final String NEXT_LOGIN_TIME_MUST_UPDATE = "2";
+        /**
+         * 指定时间过期
+         */
+        public static final String EXPIRED_AT = "3";
+        /**
+         * 禁止用户修改密码
+         */
+        public static final String DISABLE_CHANGE_PASSWORD = "4";
+        /**
+         * 已过期
+         */
+        public static final String EXPIRED = "5";
+    }
 }

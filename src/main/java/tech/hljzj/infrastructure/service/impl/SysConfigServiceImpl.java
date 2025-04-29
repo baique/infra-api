@@ -98,10 +98,8 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         if (CollUtil.isEmpty(ids)) {
             return false;
         }
-        return remove(Wrappers.<SysConfig>lambdaQuery()
-                .in(SysConfig::getId, ids)
-                .ne(SysConfig::getLocked, AppConst.YES)
-        );
+        listByIds(ids).forEach(this::entityDelete);
+        return true;
     }
 
 

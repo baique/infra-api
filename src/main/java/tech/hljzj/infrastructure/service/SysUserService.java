@@ -173,6 +173,15 @@ public interface SysUserService extends IService<SysUser> {
     void changePassword(String userId, String oldPassword, String newPassword);
 
     /**
+     * 修改密码
+     *
+     * @param username    用户
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     */
+    void changePasswordByUsername(String username, String oldPassword, String newPassword);
+
+    /**
      * 更新数据排序
      *
      * @param id       数据id

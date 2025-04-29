@@ -347,6 +347,33 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
+    public void changePasswordByUsername(String username, String oldPassword, String newPassword) {
+        SysUser us = getOne(Wrappers.<SysUser>lambdaQuery()
+                .eq(SysUser::getUsername, username)
+        );
+        if (us == null) {
+            throw UserException.defaultError("用户名或密码错误导致失败");
+        }
+        // 临时设置为不检查
+        us.setPasswordPolicy(AppConst.PASSWORD_POLICY.NEVER);
+        // 检查密码
+        if (!localSecurityProvider.validatePassword(oldPassword, us)) {
+            throw UserException.defaultError("用户名或密码错误导致失败");
+        }
+        try {
+            update(Wrappers.lambdaUpdate(SysUser.class)
+                    .eq(SysUser::getId, us.getId())
+                    .set(SysUser::getPasswordPolicy, AppConst.PASSWORD_POLICY.NEVER)
+                    .set(SysUser::getPassword, SMUtil.sm3(newPassword))
+                    .set(SysUser::getMaskV, swapEncoder.encode(newPassword))
+                    .set(SysUser::getLastChangePassword, new Date())
+            );
+        } catch (Exception e) {
+            throw UserException.defaultError("密码修改失败", e);
+        }
+    }
+
+    @Override
     public void changePassword(String userId, String oldPassword, String newPassword) {
         SysUser user = getById(userId);
 

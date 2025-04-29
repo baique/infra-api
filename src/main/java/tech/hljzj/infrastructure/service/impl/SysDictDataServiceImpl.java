@@ -91,10 +91,8 @@ public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataMapper, SysDi
         if (CollUtil.isEmpty(ids)) {
             return false;
         }
-        return remove(Wrappers.<SysDictData>lambdaQuery()
-                .in(SysDictData::getId, ids)
-                .ne(SysDictData::getLocked, AppConst.YES)
-        );
+        listByIds(ids).forEach(this::entityDelete);
+        return true;
     }
 
 
