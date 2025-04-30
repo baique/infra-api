@@ -1,0 +1,86 @@
+{
+  "server": {
+    "serverAddress": "",
+    "author": "wa",
+    "codeSelector": [
+      "new-admin",
+      "web-new"
+    ]
+  },
+  "genConfig": {
+    "perm": "sys_role_ex_",
+    "key": "sys_role_ex_",
+    "name": "相斥角色",
+    "packageName": "tech.hljzj.app",
+    "author": "",
+    "description": "",
+    "primaryKeyColumn": "id_",
+    "dateTime": "",
+    "params": {
+      "extendBizBaseEntity": ""
+    }
+  },
+  "genColumn": [
+    {
+      "key": "id_",
+      "name": "id_",
+      "type": "Long",
+      "description": null,
+      "typeNumber": true,
+      "list": false,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 2147483647,
+      "component": "InputNumber",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "id": "D2GXW2GHKARhU17eZsT8z"
+    },
+    {
+      "key": "role_id_",
+      "name": "角色标识",
+      "type": "Long",
+      "description": null,
+      "typeNumber": true,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 2147483647,
+      "component": "InputNumber",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "id": "eqy6EmSSJ0NG8IafLwYNt"
+    },
+    {
+      "key": "ex_role_id_",
+      "name": "相斥角色标识",
+      "type": "Long",
+      "description": null,
+      "typeNumber": true,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 2147483647,
+      "component": "InputNumber",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "id": "0_MmMmHlO0GYKImVKrVMz"
+    }
+  ],
+  "serverConfig": {}
+}
