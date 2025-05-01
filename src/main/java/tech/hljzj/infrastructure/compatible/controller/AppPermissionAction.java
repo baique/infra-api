@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import tech.hljzj.framework.security.an.Anonymous;
 import tech.hljzj.infrastructure.code.AppConst;
+import tech.hljzj.infrastructure.compatible.controller.bsae.MController;
+import tech.hljzj.infrastructure.compatible.controller.bsae.R;
 import tech.hljzj.infrastructure.compatible.util.AppHelper;
 import tech.hljzj.infrastructure.compatible.vo.bean.PageUtil;
 import tech.hljzj.infrastructure.compatible.vo.permission.Permission;

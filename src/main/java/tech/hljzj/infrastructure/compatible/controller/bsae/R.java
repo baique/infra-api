@@ -1,4 +1,4 @@
-package tech.hljzj.infrastructure.compatible.controller;
+package tech.hljzj.infrastructure.compatible.controller.bsae;
 
 public class R<T> extends tech.hljzj.framework.bean.R<T> {
     public int getSub_code() {

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import tech.hljzj.infrastructure.compatible.controller.bsae.MController;
 import tech.hljzj.infrastructure.compatible.vo.department.Department;
 import tech.hljzj.framework.security.an.Anonymous;
 import tech.hljzj.framework.util.tree.TreeUtil;

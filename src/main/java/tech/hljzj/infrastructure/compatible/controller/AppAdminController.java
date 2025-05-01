@@ -7,18 +7,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import tech.hljzj.infrastructure.compatible.util.AppHelper;
-import tech.hljzj.infrastructure.compatible.vo.department.Department;
-import tech.hljzj.infrastructure.compatible.vo.role.Role;
 import tech.hljzj.framework.security.SessionStoreDecorator;
 import tech.hljzj.framework.security.an.Anonymous;
-import tech.hljzj.infrastructure.domain.SysDept;
-import tech.hljzj.infrastructure.domain.SysRole;
-import tech.hljzj.infrastructure.domain.SysUser;
-import tech.hljzj.infrastructure.domain.VSysDeptMemberUser;
+import tech.hljzj.infrastructure.compatible.controller.bsae.MController;
+import tech.hljzj.infrastructure.compatible.controller.bsae.R;
+import tech.hljzj.infrastructure.compatible.util.AppHelper;
+import tech.hljzj.infrastructure.compatible.vo.AppInfo;
+import tech.hljzj.infrastructure.compatible.vo.department.Department;
+import tech.hljzj.infrastructure.compatible.vo.role.Role;
+import tech.hljzj.infrastructure.domain.*;
+import tech.hljzj.infrastructure.service.SysAppService;
 import tech.hljzj.infrastructure.service.SysDeptService;
 import tech.hljzj.infrastructure.service.SysRoleService;
 import tech.hljzj.infrastructure.service.SysUserService;
+import tech.hljzj.infrastructure.vo.SysApp.SysAppQueryVo;
 import tech.hljzj.infrastructure.vo.SysDept.SysDeptQueryVo;
 import tech.hljzj.infrastructure.vo.SysRole.SysRoleQueryVo;
 import tech.hljzj.infrastructure.vo.VSysDeptMemberUser.VSysDeptMemberUserQueryVo;
@@ -37,13 +39,15 @@ public class AppAdminController extends MController {
     private final SysUserService sysUserService;
     private final SessionStoreDecorator sessionStoreDecorator;
     private final SysRoleService sysRoleService;
+    private final SysAppService sysAppService;
 
-    public AppAdminController(SysDeptService sysDeptService, SysUserService sysUserService, SessionStoreDecorator sessionStoreDecorator, SysRoleService sysRoleService) {
+    public AppAdminController(SysDeptService sysDeptService, SysUserService sysUserService, SessionStoreDecorator sessionStoreDecorator, SysRoleService sysRoleService, SysAppService sysAppService) {
         super();
         this.sysDeptService = sysDeptService;
         this.sysUserService = sysUserService;
         this.sessionStoreDecorator = sessionStoreDecorator;
         this.sysRoleService = sysRoleService;
+        this.sysAppService = sysAppService;
     }
 
     @PostMapping("/tyrz/departments/dp/get")
@@ -63,7 +67,7 @@ public class AppAdminController extends MController {
         Map<String, String> tk = new LinkedHashMap<>();
         tk.put("id", token);
         return R.ok(Collections.singletonList(
-                tk
+            tk
         ));
     }
 
@@ -75,8 +79,8 @@ public class AppAdminController extends MController {
         SysUser u = null;
         try {
             u = sysUserService.getOne(Wrappers.<SysUser>lambdaQuery()
-                            .eq(SysUser::getUsername, userAccount),
-                    true
+                    .eq(SysUser::getUsername, userAccount),
+                true
             );
         } catch (Exception e) {
             log.error("用户信息查找失败", e);
@@ -90,8 +94,8 @@ public class AppAdminController extends MController {
 
     @RequestMapping("/tyrz/getroles")
     @ResponseBody
-    public Object getRoles(Integer page, Integer limit, String appId) {
-        SysRoleQueryVo rq = new SysRoleQueryVo();
+    public Object getRoles(Role roleInfo, Integer page, Integer limit, String appId) {
+        SysRoleQueryVo rq = roleInfo.toQuery();
         rq.setPageNum(page);
         rq.setPageSize(limit);
         rq.setOwnerAppId(appId);
@@ -101,12 +105,24 @@ public class AppAdminController extends MController {
 
 
     @RequestMapping("/tyrz/departments")
-    public Object departments(Integer page, Integer limit) {
-        SysDeptQueryVo rq = new SysDeptQueryVo();
+    @ResponseBody
+    public Object departments(Department department, Integer page, Integer limit) {
+        SysDeptQueryVo rq = department.toQuery();
         rq.setPageNum(page);
         rq.setPageSize(limit);
         List<SysDept> roleList = sysDeptService.list(rq);
         return success(roleList.stream().map(Department::from).collect(Collectors.toList()));
+    }
+
+    @RequestMapping("/tyrz/scopeapps")
+    @ResponseBody
+    public Object departments(String appName, Integer page, Integer limit) {
+        SysAppQueryVo rq = new SysAppQueryVo();
+        rq.setNameLike(appName);
+        rq.setPageNum(page);
+        rq.setPageSize(limit);
+        List<SysApp> appList = sysAppService.list(rq);
+        return success(appList.stream().map(AppInfo::fromDto).collect(Collectors.toList()));
     }
 
 
@@ -130,4 +146,6 @@ public class AppAdminController extends MController {
             return R.fail().setMsg("用户登录状态可能已失效！");
         }
     }
+
+
 }

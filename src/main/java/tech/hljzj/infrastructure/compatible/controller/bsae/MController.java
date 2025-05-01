@@ -1,4 +1,4 @@
-package tech.hljzj.infrastructure.compatible.controller;
+package tech.hljzj.infrastructure.compatible.controller.bsae;
 
 import tech.hljzj.framework.base.BaseController;
 
