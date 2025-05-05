@@ -7,17 +7,20 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.lang.*;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.springframework.ai.tool.annotation.ToolParam;
 import tech.hljzj.infrastructure.domain.SysApp;
 import tech.hljzj.framework.pojo.form.PageDomain;
 
 /**
- * 应用管理 sys_app_ 
+ * 应用管理 sys_app_
  * 交互实体 用于检索
  *
  * @author wa
@@ -25,6 +28,7 @@ import tech.hljzj.framework.pojo.form.PageDomain;
 @Getter
 @Setter
 public class SysAppQueryBaseVo<T extends SysApp> extends PageDomain implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     /** bigint     */
     private String id,idNot,idLike,idPrefix,idSuffix;
@@ -59,7 +63,7 @@ public class SysAppQueryBaseVo<T extends SysApp> extends PageDomain implements S
     private List<Integer> sortIn,sortNotIn;
 
 
-    
+
     public Consumer<LambdaQueryWrapper<? extends T>> conditionId() {
         return (builder)->{
 
@@ -194,11 +198,11 @@ public class SysAppQueryBaseVo<T extends SysApp> extends PageDomain implements S
           builder.in(null != this.getSortIn() && this.getSortIn().size() > 0,T::getSort, this.getSortIn());
           builder.notIn(null != this.getSortNotIn() && this.getSortNotIn().size() > 0,T::getSort, this.getSortNotIn());
           builder.gt(this.getSortGt() != null,T::getSort, this.getSortGt());
-          builder.ge(this.getSortGte() != null,T::getSort, this.getSortGte());         
-          builder.lt(this.getSortLt() != null,T::getSort, this.getSortLt());         
+          builder.ge(this.getSortGte() != null,T::getSort, this.getSortGte());
+          builder.lt(this.getSortLt() != null,T::getSort, this.getSortLt());
           builder.le(this.getSortLte() != null,T::getSort, this.getSortLte());
 
-  
+
         };
     }
 

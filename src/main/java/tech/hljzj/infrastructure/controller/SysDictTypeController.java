@@ -1,7 +1,6 @@
 package tech.hljzj.infrastructure.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,8 @@ import tech.hljzj.infrastructure.domain.SysDictType;
 import tech.hljzj.infrastructure.service.SysDictTypeService;
 import tech.hljzj.infrastructure.vo.SysDictType.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.function.Function;
@@ -37,7 +36,6 @@ public class SysDictTypeController extends BaseController {
     private final SysDictTypeService service;
     public static final String MODULE_NAME = "字典组管理";
 
-    @Autowired
     public SysDictTypeController(SysDictTypeService service) {
         this.service = service;
     }

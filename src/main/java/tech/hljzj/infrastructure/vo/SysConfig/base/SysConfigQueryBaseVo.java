@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.lang.*;
 import java.util.Date;
@@ -25,6 +27,7 @@ import tech.hljzj.framework.pojo.form.PageDomain;
 @Getter
 @Setter
 public class SysConfigQueryBaseVo extends PageDomain implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     /** bigint     */
     private String id,idNot,idLike,idPrefix,idSuffix;

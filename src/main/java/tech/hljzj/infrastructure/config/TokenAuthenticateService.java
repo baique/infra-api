@@ -49,7 +49,7 @@ public class TokenAuthenticateService implements SecurityProvider, ITokenAuthent
 
     private UserInfo tokenAuth(String token) {
         Optional<TokenAuthentication> user = sessionStoreDecorator.getUserByToken(token);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw UserException.defaultError("登录动作执行失败,因为传入了一个无效的会话凭据");
         }
 

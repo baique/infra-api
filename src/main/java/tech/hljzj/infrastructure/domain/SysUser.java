@@ -9,6 +9,7 @@ import lombok.Setter;
 import tech.hljzj.framework.pojo.dto.BizBaseEntity;
 import tech.hljzj.framework.service.sort.ISort;
 
+import java.io.Serial;
 import java.util.Date;
 
 /**
@@ -21,6 +22,7 @@ import java.util.Date;
 @Setter
 @TableName(value = "sys_user_")
 public class SysUser extends BizBaseEntity implements ISort {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

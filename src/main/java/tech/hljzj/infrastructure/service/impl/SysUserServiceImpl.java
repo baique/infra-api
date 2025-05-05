@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.toolkit.MPJWrappers;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -79,19 +81,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public VSysUser entityGet(VSysUser entity, boolean fetchExtAttr) {
         return userViewMapper.selectJoinOne(VSysUser.class, MPJWrappers.lambdaJoin(entity)
-                .selectAll(VSysUser.class)
-                .selectAs(SysUserExtAttr::getAttribution, VSysUser::getAttribution)
-                .leftJoin(SysUserExtAttr.class, SysUserExtAttr::getId, VSysUser::getId)
+            .selectAll(VSysUser.class)
+            .selectAs(SysUserExtAttr::getAttribution, VSysUser::getAttribution)
+            .leftJoin(SysUserExtAttr.class, SysUserExtAttr::getId, VSysUser::getId)
         );
     }
 
     @Override
     public VSysUser entityGet(Serializable id, boolean fetchExtAttr) {
         return userViewMapper.selectJoinOne(VSysUser.class, MPJWrappers.<VSysUser>lambdaJoin()
-                .selectAll(VSysUser.class)
-                .selectAs(SysUserExtAttr::getAttribution, VSysUser::getAttribution)
-                .leftJoin(SysUserExtAttr.class, SysUserExtAttr::getId, VSysUser::getId)
-                .eq(VSysUser::getId, id)
+            .selectAll(VSysUser.class)
+            .selectAs(SysUserExtAttr::getAttribution, VSysUser::getAttribution)
+            .leftJoin(SysUserExtAttr.class, SysUserExtAttr::getId, VSysUser::getId)
+            .eq(VSysUser::getId, id)
         );
     }
 
@@ -103,8 +105,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
 
         if (StrUtil.isNotBlank(entity.getCardNo()) && exists(Wrappers.<SysUser>lambdaQuery()
-                .eq(SysUser::getCardType, entity.getCardType())
-                .eq(SysUser::getCardNo, entity.getCardNo()))) {
+            .eq(SysUser::getCardType, entity.getCardType())
+            .eq(SysUser::getCardNo, entity.getCardNo()))) {
             throw UserException.defaultError(MsgUtil.t("user.exists", "证件号码"));
         }
         if (StrUtil.isNotBlank(entity.getPhone()) && exists(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, entity.getPhone()))) {
@@ -124,9 +126,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
 
         if (StrUtil.isNotBlank(entity.getCardNo()) && exists(Wrappers.<SysUser>lambdaQuery()
-                .ne(SysUser::getId, entity.getId())
-                .eq(SysUser::getCardType, entity.getCardType())
-                .eq(SysUser::getCardNo, entity.getCardNo()))) {
+            .ne(SysUser::getId, entity.getId())
+            .eq(SysUser::getCardType, entity.getCardType())
+            .eq(SysUser::getCardNo, entity.getCardNo()))) {
             throw UserException.defaultError(MsgUtil.t("user.exists", "证件号码"));
         }
         if (StrUtil.isNotBlank(entity.getPhone()) && exists(Wrappers.<SysUser>lambdaQuery().ne(SysUser::getId, entity.getId()).eq(SysUser::getPhone, entity.getPhone()))) {
@@ -173,8 +175,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
 
         Map<String, List<SysUserRole>> existValue = sysUserRoleService.list(Wrappers.<SysUserRole>lambdaQuery()
-                .eq(SysUserRole::getRoleId, roleId)
-                .in(SysUserRole::getUserId, userIds)
+            .eq(SysUserRole::getRoleId, roleId)
+            .in(SysUserRole::getUserId, userIds)
         ).stream().collect(Collectors.groupingBy(SysUserRole::getUserId));
 
         return sysUserRoleService.saveBatch(userIds.stream().filter(userId -> !existValue.containsKey(userId)).map(userId -> {
@@ -195,9 +197,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return false;
         }
         return sysUserRoleService.remove(Wrappers
-                .<SysUserRole>lambdaQuery()
-                .eq(SysUserRole::getRoleId, roleId)
-                .in(SysUserRole::getUserId, userIds)
+            .<SysUserRole>lambdaQuery()
+            .eq(SysUserRole::getRoleId, roleId)
+            .in(SysUserRole::getUserId, userIds)
         );
     }
 
@@ -213,9 +215,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return Collections.emptyMap();
         }
         List<SysUserRole> sysUserRoles = userRoleMapper.selectList(Wrappers
-                .<SysUserRole>lambdaQuery()
-                .eq(SysUserRole::getRoleId, roleId)
-                .in(SysUserRole::getUserId, userIds)
+            .<SysUserRole>lambdaQuery()
+            .eq(SysUserRole::getRoleId, roleId)
+            .in(SysUserRole::getUserId, userIds)
         );
 
         Map<String, Boolean> result = new HashMap<>();
@@ -236,35 +238,35 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public List<GrantAppRoleVo> grantAppWithRole(String userId) {
         // 这将同时得到应用和角色标识
         List<SysUserRole> grantUserRoleIds = sysUserRoleService.list(Wrappers.<SysUserRole>lambdaQuery()
-                .eq(SysUserRole::getUserId, userId)
+            .eq(SysUserRole::getUserId, userId)
         );
         Map<String, List<SysUserRole>> appRoleGroup = grantUserRoleIds
-                .stream().collect(Collectors.groupingBy(SysUserRole::getAppId));
+            .stream().collect(Collectors.groupingBy(SysUserRole::getAppId));
 
         if (CollUtil.isEmpty(appRoleGroup)) {
             return Collections.emptyList();
         }
 
         return sysAppService.listByIds(appRoleGroup.keySet()).stream().map(app -> {
-                    Set<String> roleIds = appRoleGroup.get(app.getId()).stream().map(SysUserRole::getRoleId).collect(Collectors.toSet());
-                    List<SysRoleListVo> roleList = sysRoleService
-                            .listByIds(roleIds).stream()
-                            .map(f -> new SysRoleListVo().<SysRoleListVo>fromDto(f))
-                            .collect(Collectors.toList());
-                    GrantAppRoleVo grantAppRoleVo = new GrantAppRoleVo();
-                    grantAppRoleVo.setRoleList(roleList);
-                    grantAppRoleVo.setAppInfo(new SysAppListVo().fromDto(app));
-                    return grantAppRoleVo;
-                }).sorted((app1, app2) -> CompareUtil.compare(app1.getAppInfo().getSort(), app2.getAppInfo().getSort()))
-                .collect(Collectors.toList());
+                Set<String> roleIds = appRoleGroup.get(app.getId()).stream().map(SysUserRole::getRoleId).collect(Collectors.toSet());
+                List<SysRoleListVo> roleList = sysRoleService
+                    .listByIds(roleIds).stream()
+                    .map(f -> new SysRoleListVo().<SysRoleListVo>fromDto(f))
+                    .collect(Collectors.toList());
+                GrantAppRoleVo grantAppRoleVo = new GrantAppRoleVo();
+                grantAppRoleVo.setRoleList(roleList);
+                grantAppRoleVo.setAppInfo(new SysAppListVo().fromDto(app));
+                return grantAppRoleVo;
+            }).sorted((app1, app2) -> CompareUtil.compare(app1.getAppInfo().getSort(), app2.getAppInfo().getSort()))
+            .collect(Collectors.toList());
     }
 
     @Override
     public List<SysRole> listGrantRoleOfUser(String userId, @Nullable String appId) {
         List<SysUserRole> sysUserRoles = userRoleMapper.selectList(Wrappers
-                .<SysUserRole>lambdaQuery()
-                .eq(SysUserRole::getUserId, userId)
-                .eq(SysUserRole::getAppId, appId)
+            .<SysUserRole>lambdaQuery()
+            .eq(SysUserRole::getUserId, userId)
+            .eq(SysUserRole::getAppId, appId)
         );
         SysRoleQueryVo q = new SysRoleQueryVo();
         LambdaQueryWrapper<SysRole> queryWrapper = q.buildQueryWrapper();
@@ -336,10 +338,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         try {
             update(Wrappers.lambdaUpdate(SysUser.class)
-                    .eq(SysUser::getId, userId)
-                    .set(SysUser::getPassword, SMUtil.sm3(defaultPassword))
-                    .set(SysUser::getMaskV, swapEncoder.encode(defaultPassword))
-                    .set(SysUser::getLastChangePassword, new Date())
+                .eq(SysUser::getId, userId)
+                .set(SysUser::getPassword, SMUtil.sm3(defaultPassword))
+                .set(SysUser::getMaskV, swapEncoder.encode(defaultPassword))
+                .set(SysUser::getLastChangePassword, new Date())
             );
         } catch (Exception e) {
             throw UserException.defaultError("密码修改失败", e);
@@ -349,7 +351,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public void changePasswordByUsername(String username, String oldPassword, String newPassword) {
         SysUser us = getOne(Wrappers.<SysUser>lambdaQuery()
-                .eq(SysUser::getUsername, username)
+            .eq(SysUser::getUsername, username)
         );
         if (us == null) {
             throw UserException.defaultError("用户名或密码错误导致失败");
@@ -362,11 +364,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         try {
             update(Wrappers.lambdaUpdate(SysUser.class)
-                    .eq(SysUser::getId, us.getId())
-                    .set(SysUser::getPasswordPolicy, AppConst.PASSWORD_POLICY.NEVER)
-                    .set(SysUser::getPassword, SMUtil.sm3(newPassword))
-                    .set(SysUser::getMaskV, swapEncoder.encode(newPassword))
-                    .set(SysUser::getLastChangePassword, new Date())
+                .eq(SysUser::getId, us.getId())
+                .set(SysUser::getPasswordPolicy, AppConst.PASSWORD_POLICY.NEVER)
+                .set(SysUser::getPassword, SMUtil.sm3(newPassword))
+                .set(SysUser::getMaskV, swapEncoder.encode(newPassword))
+                .set(SysUser::getLastChangePassword, new Date())
             );
         } catch (Exception e) {
             throw UserException.defaultError("密码修改失败", e);
@@ -397,10 +399,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (localSecurityProvider.validatePassword(oldPassword, user)) {
             try {
                 update(Wrappers.lambdaUpdate(SysUser.class)
-                        .eq(SysUser::getId, user.getId())
-                        .set(SysUser::getPassword, SMUtil.sm3(newPassword))
-                        .set(SysUser::getMaskV, swapEncoder.encode(newPassword))
-                        .set(SysUser::getLastChangePassword, new Date())
+                    .eq(SysUser::getId, user.getId())
+                    .set(SysUser::getPassword, SMUtil.sm3(newPassword))
+                    .set(SysUser::getMaskV, swapEncoder.encode(newPassword))
+                    .set(SysUser::getLastChangePassword, new Date())
                 );
             } catch (Exception e) {
                 throw UserException.defaultError("密码修改失败", e);
@@ -414,13 +416,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Transactional(rollbackFor = Exception.class)
     public void updateSortData(String id, String toPrevId, String toNextId) {
         updateBatchById(sortService.applySort(
-                id, toPrevId, toNextId,
-                baseMapper,
-                q -> q.where()
-                        .setEntityClass(SysUser.class)
-                        .orderByAsc(SysUser::getSort)
-                        .orderByDesc(SysUser::getCreateTime)
-                        .orderByDesc(SysUser::getId)
+            id, toPrevId, toNextId,
+            baseMapper,
+            q -> q.where()
+                .setEntityClass(SysUser.class)
+                .orderByAsc(SysUser::getSort)
+                .orderByDesc(SysUser::getCreateTime)
+                .orderByDesc(SysUser::getId)
         ));
     }
 }

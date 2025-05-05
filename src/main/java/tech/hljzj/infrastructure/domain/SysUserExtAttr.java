@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -18,6 +19,7 @@ import java.io.Serializable;
 @Setter
 @TableName(value = "sys_user_ext_attr_")
 public class SysUserExtAttr implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

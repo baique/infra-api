@@ -17,9 +17,7 @@ public class SysDeptMemberListVo extends SysUserListVo {
 
     @Override
     public <T extends SysUserListBaseVo> T fromDto(SysUser dto) {
-        if (dto instanceof VSysDeptMemberUser) {
-            //转为po
-            VSysDeptMemberUser po = (VSysDeptMemberUser) dto;
+        if (dto instanceof VSysDeptMemberUser po) {
             this.setOwnerType(po.getOwnerType());
         }
         return super.fromDto(dto);

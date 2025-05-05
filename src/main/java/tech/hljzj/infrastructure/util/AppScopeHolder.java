@@ -2,14 +2,13 @@ package tech.hljzj.infrastructure.util;
 
 import cn.hutool.core.util.StrUtil;
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.framework.util.web.ReqUtil;
 import tech.hljzj.infrastructure.code.AppConst;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * 应用上下文信息

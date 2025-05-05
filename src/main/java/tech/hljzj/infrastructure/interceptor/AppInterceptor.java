@@ -3,15 +3,12 @@ package tech.hljzj.infrastructure.interceptor;
 import cn.hutool.core.util.StrUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.Claim;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 import tech.hljzj.framework.bean.R;
 import tech.hljzj.framework.interceptor.BaseInterceptor;
 import tech.hljzj.framework.security.bean.LoginUser;
-import tech.hljzj.framework.security.bean.UserInfo;
 import tech.hljzj.framework.util.web.AuthUtil;
 import tech.hljzj.framework.util.web.ReqUtil;
 import tech.hljzj.infrastructure.config.AppLoginUserInfo;
@@ -19,8 +16,8 @@ import tech.hljzj.infrastructure.domain.SysApp;
 import tech.hljzj.infrastructure.service.SysAppService;
 import tech.hljzj.infrastructure.util.AppScopeHolder;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * 应用信息校验拦截

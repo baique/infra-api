@@ -1,7 +1,6 @@
 package tech.hljzj.infrastructure.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ import tech.hljzj.infrastructure.service.SysDeptService;
 import tech.hljzj.infrastructure.vo.SysDept.*;
 import tech.hljzj.infrastructure.vo.VSysDeptMemberUser.VSysDeptMemberUserQueryVo;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -38,7 +37,6 @@ public class SysDeptController extends BaseController {
     private final SysDeptService service;
     public static final String MODULE_NAME = "组织管理";
 
-    @Autowired
     public SysDeptController(SysDeptService service) {
         this.service = service;
     }

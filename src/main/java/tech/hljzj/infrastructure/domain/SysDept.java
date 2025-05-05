@@ -9,6 +9,8 @@ import lombok.Setter;
 import tech.hljzj.framework.pojo.dto.BizBaseEntity;
 import tech.hljzj.framework.service.sort.ISort;
 
+import java.io.Serial;
+
 /**
  * 组织管理 sys_dept
  * DTO实体
@@ -19,6 +21,7 @@ import tech.hljzj.framework.service.sort.ISort;
 @Setter
 @TableName(value = "sys_dept_")
 public class SysDept extends BizBaseEntity implements ISort {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

@@ -2,7 +2,6 @@ package tech.hljzj.infrastructure.controller;
 
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
@@ -19,8 +18,8 @@ import tech.hljzj.infrastructure.domain.SysApp;
 import tech.hljzj.infrastructure.service.SysAppService;
 import tech.hljzj.infrastructure.vo.SysApp.*;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
@@ -44,7 +43,6 @@ public class SysAppController extends BaseController {
     private final SwapEncoder swapEncoder;
     private final SysAppService sysAppService;
 
-    @Autowired
     public SysAppController(SysAppService service, SwapEncoder swapEncoder, SysAppService sysAppService) {
         this.service = service;
         this.swapEncoder = swapEncoder;
@@ -116,7 +114,6 @@ public class SysAppController extends BaseController {
      * 导出数据
      *
      * @param query 数据查询
-     * @return 导出结果
      */
     @PostMapping("/export")
     @PreAuthorize("auth('sys:app:export')")

@@ -32,7 +32,7 @@ import tech.hljzj.infrastructure.vo.SysDictData.SysDictDataListVo;
 import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeListVo;
 import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeQueryVo;
 
-import javax.validation.Validator;
+import jakarta.validation.Validator;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;

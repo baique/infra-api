@@ -1,7 +1,6 @@
 package tech.hljzj.infrastructure.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,7 @@ import tech.hljzj.infrastructure.domain.SysDictData;
 import tech.hljzj.infrastructure.service.SysDictDataService;
 import tech.hljzj.infrastructure.vo.SysDictData.*;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,7 +36,6 @@ public class SysDictDataController extends BaseController {
     private final SysDictDataService service;
     public static final String MODULE_NAME = "字典项管理";
 
-    @Autowired
     public SysDictDataController(SysDictDataService service) {
         this.service = service;
     }

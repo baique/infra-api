@@ -7,6 +7,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * sys_user_role_ sys_user_role_
  * DTO实体
@@ -16,7 +19,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName(value = "sys_user_role_")
-public class SysUserRole {
+public class SysUserRole implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -44,6 +48,6 @@ public class SysUserRole {
     /**
      * 从新的实体中更新属性
      */
-    public void updateForm(SysUserRole entity){
+    public void updateForm(SysUserRole entity) {
     }
 }

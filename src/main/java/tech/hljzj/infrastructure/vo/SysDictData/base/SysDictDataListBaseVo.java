@@ -12,6 +12,7 @@ import tech.hljzj.framework.util.excel.dict.DictConvertHandle;
 import tech.hljzj.framework.util.excel.dict.UseDict;
 import tech.hljzj.infrastructure.domain.SysDictData;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 
@@ -29,6 +30,7 @@ import java.io.Serializable;
 @ContentFontStyle(fontHeightInPoints = (short) 12)
 @ExcelIgnoreUnannotated
 public class SysDictDataListBaseVo implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     /**
      * bigint

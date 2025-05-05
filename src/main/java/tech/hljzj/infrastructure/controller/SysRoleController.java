@@ -1,8 +1,7 @@
 package tech.hljzj.infrastructure.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,7 @@ import tech.hljzj.infrastructure.domain.SysRole;
 import tech.hljzj.infrastructure.service.SysRoleService;
 import tech.hljzj.infrastructure.vo.SysRole.*;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,7 +36,6 @@ public class SysRoleController extends BaseController {
     private final SysRoleService service;
     public static final String MODULE_NAME = "角色管理";
 
-    @Autowired
     public SysRoleController(SysRoleService service) {
         this.service = service;
     }
@@ -222,7 +220,7 @@ public class SysRoleController extends BaseController {
     @PreAuthorize("auth('sys:role:grant')")
     @Validated
     @Log(title = MODULE_NAME, functionName = "分配角色可访问菜单", operType = BusinessType.UPDATE)
-    public R<?> grant(@NotNull(value = "需提供角色标识") String roleId, @NotNull(value = "需提供应用标识") String appId, @RequestBody List<String> menuId) {
+    public R<?> grant(@NotNull(message = "需提供角色标识") String roleId, @NotNull(message = "需提供应用标识") String appId, @RequestBody List<String> menuId) {
         service.grant(roleId, appId, menuId);
         return R.ok();
     }
@@ -238,7 +236,7 @@ public class SysRoleController extends BaseController {
     @PreAuthorize("auth('sys:role:grant')")
     @Validated
     @Log(title = MODULE_NAME, functionName = "移除角色可访问菜单", operType = BusinessType.UPDATE)
-    public R<?> unGrant(@NotNull(value = "角色标识不允许为空") String roleId, @NotNull(value = "应用标识不允许为空") String appId, @RequestBody List<String> menuId) {
+    public R<?> unGrant(@NotNull(message = "角色标识不允许为空") String roleId, @NotNull(message = "应用标识不允许为空") String appId, @RequestBody List<String> menuId) {
         service.unGrant(roleId, appId, menuId);
         return R.ok();
     }

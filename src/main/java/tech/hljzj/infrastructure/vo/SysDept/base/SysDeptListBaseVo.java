@@ -2,6 +2,8 @@ package tech.hljzj.infrastructure.vo.SysDept.base;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serial;
 import java.io.Serializable;
 import com.alibaba.excel.annotation.ExcelProperty;
 import tech.hljzj.infrastructure.domain.SysDept;
@@ -18,6 +20,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class SysDeptListBaseVo implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     /**
      * id_

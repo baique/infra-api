@@ -2,6 +2,7 @@ package tech.hljzj.infrastructure.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.repository.IRepository;
 import com.baomidou.mybatisplus.extension.service.IService;
 import tech.hljzj.infrastructure.domain.SysDept;
 import tech.hljzj.infrastructure.domain.VSysDeptMemberUser;
@@ -18,7 +19,7 @@ import java.util.List;
  *
  * @author wa
  */
-public interface SysDeptService extends IService<SysDept> {
+public interface SysDeptService extends IRepository<SysDept> {
     /**
      * 实体创建
      *

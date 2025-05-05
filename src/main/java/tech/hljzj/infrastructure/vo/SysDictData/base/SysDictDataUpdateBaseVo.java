@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.infrastructure.domain.SysDictData;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,6 +17,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class SysDictDataUpdateBaseVo implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

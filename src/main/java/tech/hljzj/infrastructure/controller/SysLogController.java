@@ -1,7 +1,6 @@
 package tech.hljzj.infrastructure.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ import tech.hljzj.infrastructure.vo.SysLog.SysLogListVo;
 import tech.hljzj.infrastructure.vo.SysLog.SysLogNewVo;
 import tech.hljzj.infrastructure.vo.SysLog.SysLogQueryVo;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,6 @@ public class SysLogController extends BaseController {
     private final SysLogService service;
     public static final String MODULE_NAME = "操作日志";
 
-    @Autowired
     public SysLogController(SysLogService service) {
         this.service = service;
     }

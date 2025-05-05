@@ -2,6 +2,8 @@ package tech.hljzj.infrastructure.vo.SysUser.base;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.lang.*;
 import java.util.Date;
@@ -16,6 +18,7 @@ import tech.hljzj.infrastructure.domain.SysUser;
 @Getter
 @Setter
 public class SysUserUpdateBaseVo implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

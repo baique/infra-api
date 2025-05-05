@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.infrastructure.domain.SysDictType;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -15,6 +16,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class SysDictTypeUpdateBaseVo implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

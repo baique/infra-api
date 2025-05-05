@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.infrastructure.domain.SysApp;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 
@@ -17,6 +18,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class SysAppListBaseVo implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     /**
      * bigint

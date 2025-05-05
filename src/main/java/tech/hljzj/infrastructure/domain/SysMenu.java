@@ -9,6 +9,8 @@ import lombok.Setter;
 import tech.hljzj.framework.pojo.dto.BizBaseEntity;
 import tech.hljzj.framework.service.sort.ISort;
 
+import java.io.Serial;
+
 /**
  * 菜单管理 sys_menu
  * DTO实体
@@ -19,6 +21,7 @@ import tech.hljzj.framework.service.sort.ISort;
 @Setter
 @TableName(value = "sys_menu_")
 public class SysMenu extends BizBaseEntity implements ISort {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

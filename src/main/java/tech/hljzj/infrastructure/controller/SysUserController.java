@@ -5,7 +5,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,7 @@ import tech.hljzj.infrastructure.vo.SysRole.GrantAppRoleVo;
 import tech.hljzj.infrastructure.vo.SysUser.*;
 import tech.hljzj.infrastructure.vo.VSysUser.VSysUserQueryVo;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -52,7 +51,6 @@ public class SysUserController extends BaseController {
     private final SysUserExtAttrService sysUserExtAttrService;
     private final SysUserLockService sysUserLockService;
 
-    @Autowired
     public SysUserController(SysUserService service, SysUserManagerDeptService sysUserManagerDeptService, SysUserExtAttrService sysUserExtAttrService, SysUserLockService sysUserLockService) {
         this.service = service;
         this.sysUserManagerDeptService = sysUserManagerDeptService;
