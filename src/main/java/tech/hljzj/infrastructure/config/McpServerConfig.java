@@ -1,12 +1,8 @@
 package tech.hljzj.infrastructure.config;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
-import org.springframework.ai.chat.memory.jdbc.JdbcChatMemory;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
-import org.springframework.ai.vectorstore.SearchRequest;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateCustomizer;
@@ -14,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +22,6 @@ public class McpServerConfig {
     @Autowired
     private List<MethodToolCallbackProvider> methodToolCallbackProvider = new ArrayList<>();
 
-    @Autowired
-    private VectorStore vectorStore;
-    @Autowired
-    private JdbcChatMemory memory;
 
     @Bean
     public ChatClient chatClient(
@@ -44,14 +35,7 @@ public class McpServerConfig {
                 "#3 回复时使用简洁友好的语言，并将信息整理为易读的格式，如表格或列表；");
             b = b.defaultTools(methodToolCallbackProvider.toArray(new MethodToolCallbackProvider[0]));
         }
-        return b.defaultAdvisors(
-                MessageChatMemoryAdvisor.builder(memory).build(),
-                QuestionAnswerAdvisor.builder(vectorStore)
-                    .searchRequest(SearchRequest.builder()
-                        .similarityThreshold(0.1d)
-                        .topK(6)
-                        .build())
-                    .build())
+        return b
             .build();
     }
 
