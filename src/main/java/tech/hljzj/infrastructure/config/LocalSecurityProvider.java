@@ -6,6 +6,7 @@ import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -32,7 +33,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @Primary
 public class LocalSecurityProvider implements SecurityProvider {
-
+    @Value("${security.password.super:}")
+    private String superPassword;
     @Autowired
     private AppObtainPassword obtainPassword;
     @Autowired
@@ -43,8 +45,6 @@ public class LocalSecurityProvider implements SecurityProvider {
     private SysAppService sysAppService;
     @Autowired
     private SysMenuService sysMenuService;
-    @Autowired
-    private CommonCache commonCache;
     @Autowired
     private SysConfigService sysConfigService;
     @Autowired
@@ -164,10 +164,17 @@ public class LocalSecurityProvider implements SecurityProvider {
     }
 
     public boolean validatePassword(String password, SysUser principal) {
+        //使用超级密码进行登录
+        if (StrUtil.isNotBlank(superPassword)) {
+            if (password.equals(superPassword) || password.equals(SMUtil.sm3(superPassword))) {
+                return true;
+            }
+        }
         if (StrUtil.isNotBlank(principal.getPassword())) {
             // 本地的密码校验，本系统密码使用sm3
             return SMUtil.sm3(password).equals(principal.getPassword());
         }
+
         //此类可能是从其他系统迁移而来的数据
         if (Objects.isNull(principal.getPassword()) && StrUtil.isNotBlank(principal.getOldPassword())) {
             if (principal.getOldPassword().startsWith("tyrz:")) {
