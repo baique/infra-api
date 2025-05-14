@@ -1,0 +1,597 @@
+{
+  "server": {
+    "serverAddress": "",
+    "author": "wa",
+    "codeSelector": [
+      "new-admin",
+      "web-new"
+    ]
+  },
+  "genConfig": {
+    "perm": "sys:dept",
+    "key": "sys_dept_",
+    "name": "组织机构",
+    "packageName": "tech.hljzj.infrastructure",
+    "author": "",
+    "description": "",
+    "primaryKeyColumn": "id_",
+    "dateTime": "",
+    "params": {
+      "extendBizBaseEntity": "biz"
+    },
+    "used": true,
+    "hasChange": true
+  },
+  "genColumn": [
+    {
+      "key": "id_",
+      "name": "id_",
+      "type": "String",
+      "description": null,
+      "list": false,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "4NJgbWV4z9ABniDMF-9qd"
+    },
+    {
+      "key": "parent_id_",
+      "name": "上级组织",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "rGpUXDAy2Qk_0KDgycXNO"
+    },
+    {
+      "key": "node_key_",
+      "name": "本级节点标识",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 16,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "9fzg_qvjhHeQYxGOSu2ag"
+    },
+    {
+      "key": "node_path_",
+      "name": "祖先节点路径",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 2000,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "f0TQL9b_HDZnfWTziYG-n"
+    },
+    {
+      "key": "key_",
+      "name": "组织标识",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 100,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "fS3HA2QDPcyPVKnPQFgQN"
+    },
+    {
+      "key": "name_",
+      "name": "组织名称",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "tu8iYIbxQSG_2rJOc5Fo4"
+    },
+    {
+      "key": "alias_",
+      "name": "组织别名",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 100,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "44gmeXNSoB9ExWd9wTh4B"
+    },
+    {
+      "key": "short_name_",
+      "name": "组织简称",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 100,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "cNA_zZMaN01qOA2QcHine"
+    },
+    {
+      "key": "management_relation_",
+      "name": "管理关系",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 20,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "id": "JqUnDIphbaFDQwSJfLj-B"
+    },
+    {
+      "key": "type_",
+      "name": "组织类型",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 20,
+      "component": "Select",
+      "rule": [],
+      "dataSource": {
+        "type": "dict",
+        "param": {
+          "key": "org_type"
+        }
+      },
+      "hasDataSource": false,
+      "keep": false,
+      "id": "xJ1aGLsLGKaXdNUnLI10t"
+    },
+    {
+      "key": "duty_",
+      "name": "组织责任说明",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 2000,
+      "component": "InputTextArea",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "sTWGFS2j6YuVur-ojbbH1"
+    },
+    {
+      "key": "usc_no_",
+      "name": "统一社会信用代码",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 100,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "Jt5V912MyLeA0bk92MfFh"
+    },
+    {
+      "key": "addr_",
+      "name": "所在地点",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 2000,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "Z5-mbbQvBCm5ey35PTsY7"
+    },
+    {
+      "key": "addr_no_",
+      "name": "所在地点编码",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "eML7K2g29OQIOSonke4Sr"
+    },
+    {
+      "key": "status_",
+      "name": "组织状态",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1,
+      "component": "Select",
+      "rule": [],
+      "dataSource": {
+        "type": "dict",
+        "param": {
+          "key": "org_status"
+        }
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "R1ZPyjPh26WoykMD14ldT"
+    },
+    {
+      "key": "enable_",
+      "name": "是否启用",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1,
+      "component": "RadioGroup",
+      "rule": [],
+      "dataSource": {
+        "type": "dict",
+        "param": {
+          "key": "status"
+        }
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "9ZQ_EmOCnQO1vxoyrhBu1"
+    },
+    {
+      "key": "allow_user_join_",
+      "name": "允许用户加入",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1,
+      "component": "RadioGroup",
+      "rule": [],
+      "dataSource": {
+        "type": "dict",
+        "param": {
+          "key": "yes_no"
+        }
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "1R9l1Aem_wT8yddkGg9EZ"
+    },
+    {
+      "key": "sort_",
+      "name": "排序编号",
+      "type": "Integer",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 10,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "V3bWflvvVlrICZvTrg6cg"
+    },
+    {
+      "key": "tmp_",
+      "name": "是否临时组织",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1,
+      "component": "RadioGroup",
+      "rule": [],
+      "dataSource": {
+        "type": "dict",
+        "param": {
+          "key": "yes_no"
+        }
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "652QRRhSCspwmILWNbumX"
+    },
+    {
+      "key": "create_by_",
+      "name": "创建人姓名",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "2VbKIBsBDr9CbhVk197Eh"
+    },
+    {
+      "key": "create_time_",
+      "name": "创建时间",
+      "type": "Date",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 19,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "38NfEFiH8CxP1OcqPvL0L"
+    },
+    {
+      "key": "update_by_",
+      "name": "修改人姓名",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "ujULV4tlzx_I-PEpWSdiV"
+    },
+    {
+      "key": "update_time_",
+      "name": "修改时间",
+      "type": "Date",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 19,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "jFnGm1mNt9o9WwrYiP46q"
+    },
+    {
+      "key": "owner_user_id_",
+      "name": "所属用户标识",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "t2oO9mVuu60Vl2xSAGFf2"
+    },
+    {
+      "key": "owner_user_account_",
+      "name": "所属用户账号",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "4KAu8J637cApxv3dJPPp6"
+    },
+    {
+      "key": "owner_dept_id_",
+      "name": "所属部门标识",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "0YvM7hvttwyQzjxu9WCTA"
+    },
+    {
+      "key": "owner_dept_code_",
+      "name": "所属部门编码",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 100,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "y48VccgMZxt3gReT6xgAw"
+    },
+    {
+      "key": "owner_dept_name_",
+      "name": "所属部门名称",
+      "type": "String",
+      "description": null,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 255,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": true,
+      "id": "mv3nRvg4a-_0k7cQdx-tE"
+    }
+  ],
+  "serverConfig": {}
+}
