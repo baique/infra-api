@@ -11,6 +11,8 @@ ENV TZ=Asia/Shanghai
 ENV spring.profiles.active=prd
 ENV spring.devtools.restart.enabled=false
 ENV spring.devtools.livereload.enabled=false
+ENV XMX=512m
+ENV XMS=512m
 
 RUN echo "#!/bin/bash" >> /app/Start.sh ;\
 echo "java " >> /app/Start.sh ;\
