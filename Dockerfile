@@ -20,17 +20,15 @@ echo "-XX:MaxDirectMemorySize=$XMS" >> /app/Start.sh ;\
 echo "-XX:MetaspaceSize=256M" >> /app/Start.sh ;\
 echo "-XX:MaxMetaspaceSize=256M" >> /app/Start.sh ;\
 echo "-XX:+UseG1GC" >> /app/Start.sh ;\
-echo "-XX:+AlwaysPreTouch" >> /app/Start.sh ;\
-echo "-XX:-ResizePLAB" >> /app/Start.sh ;\
+echo "-XX:+UseStringDeduplication" >> /app/Start.sh ;\
 echo "-XX:+ParallelRefProcEnabled" >> /app/Start.sh ;\
 echo "-XX:+ExplicitGCInvokesConcurrent" >> /app/Start.sh ;\
-echo "-XX:MaxGCPauseMillis=50" >> /app/Start.sh ;\
-echo "-XX:+UseStringDeduplication" >> /app/Start.sh ;\
-echo "-XX:+UnlockExperimentalVMOptions" >> /app/Start.sh ;\
-echo "-XX:G1NewSizePercent=10" >> /app/Start.sh ;\
-echo "-XX:InitiatingHeapOccupancyPercent=45" >> /app/Start.sh ;\
-echo "-Duser.timezone=Asia/Shanghai" >> /app/Start.sh ;\
+echo "-XX:MaxGCPauseMillis=200" >> /app/Start.sh ;\
+echo "-XX:ParallelGCThreads=4" >> /app/Start.sh ;\
+echo "-XX:ConcGCThreads=2" >> /app/Start.sh ;\
 echo "-Dfile.encoding=UTF-8" >> /app/Start.sh ;\
+echo "-Duser.timezone=Asia/Shanghai" >> /app/Start.sh ;\
+echo "-Djava.net.preferIPv4Stack=true" >> /app/Start.sh ;\
 echo "-jar /app/app.jar" >> /app/Start.sh ;\
 ln -sf /app/Start.sh /usr/bin/ZZ-FW-CMD ;\
 chmod 0700 /app/Start.sh
