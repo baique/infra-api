@@ -502,3 +502,7 @@ UPDATE sys_menu_ s
 SET
     s.node_key_ = c.node_key,
     s.node_path_ = c.node_path;
+-- 合并专案组成员信息
+insert ignore into frm_base_v1.sys_dept_external_user_ (id_,dept_id_,user_id_) SELECT id,department_id,user_id FROM `tyrzxt1`.`department_contain_user`;
+-- 合并所有管辖部门
+insert ignore into frm_base_v1.sys_user_manager_dept_ (id_,user_id_,dept_id_,data_access_scope_,contain_sub_) select id,user_id,dept_id,if(manager_scope = '0','self','all'),manager_children from tyrzxt1.sys_manager_dept

@@ -1,6 +1,5 @@
 package tech.hljzj.infrastructure.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -66,12 +65,12 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     @CacheEvict(cacheNames = CAHCE_NAME, allEntries = true)
     public boolean entityCreate(SysApp entity) {
         if (baseMapper.exists(Wrappers.lambdaQuery(SysApp.class)
-                .eq(SysApp::getKey, entity.getKey())
+            .eq(SysApp::getKey, entity.getKey())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "应用标识"));
         }
         if (baseMapper.exists(Wrappers.lambdaQuery(SysApp.class)
-                .eq(SysApp::getName, entity.getName())
+            .eq(SysApp::getName, entity.getName())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "应用名称"));
         }
@@ -84,14 +83,14 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     public boolean entityUpdate(SysApp entity) {
         SysApp existsEntity = getById(entity.getId());
         if (baseMapper.exists(Wrappers.lambdaQuery(SysApp.class)
-                .eq(SysApp::getKey, entity.getKey())
-                .ne(SysApp::getId, existsEntity.getId())
+            .eq(SysApp::getKey, entity.getKey())
+            .ne(SysApp::getId, existsEntity.getId())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "应用标识"));
         }
         if (baseMapper.exists(Wrappers.lambdaQuery(SysApp.class)
-                .eq(SysApp::getName, entity.getName())
-                .ne(SysApp::getId, existsEntity.getId())
+            .eq(SysApp::getName, entity.getName())
+            .ne(SysApp::getId, existsEntity.getId())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "应用名称"));
         }
@@ -105,8 +104,8 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     public boolean entityDelete(SysApp entity) {
         //如果需要删除应用，那么必须保证该应用下的数据已经完全无用
         if (sysUserRoleService.exists(Wrappers
-                .<SysUserRole>lambdaQuery()
-                .eq(SysUserRole::getAppId, entity.getId())
+            .<SysUserRole>lambdaQuery()
+            .eq(SysUserRole::getAppId, entity.getId())
         )) {
             throw UserException.defaultError("如要删除应用必须先清空应用中已授予用户的角色、菜单信息。");
         }
@@ -151,16 +150,16 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     public SysAppExport exportAppData(String appId) {
         SysApp appInfo = getById(appId);
         List<SysConfig> config = sysConfigService.list(Wrappers.<SysConfig>lambdaQuery()
-                .eq(SysConfig::getOwnerAppId, appId)
+            .eq(SysConfig::getOwnerAppId, appId)
         );
         List<SysRole> role = sysRoleService.list(Wrappers.<SysRole>lambdaQuery()
-                .eq(SysRole::getOwnerAppId, appId)
+            .eq(SysRole::getOwnerAppId, appId)
         );
         List<SysMenu> menu = sysMenuService.list(Wrappers.<SysMenu>lambdaQuery()
-                .eq(SysMenu::getOwnerAppId, appId)
+            .eq(SysMenu::getOwnerAppId, appId)
         );
         List<SysRoleMenu> roleMenuGrantList = sysRoleMenuService.list(Wrappers.<SysRoleMenu>lambdaQuery()
-                .in(SysRoleMenu::getRoleId, role.stream().map(SysRole::getId).collect(Collectors.toList()))
+            .in(SysRoleMenu::getRoleId, role.stream().map(SysRole::getId).collect(Collectors.toList()))
         );
         // 传输为一组加密的json数据
         SysAppExport export = new SysAppExport();

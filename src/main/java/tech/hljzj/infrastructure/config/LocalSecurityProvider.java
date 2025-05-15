@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
-import tech.hljzj.framework.cache.CommonCache;
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.security.AppObtainPassword;
 import tech.hljzj.framework.security.SecurityProvider;
@@ -73,9 +72,13 @@ public class LocalSecurityProvider implements SecurityProvider {
             // 这里不考虑跨年情况，以展示为主
             throw UserException.defaultError("由于您多次登录失败，当前账号已被锁定");
         }
-
-        // 获取用户输入的明文密码
-        String password = obtainPassword.obtainPassword((String) authentication.getCredentials());
+        String password;
+        try {
+            // 获取用户输入的明文密码
+            password = obtainPassword.obtainPassword((String) authentication.getCredentials());
+        } catch (Exception e) {
+            throw UserException.defaultError("用户密码无法正确解析，可能是其不符合安全要求", e);
+        }
 
         VSysUser principal = new VSysUser();
         principal.setUsername(username);
