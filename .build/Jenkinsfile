@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'docker-proxy.hljzj.tech/maven:3.8.5-openjdk-17-slim'
-      args '-v $ROOT/.m2:/root/.m2'
+      args '-v /data/jenkins/.m2:/root/.m2'
     }
 
   }
@@ -19,8 +19,5 @@ pipeline {
       }
     }
 
-  }
-  environment {
-    ROOT = '/data/jenkins'
   }
 }
