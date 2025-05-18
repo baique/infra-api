@@ -16,7 +16,7 @@ pipeline {
 
     stage('publish') {
       steps {
-        archiveArtifacts 'dist/*'
+        archiveArtifacts 'app.tar'
       }
     }
 
