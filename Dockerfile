@@ -16,22 +16,22 @@ ENV XMS=512m
 
 RUN echo "#!/bin/bash" >> /app/Start.sh ;\
 echo "java " >> /app/Start.sh ;\
-echo "-Xms$XMS" >> /app/Start.sh ;\
-echo "-Xmx$XMX" >> /app/Start.sh ;\
-echo "-XX:MaxDirectMemorySize=$XMS" >> /app/Start.sh ;\
-echo "-XX:MetaspaceSize=256M" >> /app/Start.sh ;\
-echo "-XX:MaxMetaspaceSize=256M" >> /app/Start.sh ;\
-echo "-XX:+UseG1GC" >> /app/Start.sh ;\
-echo "-XX:+UseStringDeduplication" >> /app/Start.sh ;\
-echo "-XX:+ParallelRefProcEnabled" >> /app/Start.sh ;\
-echo "-XX:+ExplicitGCInvokesConcurrent" >> /app/Start.sh ;\
-echo "-XX:MaxGCPauseMillis=200" >> /app/Start.sh ;\
-echo "-XX:ParallelGCThreads=4" >> /app/Start.sh ;\
-echo "-XX:ConcGCThreads=2" >> /app/Start.sh ;\
-echo "-Dfile.encoding=UTF-8" >> /app/Start.sh ;\
-echo "-Duser.timezone=Asia/Shanghai" >> /app/Start.sh ;\
-echo "-Djava.net.preferIPv4Stack=true" >> /app/Start.sh ;\
-echo "-jar /app/app.jar" >> /app/Start.sh ;\
+echo -n "-Xms$XMS" >> /app/Start.sh ;\
+echo -n "-Xmx$XMX" >> /app/Start.sh ;\
+echo -n "-XX:MaxDirectMemorySize=$XMS" >> /app/Start.sh ;\
+echo -n "-XX:MetaspaceSize=256M" >> /app/Start.sh ;\
+echo -n "-XX:MaxMetaspaceSize=256M" >> /app/Start.sh ;\
+echo -n "-XX:+UseG1GC" >> /app/Start.sh ;\
+echo -n "-XX:+UseStringDeduplication" >> /app/Start.sh ;\
+echo -n "-XX:+ParallelRefProcEnabled" >> /app/Start.sh ;\
+echo -n "-XX:+ExplicitGCInvokesConcurrent" >> /app/Start.sh ;\
+echo -n "-XX:MaxGCPauseMillis=200" >> /app/Start.sh ;\
+echo -n "-XX:ParallelGCThreads=4" >> /app/Start.sh ;\
+echo -n "-XX:ConcGCThreads=2" >> /app/Start.sh ;\
+echo -n "-Dfile.encoding=UTF-8" >> /app/Start.sh ;\
+echo -n "-Duser.timezone=Asia/Shanghai" >> /app/Start.sh ;\
+echo -n "-Djava.net.preferIPv4Stack=true" >> /app/Start.sh ;\
+echo -n "-jar /app/app.jar" >> /app/Start.sh ;\
 ln -sf /app/Start.sh /usr/bin/ZZ-FW-CMD ;\
 chmod 0700 /app/Start.sh
 CMD ["ZZ-FW-CMD"]
