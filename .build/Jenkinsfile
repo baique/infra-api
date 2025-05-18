@@ -11,6 +11,7 @@ pipeline {
       steps {
         sh 'mvn -DskipTests clean package'
         sh 'tar -cvf app.tar dist'
+        echo '2025年5月18日18:17:11'
       }
     }
 
