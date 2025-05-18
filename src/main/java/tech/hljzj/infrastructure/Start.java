@@ -6,5 +6,5 @@ import tech.hljzj.framework.Bootstrap;
 
 @SpringBootApplication
 public class Start extends Bootstrap {
-
+    // 本地启动器
 }
