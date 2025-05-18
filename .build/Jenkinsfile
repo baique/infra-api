@@ -10,7 +10,7 @@ pipeline {
     stage('Build') {
       steps {
         sh 'mvn -DskipTests clean package'
-        sh 'tar -czvf app.tar dist'
+        sh 'tar -cvf app.tar dist'
       }
     }
 
