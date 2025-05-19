@@ -1,6 +1,6 @@
 FROM docker-proxy.hljzj.tech/openjdk:17-buster as builder
 WORKDIR /app
-ADD http://172.18.3.17/job/infra-service/job/master/lastSuccessfulBuild/artifact/app.tar app.tar
+ADD https://jenkins.hljzj.tech/job/infra-service/job/master/lastSuccessfulBuild/artifact/app.tar app.tar
 RUN tar -xvf app.tar
 
 FROM docker-proxy.hljzj.tech/openjdk:17-buster
