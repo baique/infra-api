@@ -4,6 +4,7 @@ pipeline {
       image 'docker-proxy.hljzj.tech/maven:3.8.5-openjdk-17-slim'
       args '-v $ROOT/.m2:/root/.m2'
     }
+
   }
   stages {
     stage('build') {
@@ -11,6 +12,7 @@ pipeline {
         sh 'mvn -DskipTests clean package'
       }
     }
+
     stage('publish') {
       steps {
         sh 'tar -cvf app.tar dist'
@@ -23,5 +25,12 @@ pipeline {
         ''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'infra', remoteDirectorySDF: false, removePrefix: '', sourceFiles: './app.tar')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
       }
     }
+
+    stage('') {
+      steps {
+        sshPublisher()
+      }
+    }
+
   }
 }
