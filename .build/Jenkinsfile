@@ -18,7 +18,7 @@ pipeline {
         sh 'tar -cvf app.tar dist'
         archiveArtifacts 'app.tar'
         sshPublisher(publishers: [sshPublisherDesc(configName: 'DEV', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''tar -xvf app.tar
-        mv dist/* ./
+        mv dist/* .
         rm -rf app.tar
         rm -rf dist
         docker restart infra-api
