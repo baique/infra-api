@@ -4,7 +4,9 @@ pipeline {
       image 'docker-proxy.hljzj.tech/maven:3.8.5-openjdk-17-slim'
       args '-v $ROOT/.m2:/root/.m2'
     }
-
+  }
+  environment {
+    ID = 'infra'
   }
   stages {
     stage('build') {
@@ -17,12 +19,8 @@ pipeline {
       steps {
         sh 'tar -cvf app.tar dist'
         archiveArtifacts 'app.tar'
-        sshPublisher(publishers: [sshPublisherDesc(configName: 'DEV', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''tar -xvf app.tar
-        mv dist/* .
-        rm -rf app.tar
-        rm -rf dist
-        docker restart infra-api
-        ''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'infra', remoteDirectorySDF: false, removePrefix: '', sourceFiles: './app.tar')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+        sshPublisher(publishers: [sshPublisherDesc(configName: 'DEV', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''docker restart ${ID}-api
+        ''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '${ID}/api', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
       }
     }
   }
