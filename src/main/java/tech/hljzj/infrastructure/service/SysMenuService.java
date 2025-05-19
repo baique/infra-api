@@ -2,9 +2,14 @@ package tech.hljzj.infrastructure.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import tech.hljzj.framework.util.excel.ExcelUtil;
 import tech.hljzj.infrastructure.domain.SysMenu;
+import tech.hljzj.infrastructure.vo.SysMenu.SysMenuListVo;
 import tech.hljzj.infrastructure.vo.SysMenu.SysMenuQueryVo;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -77,4 +82,7 @@ public interface SysMenuService extends IService<SysMenu> {
     List<SysMenu> list(SysMenuQueryVo query);
 
     void entityUpdateSort(String rowId, String prevRowId, String nextRowId);
+
+    @Transactional(rollbackFor = Exception.class)
+    List<ExcelUtil.FailRowWrap<SysMenuListVo>> importData(String appId, MultipartFile file) throws IOException;
 }

@@ -1,12 +1,15 @@
 package tech.hljzj.infrastructure.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tech.hljzj.framework.base.BaseController;
 import tech.hljzj.framework.bean.R;
+import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.logger.BusinessType;
 import tech.hljzj.framework.logger.Log;
 import tech.hljzj.framework.util.excel.ExcelUtil;
@@ -15,7 +18,6 @@ import tech.hljzj.infrastructure.domain.SysMenu;
 import tech.hljzj.infrastructure.service.SysMenuService;
 import tech.hljzj.infrastructure.vo.SysMenu.*;
 
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -132,10 +134,12 @@ public class SysMenuController extends BaseController {
     @PostMapping("/import")
     @PreAuthorize("auth('sys:menu:import')")
     @Log(title = MODULE_NAME, operType = BusinessType.IMPORT)
-    public R<List<ExcelUtil.FailRowWrap<SysMenuListVo>>> importData(@RequestPart MultipartFile file) throws IOException {
-        return R.ok(ExcelUtil.readExcel(ExcelUtil.getType(file.getOriginalFilename()),file.getInputStream(), SysMenuListVo.class, SysMenuListVo -> {
-            this.service.entityCreate(SysMenuListVo.toDto());
-        }));
+    public R<List<ExcelUtil.FailRowWrap<SysMenuListVo>>> importData(String appId, @RequestPart(name = "files") MultipartFile file) throws IOException {
+        List<ExcelUtil.FailRowWrap<SysMenuListVo>> d = service.importData(appId, file);
+        if (CollUtil.isNotEmpty(d)) {
+            throw UserException.defaultError("数据不符合要求，请处理后重新上传(此功能建议在专业人员指导下使用)");
+        }
+        return R.ok(d);
     }
 
 

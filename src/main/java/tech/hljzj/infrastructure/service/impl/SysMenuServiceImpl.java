@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.pojo.vo.MenuType;
 import tech.hljzj.framework.pojo.vo.Router;
@@ -20,6 +21,7 @@ import tech.hljzj.framework.security.bean.TokenAuthentication;
 import tech.hljzj.framework.security.bean.UserInfo;
 import tech.hljzj.framework.service.IRouterService;
 import tech.hljzj.framework.service.SortService;
+import tech.hljzj.framework.util.excel.ExcelUtil;
 import tech.hljzj.framework.util.tree.TreeUtil;
 import tech.hljzj.framework.util.web.AuthUtil;
 import tech.hljzj.framework.util.web.MsgUtil;
@@ -31,15 +33,15 @@ import tech.hljzj.infrastructure.mapper.SysMenuMapper;
 import tech.hljzj.infrastructure.mapper.SysRoleMenuMapper;
 import tech.hljzj.infrastructure.service.SysMenuService;
 import tech.hljzj.infrastructure.util.AppScopeHolder;
+import tech.hljzj.infrastructure.vo.SysMenu.SysMenuListVo;
 import tech.hljzj.infrastructure.vo.SysMenu.SysMenuQueryVo;
 
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static cn.hutool.core.text.StrFormatter.format;
 import static tech.hljzj.infrastructure.code.AppConst.TREE_DELIMITER;
 
 
@@ -181,6 +183,48 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public List<SysMenu> list(SysMenuQueryVo query) {
         query.setEnablePage(false);
         return this.page(query).getRecords();
+    }
+
+    @Override
+    public List<ExcelUtil.FailRowWrap<SysMenuListVo>> importData(String appId, MultipartFile file) throws IOException {
+        List<SysMenuListVo> vos = new ArrayList<>();
+        List<ExcelUtil.FailRowWrap<SysMenuListVo>> d = ExcelUtil.readExcel(ExcelUtil.getType(file.getOriginalFilename()), file.getInputStream(), SysMenuListVo.class, vos::add);
+        // 这里需要进行保存
+        Map<String, SysMenuListVo> ref = new HashMap<>();
+        for (SysMenuListVo vo : vos) {
+            ref.put(vo.getKey(), vo);
+        }
+        // 开始保存
+        for (SysMenuListVo vo : vos) {
+            vo.setOwnerAppId(appId);
+            saveAndRecord(vo, ref, new LinkedHashSet<>());
+        }
+        return d;
+    }
+
+    private void saveAndRecord(SysMenuListVo currentNode, Map<String, SysMenuListVo> nodeMapping, Set<String> link) {
+        String parentKey = currentNode.getParentKey();
+        if (!link.add(parentKey)) {
+            throw UserException.defaultError(format(
+                "菜单出现循环引用:{}", String.join(">", link)
+            ));
+        }
+
+        if (StrUtil.isBlank(parentKey)) {
+            currentNode.setParentId("0");
+        } else {
+            // 先看本地检查父级是否存在，如果存在先创建父级，然后移除
+            SysMenuListVo d = nodeMapping.get(parentKey);
+            if (StrUtil.isBlank(d.getId())) {
+                // 先保存上文，递归动作，需要记录链路
+                saveAndRecord(d, nodeMapping, link);
+            }
+            currentNode.setParentId(d.getId());
+        }
+        // 调用创建
+        SysMenu dto = currentNode.toDto();
+        this.entityCreate(dto);
+        currentNode.setId(dto.getId());
     }
 
     /**

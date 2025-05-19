@@ -1,8 +1,12 @@
 package tech.hljzj.infrastructure.vo.SysMenu.base;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
+import tech.hljzj.framework.util.excel.dict.DictConvertHandle;
+import tech.hljzj.framework.util.excel.dict.UseDict;
+import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.domain.SysMenu;
 
 import java.io.Serial;
@@ -10,7 +14,7 @@ import java.io.Serializable;
 
 
 /**
- * 菜单管理 sys_menu 
+ * 菜单管理 sys_menu
  * 交互实体 用于列表检索和导出
  *
  * @author wa
@@ -28,15 +32,18 @@ public class SysMenuListBaseVo implements Serializable {
      * 所属应用标识
      */
     private String ownerAppId;
+    
     /**
      * 菜单标识
      */
     @ExcelProperty(value = "菜单标识")
+    @NotBlank(message = "菜单标识不可为空")
     private String key;
     /**
      * 菜单名称
      */
     @ExcelProperty(value = "菜单名称")
+    @NotBlank(message = "菜单名称不可为空")
     private String name;
     /**
      * 菜单状态
@@ -55,12 +62,14 @@ public class SysMenuListBaseVo implements Serializable {
     /**
      * 显示状态
      */
-    @ExcelProperty(value = "是否显示")
-    private String visible;
+    @ExcelProperty(value = "是否显示", converter = DictConvertHandle.class)
+    @UseDict("yes_no")
+    private String visible = AppConst.YES;
     /**
      * 菜单类型
      */
-    @ExcelProperty(value = "菜单类型")
+    @ExcelProperty(value = "菜单类型", converter = DictConvertHandle.class)
+    @UseDict("menu_type")
     private String menuType;
     /**
      * 访问路径
@@ -75,7 +84,7 @@ public class SysMenuListBaseVo implements Serializable {
     /**
      * 菜单图标
      */
-    @ExcelProperty(value = "菜单图标")
+//    @ExcelProperty(value = "菜单图标")
     private String icon;
     /**
      * 标签
@@ -94,10 +103,10 @@ public class SysMenuListBaseVo implements Serializable {
     /**
      * 上级菜单标识
      */
-    @ExcelProperty(value = "上级菜单标识")
+//    @ExcelProperty(value = "上级菜单标识")
     private String parentId;
 
-    public <T extends SysMenuListBaseVo> T fromDto(SysMenu dto){
+    public <T extends SysMenuListBaseVo> T fromDto(SysMenu dto) {
         this.setId(dto.getId());
         this.setOwnerAppId(dto.getOwnerAppId());
         this.setKey(dto.getKey());
@@ -118,7 +127,7 @@ public class SysMenuListBaseVo implements Serializable {
         return (T) this;
     }
 
-    public SysMenu toDto(){
+    public SysMenu toDto() {
         SysMenu dto = new SysMenu();
         dto.setId(this.getId());
         dto.setOwnerAppId(this.getOwnerAppId());
