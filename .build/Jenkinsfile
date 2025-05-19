@@ -19,8 +19,12 @@ pipeline {
       steps {
         sh 'tar -cvf app.tar dist'
         archiveArtifacts 'app.tar'
-        sshPublisher(publishers: [sshPublisherDesc(configName: 'DEV', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''docker restart ${ID}-api
-        ''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '${ID}/api', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+      }
+    }
+
+    stage('deploy') {
+      steps {
+        sshPublisher(publishers: [sshPublisherDesc(configName: 'DEV', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '${ID}/api/', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
       }
     }
   }
