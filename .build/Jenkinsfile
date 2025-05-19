@@ -25,12 +25,5 @@ pipeline {
         ''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'infra', remoteDirectorySDF: false, removePrefix: '', sourceFiles: './app.tar')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
       }
     }
-
-    stage('') {
-      steps {
-        sshPublisher()
-      }
-    }
-
   }
 }
