@@ -8,13 +8,14 @@ pipeline {
 
   environment {
       DIST_DIR = "${env.JOB_NAME}"
+      APP_KEY = "${env.JOB_NAME.replaceAll('/','_')}"
       BASE_IMAGE = "docker-proxy.hljzj.tech/openjdk:17-buster"
       DIST_COMMAND = """
-      docker stop ${currentBuild.projectName} 2>/dev/null
-      docker rm ${currentBuild.projectName} 2>/dev/null
+      docker stop ${env.APP_KEY} 2>/dev/null
+      docker rm ${env.APP_KEY} 2>/dev/null
       docker run -dit \
                  --restart=always \
-                 --name ${currentBuild.projectName} \
+                 --name ${env.APP_KEY} \
                  -v ${env.AGENT_HOME}/${env.DIST_DIR}:/app \
                  -w /app \
                  ${env.BASE_IMAGE} \
