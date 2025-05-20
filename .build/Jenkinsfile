@@ -10,11 +10,11 @@ pipeline {
       DIST_DIR = "${env.JOB_NAME}"
       BASE_IMAGE = "docker-proxy.hljzj.tech/openjdk:17-buster"
       DIST_COMMAND = """
-      docker stop ${env.projectName} 2>/dev/null
-      docker rm ${env.projectName} 2>/dev/null
+      docker stop ${currentBuild.projectName} 2>/dev/null
+      docker rm ${currentBuild.projectName} 2>/dev/null
       docker run -dit \
                  --restart=always \
-                 --name ${env.projectName} \
+                 --name ${currentBuild.projectName} \
                  -v ${env.AGENT_HOME}/${env.DIST_DIR}:/app \
                  -w /app \
                  ${env.BASE_IMAGE} \
