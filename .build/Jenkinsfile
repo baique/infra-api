@@ -6,13 +6,10 @@ pipeline {
     }
   }
 
-  script {
-      env.APP_KEY = env.JOB_NAME.replaceAll('/', '_')
-  }
-
   environment {
       DIST_DIR = "${env.JOB_NAME}"
       BASE_IMAGE = "docker-proxy.hljzj.tech/openjdk:17-buster"
+      APP_KEY = "${env.BITBUCKET_REPO_SLUG}"
       DIST_COMMAND = """
       docker stop ${env.APP_KEY} 2>/dev/null
       docker rm ${env.APP_KEY} 2>/dev/null
