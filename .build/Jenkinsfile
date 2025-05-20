@@ -13,7 +13,7 @@ pipeline {
       docker stop ${env.JOB_BASE_NAME} 2>/dev/null
       docker rm ${env.JOB_BASE_NAME} 2>/dev/null
       docker run -dit \
-                 -restart=always \
+                 --restart=always \
                  --name ${env.JOB_BASE_NAME} \
                  -v ${env.AGENT_HOME}/${env.DIST_DIR}:/app \
                  -w /app \
