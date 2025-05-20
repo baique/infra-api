@@ -7,7 +7,19 @@ pipeline {
   }
 
   environment {
-      ID = "infra"
+      DIST_DIR = "${env.JOB_NAME}"
+      BASE_IMAGE = "docker-proxy.hljzj.tech/openjdk:17-buster"
+      DIST_COMMAND = """
+      docker stop ${env.JOB_BASE_NAME} 2>/dev/null
+      docker rm ${env.JOB_BASE_NAME} 2>/dev/null
+      docker run -dit \
+                 -restart=always \
+                 --name ${env.JOB_BASE_NAME} \
+                 -v ${env.AGENT_HOME}/${env.DIST_DIR}:/app \
+                 -w /app \
+                 ${env.BASE_IMAGE} \
+                 java -jar app.jar
+      """
   }
 
   stages {
@@ -26,7 +38,7 @@ pipeline {
 
     stage('deploy') {
       steps {
-        sshPublisher failOnError: true, publishers: [sshPublisherDesc(configName: 'DEV', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "docker restart ${env.ID}_api", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: "${env.ID}/api/", remoteDirectorySDF: false, removePrefix: 'dist', sourceFiles: 'dist/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)]
+        sshPublisher failOnError: true, publishers: [sshPublisherDesc(configName: 'DEV', transfers: [sshTransfer(cleanRemote: false, excludes: '',execCommand: "${env.DIST_COMMAND}", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+',remoteDirectory: "${env.DIST_DIR}", remoteDirectorySDF: false, removePrefix: 'dist', sourceFiles: 'dist/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)]
       }
     }
   }
