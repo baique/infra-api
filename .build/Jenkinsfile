@@ -11,12 +11,9 @@ pipeline {
       BASE_IMAGE = "docker-proxy.hljzj.tech/openjdk:17-buster"
       APP_KEY = "${env.BUILD_TAG}"
       DIST_COMMAND = """
-      # 设置容器ID文件路径
       CID_FILE="${env.AGENT_HOME}/.cid"
-
-      # 如果存在旧的容器ID，先停止并删除对应容器
       if [ -f "$CID_FILE" ]; then
-        OLD_CID=$(cat "$CID_FILE")
+        OLD_CID=\$(cat "${CID_FILE}")
         if [ -n "$OLD_CID" ]; then
           docker stop "$OLD_CID" 2>/dev/null
           docker rm "$OLD_CID" 2>/dev/null
