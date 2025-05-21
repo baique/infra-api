@@ -20,13 +20,13 @@ pipeline {
         fi
       fi
       docker run -dit \
-                 --restart=always \
-                 --name ${env.APP_KEY} \
-                 -v ${env.AGENT_HOME}/${env.DIST_DIR}:/app \
-                 -w /app \
-                 ${env.BASE_IMAGE} \
-                 java -jar app.jar \
-                 > ${CID_FILE}
+             --restart=always \
+             --name ${env.APP_KEY} \
+             -v ${env.AGENT_HOME}/${env.DIST_DIR}:/app \
+             -w /app \
+             ${env.BASE_IMAGE} \
+             java -jar app.jar \
+             > \${CID_FILE}
       """
   }
 
