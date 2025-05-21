@@ -9,7 +9,7 @@ pipeline {
   environment {
       DIST_DIR = "${env.JOB_NAME}"
       BASE_IMAGE = "docker-proxy.hljzj.tech/openjdk:17-buster"
-      APP_KEY = "${env.BUILD_TAG}"
+      APP_KEY = "${env.JOB_NAME}"
       DIST_COMMAND = """
       CN="${env.APP_KEY.replaceAll('[^a-zA-Z0-9_]', '_')}"
       docker stop \$CN 2>/dev/null
