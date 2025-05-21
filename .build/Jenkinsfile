@@ -11,22 +11,16 @@ pipeline {
       BASE_IMAGE = "docker-proxy.hljzj.tech/openjdk:17-buster"
       APP_KEY = "${env.BUILD_TAG}"
       DIST_COMMAND = """
-      CID_FILE="${env.AGENT_HOME}/${env.DIST_DIR}/cid"
-      if [ -f "$CID_FILE" ]; then
-        OLD_CID=\$(cat "${CID_FILE}")
-        if [ -n "$OLD_CID" ]; then
-          docker stop "$OLD_CID" 2>/dev/null
-          docker rm "$OLD_CID" 2>/dev/null
-        fi
-      fi
+      CN="${env.APP_KEY.replaceAll('[^a-zA-Z0-9_]', '_')}"
+      docker stop \$CN 2>/dev/null
+      docker rm \$CN 2>/dev/null
       docker run -dit \
-             --restart=always \
-             --name ${env.APP_KEY} \
-             -v ${env.AGENT_HOME}/${env.DIST_DIR}:/app \
-             -w /app \
-             ${env.BASE_IMAGE} \
-             java -jar app.jar \
-             > \${CID_FILE}
+                 --restart=always \
+                 --name \$CN \
+                 -v ${env.AGENT_HOME}/${env.DIST_DIR}:/app \
+                 -w /app \
+                 ${env.BASE_IMAGE} \
+                 java -jar app.jar
       """
   }
 
