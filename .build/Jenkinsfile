@@ -11,7 +11,7 @@ pipeline {
       BASE_IMAGE = "docker-proxy.hljzj.tech/openjdk:17-buster"
       APP_KEY = "${env.BUILD_TAG}"
       DIST_COMMAND = """
-      CID_FILE="${env.AGENT_HOME}/.cid"
+      CID_FILE="${env.AGENT_HOME}/${env.DIST_DIR}/cid"
       if [ -f "$CID_FILE" ]; then
         OLD_CID=\$(cat "${CID_FILE}")
         if [ -n "$OLD_CID" ]; then
