@@ -13,7 +13,7 @@ pipeline {
       MX_MEMORY = "400m"
       MX_CPU = 4
       DIST_COMMAND = """
-      CN="${env.APP_KEY.replaceAll('[^a-zA-Z0-9_]', '_')}"
+      CN="${env.APP_KEY.split('/')[0]}-api-${BUILD_TAG}"
       docker stop \$CN 2>/dev/null
       docker rm \$CN 2>/dev/null
       docker run -dit \
