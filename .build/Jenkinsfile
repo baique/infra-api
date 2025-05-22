@@ -25,7 +25,6 @@ pipeline {
                  -v ${env.AGENT_HOME}/${env.DIST_DIR}:/app \
                  -w /app \
                  -e server.ssl.enabled=false \
-                 -e server.address=0.0.0.0 \
                  -e server.port=80 \
                  ${env.BASE_IMAGE} \
                  java -jar app.jar
