@@ -10,12 +10,17 @@ pipeline {
       DIST_DIR = "${env.JOB_NAME}"
       BASE_IMAGE = "docker-proxy.hljzj.tech/openjdk:17-buster"
       APP_KEY = "${env.JOB_NAME}"
+      MX_MEMORY = "400m"
+      MX_CPU = 4
       DIST_COMMAND = """
       CN="${env.APP_KEY.replaceAll('[^a-zA-Z0-9_]', '_')}"
       docker stop \$CN 2>/dev/null
       docker rm \$CN 2>/dev/null
       docker run -dit \
+                --memory='${env.MX_MEMORY}' \
+                --cpus='${env.MX_CPU}' \
                  --restart=always \
+                 --network=subnet \
                  --name \$CN \
                  -v ${env.AGENT_HOME}/${env.DIST_DIR}:/app \
                  -w /app \
