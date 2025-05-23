@@ -49,7 +49,8 @@ public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataMapper, SysDi
     @Override
     public boolean entityCreate(SysDictData entity) {
         if (baseMapper.exists(Wrappers.lambdaQuery(SysDictData.class)
-                .eq(SysDictData::getKey, entity.getKey())
+            .eq(SysDictData::getKey, entity.getKey())
+            .eq(SysDictData::getOwnerTypeId, entity.getOwnerTypeId())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "字典数据标识"));
         }
@@ -66,8 +67,9 @@ public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataMapper, SysDi
             throw UserException.defaultError(MsgUtil.t("data.locked", "字典数据"));
         }
         if (baseMapper.exists(Wrappers.lambdaQuery(SysDictData.class)
-                .eq(SysDictData::getKey, entity.getKey())
-                .ne(SysDictData::getId, existsEntity.getId())
+            .eq(SysDictData::getKey, entity.getKey())
+            .eq(SysDictData::getOwnerTypeId, entity.getOwnerTypeId())
+            .ne(SysDictData::getId, existsEntity.getId())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "字典数据标识"));
         }
@@ -120,15 +122,15 @@ public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataMapper, SysDi
     public void entityUpdateSort(String rowId, String prevRowId, String nextRowId) {
 
         updateBatchById(sortService.applySort(
-                rowId,
-                prevRowId,
-                nextRowId,
-                baseMapper,
-                (condition) -> condition.where()
-                        .eq(SysDictData::getOwnerTypeId, condition.row().getOwnerTypeId())
-                        .orderByAsc(SysDictData::getSort)
-                        .orderByDesc(SysDictData::getCreateTime)
-                        .orderByDesc(SysDictData::getId)
+            rowId,
+            prevRowId,
+            nextRowId,
+            baseMapper,
+            (condition) -> condition.where()
+                .eq(SysDictData::getOwnerTypeId, condition.row().getOwnerTypeId())
+                .orderByAsc(SysDictData::getSort)
+                .orderByDesc(SysDictData::getCreateTime)
+                .orderByDesc(SysDictData::getId)
         ));
     }
 
