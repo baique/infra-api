@@ -10,8 +10,8 @@ pipeline {
       DIST_DIR = "${env.JOB_NAME}"
       BASE_IMAGE = "docker-proxy.hljzj.tech/openjdk:17-buster"
       APP_KEY = "${env.JOB_NAME}"
-      MX_MEMORY = "400m"
-      MX_CPU = 4
+      MX_MEMORY = "256m"
+      MX_CPU = 2
       DIST_COMMAND = """
       CN="${env.APP_KEY.split('/')[0]}-api-${env.BRANCH_NAME}"
       docker stop \$CN 2>/dev/null
