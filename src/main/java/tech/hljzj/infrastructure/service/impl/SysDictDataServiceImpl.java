@@ -68,7 +68,7 @@ public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataMapper, SysDi
         }
         if (baseMapper.exists(Wrappers.lambdaQuery(SysDictData.class)
             .eq(SysDictData::getKey, entity.getKey())
-            .eq(SysDictData::getOwnerTypeId, entity.getOwnerTypeId())
+            .eq(SysDictData::getOwnerTypeId, existsEntity.getOwnerTypeId())
             .ne(SysDictData::getId, existsEntity.getId())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "字典数据标识"));
