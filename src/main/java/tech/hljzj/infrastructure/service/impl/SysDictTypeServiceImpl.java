@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.service.IDictService;
 import tech.hljzj.framework.service.SortService;
 import tech.hljzj.framework.service.entity.DictData;
+import tech.hljzj.framework.service.entity.IDictData;
 import tech.hljzj.framework.util.excel.ExcelUtil;
 import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.infrastructure.domain.SysDictData;
@@ -32,7 +34,6 @@ import tech.hljzj.infrastructure.vo.SysDictData.SysDictDataListVo;
 import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeListVo;
 import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeQueryVo;
 
-import jakarta.validation.Validator;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -146,7 +147,7 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
 
 
     @Override
-    public Map<String, List<DictData>> getDictData(List<String> keys) {
+    public Map<String, List<IDictData>> getDictData(List<String> keys) {
         if (CollUtil.isEmpty(keys)) {
             return Collections.emptyMap();
         }
@@ -163,7 +164,7 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
             return Collections.emptyMap();
         }
 
-        Map<String, List<DictData>> dd = new LinkedHashMap<>();
+        Map<String, List<IDictData>> dd = new LinkedHashMap<>();
         sysDictDataService.list(Wrappers.
             <SysDictData>lambdaQuery()
             .in(SysDictData::getOwnerTypeId, keyMapping.keySet())
@@ -192,7 +193,7 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
             return d;
         }).collect(Collectors.toList());
 
-        Map<String, List<DictData>> dd = getDictData(loadDictData);
+        Map<String, List<IDictData>> dd = getDictData(loadDictData);
 
 
         Map<WriteSheet, List<?>> writeMap = new LinkedHashMap<>();

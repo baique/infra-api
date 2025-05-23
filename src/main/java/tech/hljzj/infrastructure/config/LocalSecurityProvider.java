@@ -24,6 +24,7 @@ import tech.hljzj.infrastructure.domain.*;
 import tech.hljzj.infrastructure.service.*;
 import tech.hljzj.infrastructure.util.AppScopeHolder;
 import tech.hljzj.infrastructure.vo.SysMenu.SysMenuQueryVo;
+import tech.hljzj.protect.password.PasswordScorer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -48,6 +49,7 @@ public class LocalSecurityProvider implements SecurityProvider {
     private SysConfigService sysConfigService;
     @Autowired
     private SysUserLockService sysUserLockService;
+
 
     @Override
     public Map<String, String> withTokenAttr() {
@@ -97,6 +99,10 @@ public class LocalSecurityProvider implements SecurityProvider {
                 }
             }
             return null;
+        }
+        int minScore = Integer.parseInt(sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_SCORE));
+        if (!PasswordScorer.isStrongPassword(password, minScore)) {
+            throw new PasswordExpiredException("密码强度过低，请修改后重新登录");
         }
         if (AppConst.PASSWORD_POLICY.EXPIRED.equals(principal.getPasswordPolicy())) {
             throw new PasswordExpiredException("密码已过期，请修改后重新登录；或联系管理员进行解锁");

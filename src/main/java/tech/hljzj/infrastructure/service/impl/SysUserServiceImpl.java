@@ -37,6 +37,7 @@ import tech.hljzj.infrastructure.vo.SysRole.SysRoleListVo;
 import tech.hljzj.infrastructure.vo.SysRole.SysRoleQueryVo;
 import tech.hljzj.infrastructure.vo.SysUser.TokenInfoVo;
 import tech.hljzj.infrastructure.vo.VSysUser.VSysUserQueryVo;
+import tech.hljzj.protect.password.PasswordScorer;
 
 import java.io.Serializable;
 import java.util.*;
@@ -379,6 +380,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 首先检查密码
         String passwordStrength = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_STRENGTH);
+        String passwordScore = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_SCORE);
         String desc = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_STRENGTH_DESC);
         if (StrUtil.isNotEmpty(passwordStrength)) {
             //如果设置了强度规则，那么就用这个规则进行检查
@@ -386,6 +388,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 Pattern pp = Pattern.compile(passwordStrength);
                 Matcher matcher = pp.matcher(newPassword);
                 if (!matcher.matches()) {
+                    throw UserException.defaultError("密码内容不符合强度要求" + (StrUtil.isBlank(desc) ? "" : ":" + desc));
+                }
+
+                if (!PasswordScorer.isStrongPassword(newPassword, Integer.parseInt(passwordScore))) {
                     throw UserException.defaultError("密码内容不符合强度要求" + (StrUtil.isBlank(desc) ? "" : ":" + desc));
                 }
             } catch (Exception e) {
