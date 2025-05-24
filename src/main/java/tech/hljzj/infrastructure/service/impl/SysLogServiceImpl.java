@@ -104,6 +104,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         //使用一个异步线程完成
         asyncTaskExecutor.submit(() -> {
             if (StrUtil.isNotBlank(log.getOpAppId())) {
+                // 这里记录是哪个应用上报的日志
                 SysApp app = sysAppService.entityGet(log.getOpAppId());
                 log.setAppName(app.getName());
             }

@@ -20,6 +20,7 @@ import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.security.SessionStoreDecorator;
 import tech.hljzj.framework.security.bean.TokenAuthentication;
 import tech.hljzj.framework.service.SortService;
+import tech.hljzj.framework.util.password.ParamEncryption;
 import tech.hljzj.framework.util.password.SMUtil;
 import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.infrastructure.code.AppConst;
@@ -76,6 +77,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SwapEncoder swapEncoder;
     @Autowired
     private SortService sortService;
+    @Autowired
+    private ParamEncryption paramEncryption;
 
     @Override
     public VSysUser entityGet(VSysUser entity, boolean fetchExtAttr) {
@@ -349,6 +352,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public void changePasswordByUsername(String username, String oldPassword, String newPassword) {
+        oldPassword = getRawPassword(oldPassword);
+        newPassword = getRawPassword(newPassword);
+
         SysUser us = getOne(Wrappers.<SysUser>lambdaQuery()
             .eq(SysUser::getUsername, username)
         );
@@ -357,6 +363,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         // 临时设置为不检查
         us.setPasswordPolicy(AppConst.PASSWORD_POLICY.NEVER);
+        validatePasswordStorage(newPassword);
         // 检查密码
         if (!localSecurityProvider.validatePassword(oldPassword, us)) {
             throw UserException.defaultError("用户名或密码错误导致失败");
@@ -376,29 +383,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public void changePassword(String userId, String oldPassword, String newPassword) {
+        oldPassword = getRawPassword(oldPassword);
+        newPassword = getRawPassword(newPassword);
         SysUser user = getById(userId);
-
-        // 首先检查密码
-        String passwordStrength = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_STRENGTH);
-        String passwordScore = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_SCORE);
-        String desc = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_STRENGTH_DESC);
-        if (StrUtil.isNotEmpty(passwordStrength)) {
-            //如果设置了强度规则，那么就用这个规则进行检查
-            try {
-                Pattern pp = Pattern.compile(passwordStrength);
-                Matcher matcher = pp.matcher(newPassword);
-                if (!matcher.matches()) {
-                    throw UserException.defaultError("密码内容不符合强度要求" + (StrUtil.isBlank(desc) ? "" : ":" + desc));
-                }
-
-                if (!PasswordScorer.isStrongPassword(newPassword, Integer.parseInt(passwordScore))) {
-                    throw UserException.defaultError("密码内容不符合强度要求" + (StrUtil.isBlank(desc) ? "" : ":" + desc));
-                }
-            } catch (Exception e) {
-                throw UserException.defaultError("密码强度规则设置有误，无法正确检测密码强弱", e);
-            }
-        }
-
+        validatePasswordStorage(newPassword);
         //这里需要使用登录认证的类似逻辑
         if (localSecurityProvider.validatePassword(oldPassword, user)) {
             try {
@@ -414,6 +402,34 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return;
         }
         throw UserException.defaultError("原密码错误");
+    }
+
+
+    public String getRawPassword(String encPass) {
+        return paramEncryption.decrypt(encPass);
+    }
+
+
+    public void validatePasswordStorage(String newPassword) {
+        // 首先检查密码
+        String passwordStrength = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_STRENGTH);
+        String passwordScore = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_SCORE);
+        String desc = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_STRENGTH_DESC);
+        if (StrUtil.isNotEmpty(passwordStrength)) {
+            //如果设置了强度规则，那么就用这个规则进行检查
+            try {
+                Pattern pp = Pattern.compile(passwordStrength);
+                Matcher matcher = pp.matcher(newPassword);
+                if (!matcher.matches()) {
+                    throw UserException.defaultError("密码内容不符合强度要求" + (StrUtil.isBlank(desc) ? "" : ":" + desc));
+                }
+            } catch (Exception e) {
+                throw UserException.defaultError("密码强度规则设置有误，无法正确检测密码强弱", e);
+            }
+        }
+        if (!PasswordScorer.isStrongPassword(newPassword, Integer.parseInt(passwordScore))) {
+            throw UserException.defaultError("密码内容不符合强度要求" + (StrUtil.isBlank(desc) ? "" : ":" + desc));
+        }
     }
 
     @Override

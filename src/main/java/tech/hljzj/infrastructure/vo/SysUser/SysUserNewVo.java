@@ -1,5 +1,6 @@
 package tech.hljzj.infrastructure.vo.SysUser;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.infrastructure.vo.SysUser.base.SysUserNewBaseVo;
@@ -14,6 +15,9 @@ import java.util.Map;
  */
 @Getter
 @Setter
+@JsonIgnoreProperties(
+    value = "password", allowSetters = true
+)
 public class SysUserNewVo extends SysUserNewBaseVo {
     // 在这里可以扩展其他属性
     /**

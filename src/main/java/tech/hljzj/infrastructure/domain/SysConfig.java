@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.framework.pojo.dto.BizBaseEntity;
+import tech.hljzj.framework.service.entity.ConfigData;
 import tech.hljzj.framework.service.sort.ISort;
 
 import java.io.Serial;
@@ -20,7 +21,7 @@ import java.io.Serial;
 @Getter
 @Setter
 @TableName(value = "sys_config_")
-public class SysConfig extends BizBaseEntity implements ISort {
+public class SysConfig extends ConfigData implements ISort {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -34,41 +35,7 @@ public class SysConfig extends BizBaseEntity implements ISort {
      */
     @TableField(value = "owner_app_id_")
     private String ownerAppId;
-    /**
-     * 配置标识
-     */
-    @TableField(value = "key_")
-    private String key;
-    /**
-     * 配置名称
-     */
-    @TableField(value = "name_")
-    private String name;
-    /**
-     * 配置项值
-     */
-    @TableField(value = "value_")
-    private String value;
-    /**
-     * 配置状态
-     */
-    @TableField(value = "status_")
-    private String status;
-    /**
-     * 配置描述
-     */
-    @TableField(value = "desc_")
-    private String desc;
-    /**
-     * 排序编号
-     */
-    @TableField(value = "sort_")
-    private Integer sort;
-    /**
-     * 是否锁定
-     */
-    @TableField(value = "locked_")
-    private String locked;
+
 
 
     /**

@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,6 @@ import tech.hljzj.infrastructure.vo.SysRole.GrantAppRoleVo;
 import tech.hljzj.infrastructure.vo.SysUser.*;
 import tech.hljzj.infrastructure.vo.VSysUser.VSysUserQueryVo;
 
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -80,7 +80,10 @@ public class SysUserController extends BaseController {
      * @return 新增
      */
     @PreAuthorize("auth('sys:user:add')")
-    @Log(title = MODULE_NAME, operType = BusinessType.INSERT)
+    @Log(title = MODULE_NAME, operType = BusinessType.INSERT, ignoreParamValue = {
+        "oldPassword",
+        "newPassword",
+    })
     @PostMapping("/insert")
     public R<SysUserDetailVo> entityCreate(@RequestBody @Validated SysUserNewVo entity) {
         SysUser dto = entity.toDto();
@@ -183,7 +186,7 @@ public class SysUserController extends BaseController {
     @PreAuthorize("auth('sys:user:import')")
     @Log(title = MODULE_NAME, operType = BusinessType.IMPORT)
     public R<List<ExcelUtil.FailRowWrap<SysUserListVo>>> importData(@RequestPart MultipartFile file) throws IOException {
-        return R.ok(ExcelUtil.readExcel(ExcelUtil.getType(file.getOriginalFilename()),file.getInputStream(), SysUserListVo.class, SysUserListVo -> {
+        return R.ok(ExcelUtil.readExcel(ExcelUtil.getType(file.getOriginalFilename()), file.getInputStream(), SysUserListVo.class, SysUserListVo -> {
             this.service.entityCreate(SysUserListVo.toDto());
         }));
     }
@@ -342,9 +345,9 @@ public class SysUserController extends BaseController {
     @Log(title = MODULE_NAME, functionName = "移除管辖组织", operType = BusinessType.UPDATE)
     public R<Boolean> delUserManagerOrg(String userId, String deptId) {
         return R.ok(sysUserManagerDeptService.remove(Wrappers
-                .<SysUserManagerDept>lambdaQuery()
-                .eq(SysUserManagerDept::getUserId, userId)
-                .eq(SysUserManagerDept::getDeptId, deptId)
+            .<SysUserManagerDept>lambdaQuery()
+            .eq(SysUserManagerDept::getUserId, userId)
+            .eq(SysUserManagerDept::getDeptId, deptId)
         ));
     }
 
@@ -361,7 +364,7 @@ public class SysUserController extends BaseController {
         }
         // 检索用户管辖的单位
         return R.ok(sysUserManagerDeptService.list(Wrappers.<SysUserManagerDept>lambdaQuery()
-                .eq(SysUserManagerDept::getUserId, userId)
+            .eq(SysUserManagerDept::getUserId, userId)
         ));
     }
 
@@ -384,7 +387,10 @@ public class SysUserController extends BaseController {
      * @param oldPassword 原密码
      * @param newPassword 新密码
      */
-    @Log(title = MODULE_NAME, functionName = "修改密码", operType = BusinessType.UPDATE, isSaveRequestData = false, isSaveResponseData = false)
+    @Log(title = MODULE_NAME, functionName = "修改密码", operType = BusinessType.UPDATE, ignoreParamValue = {
+        "oldPassword",
+        "newPassword",
+    })
     @PostMapping("changePassword")
     public R<Void> changePassword(String userId, String oldPassword, String newPassword) {
         service.changePassword(userId, oldPassword, newPassword);
@@ -398,7 +404,10 @@ public class SysUserController extends BaseController {
      * @param oldPassword 原密码
      * @param newPassword 新密码
      */
-    @Log(title = MODULE_NAME, functionName = "修改密码", operType = BusinessType.UPDATE, isSaveRequestData = false, isSaveResponseData = false)
+    @Log(title = MODULE_NAME, functionName = "修改密码", operType = BusinessType.UPDATE, ignoreParamValue = {
+        "oldPassword",
+        "newPassword",
+    })
     @PostMapping("changePasswordByUsername")
     @Anonymous
     public R<Void> changePasswordByUsername(String username, String oldPassword, String newPassword) {
