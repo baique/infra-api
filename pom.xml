@@ -6,6 +6,7 @@
         <groupId>tech.hljzj</groupId>
         <artifactId>frm-parent</artifactId>
         <version>1.0.2-SNAPSHOT</version>
+        <relativePath/>
     </parent>
 
     <artifactId>infra-api</artifactId>
