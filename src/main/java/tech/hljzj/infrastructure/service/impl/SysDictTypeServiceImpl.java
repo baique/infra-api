@@ -13,7 +13,6 @@ import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +20,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.service.IDictService;
 import tech.hljzj.framework.service.SortService;
-import tech.hljzj.framework.service.entity.DictData;
 import tech.hljzj.framework.service.entity.IDictData;
 import tech.hljzj.framework.util.excel.ExcelUtil;
 import tech.hljzj.framework.util.web.MsgUtil;
@@ -34,6 +32,7 @@ import tech.hljzj.infrastructure.vo.SysDictData.SysDictDataListVo;
 import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeListVo;
 import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeQueryVo;
 
+import javax.validation.Validator;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -97,8 +96,11 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean entityDelete(SysDictType entity) {
-        // 同步删除所有的字典值
-        sysDictDataService.remove(Wrappers.<SysDictData>lambdaQuery().eq(SysDictData::getOwnerTypeId, entity.getId()));
+        if (sysDictDataService.exists(Wrappers.<SysDictData>lambdaQuery().eq(SysDictData::getOwnerTypeId, entity.getId()))) {
+            // 如果包含了字段值，那么就不允许删除
+            throw UserException.defaultError("当前字典组内仍有字典项，删除操作被拒绝");
+        }
+
         return removeById(entity);
     }
 

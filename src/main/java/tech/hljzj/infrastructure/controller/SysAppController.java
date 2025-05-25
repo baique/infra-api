@@ -18,8 +18,8 @@ import tech.hljzj.infrastructure.domain.SysApp;
 import tech.hljzj.infrastructure.service.SysAppService;
 import tech.hljzj.infrastructure.vo.SysApp.*;
 
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
@@ -55,7 +55,7 @@ public class SysAppController extends BaseController {
      * @param id 数据id
      * @return 数据详情
      */
-    @PreAuthorize("auth('sys:app:query')")
+    @PreAuthorize("auth({'sys:app:query','sys:app:edit'})")
     @GetMapping("/{id}")
     @Log(title = MODULE_NAME, operType = BusinessType.DETAIL)
     public R<SysAppDetailVo> entityGet(@PathVariable Serializable id) {

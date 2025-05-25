@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import tech.hljzj.framework.util.password.SMUtil;
 
-import jakarta.annotation.PostConstruct;
+import javax.annotation.PostConstruct;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;

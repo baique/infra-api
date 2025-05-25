@@ -8,7 +8,7 @@ import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.framework.util.web.ReqUtil;
 import tech.hljzj.infrastructure.code.AppConst;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 应用上下文信息

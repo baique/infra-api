@@ -1,7 +1,7 @@
 package tech.hljzj.infrastructure.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ import tech.hljzj.infrastructure.domain.SysRole;
 import tech.hljzj.infrastructure.service.SysRoleService;
 import tech.hljzj.infrastructure.vo.SysRole.*;
 
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class SysRoleController extends BaseController {
      * @param id 数据id
      * @return 数据详情
      */
-    @PreAuthorize("auth('sys:role:query')")
+    @PreAuthorize("auth({'sys:role:query','sys:role:edit'})")
     @GetMapping("/{id}")
     @Log(title = MODULE_NAME, operType = BusinessType.DETAIL)
     public R<SysRoleDetailVo> entityGet(@PathVariable Serializable id) {

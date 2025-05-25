@@ -15,9 +15,9 @@ import tech.hljzj.framework.security.handler.AppLoginSuccessHandler;
 import tech.hljzj.framework.service.ILoggerService;
 import tech.hljzj.framework.util.web.ReqUtil;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j

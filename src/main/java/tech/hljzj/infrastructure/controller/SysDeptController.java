@@ -16,7 +16,7 @@ import tech.hljzj.infrastructure.service.SysDeptService;
 import tech.hljzj.infrastructure.vo.SysDept.*;
 import tech.hljzj.infrastructure.vo.VSysDeptMemberUser.VSysDeptMemberUserQueryVo;
 
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class SysDeptController extends BaseController {
      * @param id 数据id
      * @return 数据详情
      */
-    @PreAuthorize("auth('sys:dept:query')")
+    @PreAuthorize("auth({'sys:dept:query','sys:dept:edit'})")
     @GetMapping("/{id}")
     @Log(title = MODULE_NAME, operType = BusinessType.DETAIL)
     public R<SysDeptDetailVo> entityGet(@PathVariable Serializable id) {
@@ -196,7 +196,6 @@ public class SysDeptController extends BaseController {
     }
 
     @PostMapping("/member/list")
-    @PreAuthorize("auth('sys:dept:member:list')")
     @Log(title = MODULE_NAME, content = "查看成员", operType = BusinessType.DETAIL, isSaveResponseData = false)
     public R<R.PageResult<SysDeptMemberListVo>> pageMemeber(@RequestBody VSysDeptMemberUserQueryVo query) {
         Page<VSysDeptMemberUser> page = this.service.pageMember(query);
@@ -221,6 +220,7 @@ public class SysDeptController extends BaseController {
      */
     @PostMapping("followDeptOfUsers")
     @Log(title = MODULE_NAME, content = "添加成员", operType = BusinessType.UPDATE)
+    @PreAuthorize("auth('sys:dept:member')")
     public R<Boolean> followDeptOfUsers(String deptId, @RequestBody List<String> userIds) {
         return R.ok(service.followDeptOfUsers(deptId, userIds));
     }
@@ -234,6 +234,7 @@ public class SysDeptController extends BaseController {
      */
     @Log(title = MODULE_NAME, content = "移出成员", operType = BusinessType.UPDATE)
     @PostMapping("unFollowDeptOfUsers")
+    @PreAuthorize("auth('sys:dept:member')")
     public R<Boolean> unFollowDeptOfUsers(String deptId, @RequestBody List<String> userIds) {
         return R.ok(service.unFollowDeptOfUsers(deptId, userIds));
     }

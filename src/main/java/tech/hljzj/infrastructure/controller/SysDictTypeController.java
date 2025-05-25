@@ -16,7 +16,7 @@ import tech.hljzj.infrastructure.domain.SysDictType;
 import tech.hljzj.infrastructure.service.SysDictTypeService;
 import tech.hljzj.infrastructure.vo.SysDictType.*;
 
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import java.io.Serializable;
 import java.util.List;
@@ -46,7 +46,7 @@ public class SysDictTypeController extends BaseController {
      * @param id 数据id
      * @return 数据详情
      */
-    @PreAuthorize("auth('sys:dict:query')")
+    @PreAuthorize("auth({'sys:dict:query','sys:dict:edit'})")
     @GetMapping("/{id}")
     @Log(title = MODULE_NAME, operType = BusinessType.DETAIL)
     public R<SysDictTypeDetailVo> entityGet(@PathVariable Serializable id) {

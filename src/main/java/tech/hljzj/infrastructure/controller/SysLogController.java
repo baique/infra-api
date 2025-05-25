@@ -16,7 +16,7 @@ import tech.hljzj.infrastructure.vo.SysLog.SysLogListVo;
 import tech.hljzj.infrastructure.vo.SysLog.SysLogNewVo;
 import tech.hljzj.infrastructure.vo.SysLog.SysLogQueryVo;
 
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class SysLogController extends BaseController {
      * @param id 数据id
      * @return 数据详情
      */
-    @PreAuthorize("auth('sys:log:query')")
+    @PreAuthorize("auth({'sys:log:query','sys:log:edit'})")
     @GetMapping("/{id}")
     @Log(title = MODULE_NAME, operType = BusinessType.DETAIL)
     public R<SysLogDetailVo> entityGet(@PathVariable Serializable id) {

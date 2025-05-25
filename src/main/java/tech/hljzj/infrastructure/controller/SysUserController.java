@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -64,7 +64,7 @@ public class SysUserController extends BaseController {
      * @param id 数据id
      * @return 数据详情
      */
-    @PreAuthorize("auth('sys:user:query')")
+    @PreAuthorize("auth({'sys:user:query','sys:user:edit'})")
     @GetMapping("/{id}")
     @Log(title = MODULE_NAME, operType = BusinessType.DETAIL)
     public R<SysUserDetailVo> entityGet(@PathVariable Serializable id, Boolean fetchExtAttr) {
@@ -199,7 +199,6 @@ public class SysUserController extends BaseController {
      * @return 查询结果
      */
     @PostMapping("/list")
-    @PreAuthorize("auth('sys:user:list')")
     public R<R.PageResult<SysUserListVo>> page(@RequestBody VSysUserQueryVo query) {
         Page<VSysUser> page = this.service.page(query);
         Page<SysUserListVo> pageVo = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());

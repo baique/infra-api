@@ -13,7 +13,7 @@ import tech.hljzj.infrastructure.domain.SysConfig;
 import tech.hljzj.infrastructure.service.SysConfigService;
 import tech.hljzj.infrastructure.vo.SysConfig.*;
 
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class SysConfigController extends BaseController {
      * @param id 数据id
      * @return 数据详情
      */
-    @PreAuthorize("auth('sys:config:query')")
+    @PreAuthorize("auth({'sys:config:query','sys:config:edit'})")
     @GetMapping("/{id}")
     @Log(title = MODULE_NAME, operType = BusinessType.DETAIL)
     public R<SysConfigDetailVo> entityGet(@PathVariable Serializable id) {

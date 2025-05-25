@@ -1,7 +1,7 @@
 package tech.hljzj.infrastructure.vo.SysMenu.base;
 
 import com.alibaba.excel.annotation.ExcelProperty;
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.framework.util.excel.dict.DictConvertHandle;

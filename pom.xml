@@ -5,7 +5,7 @@
     <parent>
         <groupId>tech.hljzj</groupId>
         <artifactId>frm-parent</artifactId>
-        <version>1.0.2-boot3-SNAPSHOT</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>infra-api</artifactId>
@@ -25,10 +25,6 @@
         <dependency>
             <groupId>tech.hljzj</groupId>
             <artifactId>framework-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
     </dependencies>
 </project>

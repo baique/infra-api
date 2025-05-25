@@ -2,7 +2,7 @@ package tech.hljzj.infrastructure.compatible.util;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import jakarta.annotation.PostConstruct;
+import javax.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import tech.hljzj.framework.security.bean.LoginUser;
 import tech.hljzj.framework.security.bean.TokenAuthentication;
 import tech.hljzj.framework.security.store.JwtTokenStore;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Component

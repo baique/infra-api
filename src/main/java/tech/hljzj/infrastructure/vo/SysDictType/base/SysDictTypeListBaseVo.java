@@ -13,7 +13,7 @@ import tech.hljzj.framework.util.excel.dict.UseDict;
 import tech.hljzj.infrastructure.domain.SysDictType;
 
 
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 import java.io.Serial;
 import java.io.Serializable;

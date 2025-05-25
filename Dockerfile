@@ -18,8 +18,8 @@ echo -n "java" >> /app/Start.sh ;\
 echo -n " -Xms$XMS" >> /app/Start.sh ;\
 echo -n " -Xmx$XMX" >> /app/Start.sh ;\
 echo -n " -XX:MaxDirectMemorySize=$XMS" >> /app/Start.sh ;\
-echo -n " -XX:MetaspaceSize=256M" >> /app/Start.sh ;\
-echo -n " -XX:MaxMetaspaceSize=256M" >> /app/Start.sh ;\
+echo -n " -XX:MetaspaceSize=128M" >> /app/Start.sh ;\
+echo -n " -XX:MaxMetaspaceSize=128M" >> /app/Start.sh ;\
 echo -n " -XX:+UseG1GC" >> /app/Start.sh ;\
 echo -n " -XX:+UseStringDeduplication" >> /app/Start.sh ;\
 echo -n " -XX:+ParallelRefProcEnabled" >> /app/Start.sh ;\

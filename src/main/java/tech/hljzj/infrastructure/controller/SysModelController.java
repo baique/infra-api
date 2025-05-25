@@ -34,7 +34,6 @@ public class SysModelController extends BaseController {
      * @param id 数据id
      * @return 数据详情
      */
-    @PreAuthorize("auth('sys_model_:query')")
     @GetMapping("/{id}")
     public R<SysModel> entityGet(@PathVariable Serializable id) {
         return R.ok(this.service.entityGet(id));
@@ -47,7 +46,7 @@ public class SysModelController extends BaseController {
      * @param dto 数据体
      * @return 修改后
      */
-    @PreAuthorize("auth('sys_model_:edit')")
+    @PreAuthorize("auth('model-manager')")
     @Log(title = "功能扩展模型", operType = BusinessType.UPDATE)
     @PostMapping("/update")
     public R<SysModel> entityUpdate(@RequestBody @Validated SysModel dto) {
