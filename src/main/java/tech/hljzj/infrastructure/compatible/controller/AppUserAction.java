@@ -5,6 +5,9 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
+import tech.hljzj.framework.exception.UserException;
+import tech.hljzj.framework.security.an.Anonymous;
+import tech.hljzj.framework.security.bean.LoginUser;
 import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.compatible.controller.bsae.MController;
 import tech.hljzj.infrastructure.compatible.controller.bsae.R;
@@ -16,9 +19,6 @@ import tech.hljzj.infrastructure.compatible.vo.role.Role;
 import tech.hljzj.infrastructure.compatible.vo.role.RolePermission;
 import tech.hljzj.infrastructure.compatible.vo.user.userMini.UserMiniInfo;
 import tech.hljzj.infrastructure.compatible.vo.user.userWithRolePermission.UserRolePermission;
-import tech.hljzj.framework.exception.UserException;
-import tech.hljzj.framework.security.an.Anonymous;
-import tech.hljzj.framework.security.bean.LoginUser;
 import tech.hljzj.infrastructure.domain.SysDept;
 import tech.hljzj.infrastructure.domain.SysUserManagerDept;
 import tech.hljzj.infrastructure.domain.VSysDeptMemberUser;
@@ -27,6 +27,7 @@ import tech.hljzj.infrastructure.service.*;
 import tech.hljzj.infrastructure.vo.SysDept.SysDeptQueryVo;
 import tech.hljzj.infrastructure.vo.VSysDeptMemberUser.VSysDeptMemberUserQueryVo;
 import tech.hljzj.infrastructure.vo.VSysUser.VSysUserQueryVo;
+import tech.hljzj.protect.password.PasswordNotSafeException;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -78,12 +79,12 @@ public class AppUserAction extends MController {
         String appId = AppHelper.getLoginApp(request);
         // 获取授权给某个用户的角色和权限列表
         List<RolePermission> roles = sysUserService.listGrantRoleOfUser(userInfo.getUserId(), appId).stream()
-                .map(f -> {
-                    Role r = Role.from(f);
-                    return BeanUtil.copyProperties(r, RolePermission.class);
-                }).collect(Collectors.toList());
+            .map(f -> {
+                Role r = Role.from(f);
+                return BeanUtil.copyProperties(r, RolePermission.class);
+            }).collect(Collectors.toList());
         roles.forEach(item -> item.setPermissions(sysRoleService.listGrantOfRole(item.getRoleId(), appId).stream()
-                .map(Permission::from).collect(Collectors.toList())));
+            .map(Permission::from).collect(Collectors.toList())));
         userInfo.setRoles(roles);
         return success(userInfo);
     }
@@ -185,7 +186,7 @@ public class AppUserAction extends MController {
 
     @PostMapping("/user/changePassword")
     @ResponseBody
-    public Object changePassword(String password, String newPassword) {
+    public Object changePassword(String password, String newPassword) throws PasswordNotSafeException {
         //修改密码
         LoginUser user = AppHelper.getLoginUser(request);
         sysUserService.changePassword(user.getUserInfo().getId(), password, newPassword);
@@ -198,8 +199,8 @@ public class AppUserAction extends MController {
     public Object getManagerDept(String userId) {
         //获取用户的管辖单位
         List<SysUserManagerDept> deptList = sysUserManagerDeptService.list(
-                Wrappers.<SysUserManagerDept>lambdaQuery()
-                        .eq(SysUserManagerDept::getUserId, userId)
+            Wrappers.<SysUserManagerDept>lambdaQuery()
+                .eq(SysUserManagerDept::getUserId, userId)
         );
         Set<ManagerInfo> depts = new LinkedHashSet<>();
         for (SysUserManagerDept sysUserManagerDept : deptList) {

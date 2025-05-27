@@ -5,7 +5,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +24,9 @@ import tech.hljzj.infrastructure.service.SysUserService;
 import tech.hljzj.infrastructure.vo.SysRole.GrantAppRoleVo;
 import tech.hljzj.infrastructure.vo.SysUser.*;
 import tech.hljzj.infrastructure.vo.VSysUser.VSysUserQueryVo;
+import tech.hljzj.protect.password.PasswordNotSafeException;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -391,7 +392,7 @@ public class SysUserController extends BaseController {
         "newPassword",
     })
     @PostMapping("changePassword")
-    public R<Void> changePassword(String userId, String oldPassword, String newPassword) {
+    public R<Void> changePassword(String userId, String oldPassword, String newPassword) throws PasswordNotSafeException {
         service.changePassword(userId, oldPassword, newPassword);
         return R.ok();
     }
@@ -409,7 +410,7 @@ public class SysUserController extends BaseController {
     })
     @PostMapping("changePasswordByUsername")
     @Anonymous
-    public R<Void> changePasswordByUsername(String username, String oldPassword, String newPassword) {
+    public R<Void> changePasswordByUsername(String username, String oldPassword, String newPassword) throws PasswordNotSafeException {
         service.changePasswordByUsername(username, oldPassword, newPassword);
         return R.ok();
     }

@@ -10,6 +10,7 @@ import tech.hljzj.infrastructure.domain.VSysUser;
 import tech.hljzj.infrastructure.vo.SysRole.GrantAppRoleVo;
 import tech.hljzj.infrastructure.vo.SysUser.TokenInfoVo;
 import tech.hljzj.infrastructure.vo.VSysUser.VSysUserQueryVo;
+import tech.hljzj.protect.password.PasswordNotSafeException;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -170,7 +171,7 @@ public interface SysUserService extends IService<SysUser> {
      * @param userId      用户标识
      * @param newPassword 新密码 ，如果新密码传入空，则由系统自动读取默认密码
      */
-    void changePassword(String userId, String oldPassword, String newPassword);
+    void changePassword(String userId, String oldPassword, String newPassword) throws PasswordNotSafeException;
 
     /**
      * 修改密码
@@ -179,9 +180,15 @@ public interface SysUserService extends IService<SysUser> {
      * @param oldPassword 旧密码
      * @param newPassword 新密码
      */
-    void changePasswordByUsername(String username, String oldPassword, String newPassword);
+    void changePasswordByUsername(String username, String oldPassword, String newPassword) throws PasswordNotSafeException;
 
-    void validatePasswordStorage(String newPassword, SysUser userInfo);
+    /**
+     * 校验密码强度
+     *
+     * @param password 密码
+     * @param userInfo    用户信息
+     */
+    void validatePasswordStorage(String password, SysUser userInfo) throws PasswordNotSafeException;
 
     /**
      * 更新数据排序

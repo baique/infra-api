@@ -24,6 +24,7 @@ import tech.hljzj.infrastructure.vo.SysApp.SysAppQueryVo;
 import tech.hljzj.infrastructure.vo.SysDept.SysDeptQueryVo;
 import tech.hljzj.infrastructure.vo.SysRole.SysRoleQueryVo;
 import tech.hljzj.infrastructure.vo.VSysDeptMemberUser.VSysDeptMemberUserQueryVo;
+import tech.hljzj.protect.password.PasswordNotSafeException;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -75,7 +76,7 @@ public class AppAdminController extends MController {
     @ResponseBody
     @Anonymous
 
-    public Object updatePassword(String userAccount, String userPassword, String initialPassWord) {
+    public Object updatePassword(String userAccount, String userPassword, String initialPassWord) throws PasswordNotSafeException {
         SysUser u = null;
         try {
             u = sysUserService.getOne(Wrappers.<SysUser>lambdaQuery()

@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.toolkit.MPJWrappers;
-import com.nulabinc.zxcvbn.Strength;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -40,12 +39,11 @@ import tech.hljzj.infrastructure.vo.SysRole.SysRoleListVo;
 import tech.hljzj.infrastructure.vo.SysRole.SysRoleQueryVo;
 import tech.hljzj.infrastructure.vo.SysUser.TokenInfoVo;
 import tech.hljzj.infrastructure.vo.VSysUser.VSysUserQueryVo;
+import tech.hljzj.protect.password.PasswordNotSafeException;
 import tech.hljzj.protect.password.PasswordScorer;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -353,7 +351,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public void changePasswordByUsername(String username, String oldPassword, String newPassword) {
+    public void changePasswordByUsername(String username, String oldPassword, String newPassword) throws PasswordNotSafeException {
         oldPassword = getRawPassword(oldPassword);
         newPassword = getRawPassword(newPassword);
 
@@ -384,7 +382,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public void changePassword(String userId, String oldPassword, String newPassword) {
+    public void changePassword(String userId, String oldPassword, String newPassword) throws PasswordNotSafeException {
         oldPassword = getRawPassword(oldPassword);
         newPassword = getRawPassword(newPassword);
         SysUser user = getById(userId);
@@ -412,38 +410,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public void validatePasswordStorage(String newPassword, SysUser user) {
-        this.validatePasswordStorage(newPassword, UserPasswordContext.getContext(user));
+    public void validatePasswordStorage(String password, SysUser user) throws PasswordNotSafeException {
+        this.validatePasswordStorage(password, UserPasswordContext.getContext(user));
     }
 
-    protected void validatePasswordStorage(String newPassword, List<String> userMoreInfo) {
+    protected void validatePasswordStorage(String newPassword, List<String> userMoreInfo) throws PasswordNotSafeException {
         // 密码强度检查
         String passwordStrengthPattern = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_STRENGTH);
         // 密码最低强度分，基于zxcvbn
         int passwordScore = Integer.parseInt(sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_SCORE));
         // 低于指定强度时提示信息
         String errorMessage = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_STRENGTH_DESC);
-        validatePasswordStorage(newPassword, passwordStrengthPattern, passwordScore, errorMessage, userMoreInfo);
+        PasswordScorer.validatePassword(newPassword,
+            passwordStrengthPattern,
+            passwordScore,
+            errorMessage,
+            userMoreInfo
+        );
     }
 
-    private void validatePasswordStorage(String newPassword, String passwordStrengthPattern, int passwordScore, String errorMessage, List<String> userMoreInfo) {
-        if (StrUtil.isNotEmpty(passwordStrengthPattern)) {
-            //如果设置了强度规则，那么就用这个规则进行检查
-            try {
-                Pattern pp = Pattern.compile(passwordStrengthPattern);
-                Matcher matcher = pp.matcher(newPassword);
-                if (!matcher.matches()) {
-                    throw UserException.defaultError("密码内容不符合强度要求" + (StrUtil.isBlank(errorMessage) ? "" : ":" + errorMessage));
-                }
-            } catch (Exception e) {
-                throw UserException.defaultError("密码强度规则设置有误，无法正确检测密码强弱", e);
-            }
-        }
-        Strength seg = PasswordScorer.getPasswordStrengthScore(newPassword, userMoreInfo);
-        if (seg.getScore() < passwordScore) {
-            throw UserException.defaultError("密码内容不符合强度要求" + (StrUtil.isBlank(errorMessage) ? "" : ":" + errorMessage));
-        }
-    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

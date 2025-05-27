@@ -103,7 +103,7 @@ public class LocalSecurityProvider implements SecurityProvider {
         try {
             sysUserService.validatePasswordStorage(password, principal);
         } catch (Exception e) {
-            throw new PasswordExpiredException("密码强度过低，请修改后重新登录");
+            throw new PasswordExpiredException("密码强度不符合安全要求，请修改后重新登录");
         }
 
         if (AppConst.PASSWORD_POLICY.EXPIRED.equals(principal.getPasswordPolicy())) {
