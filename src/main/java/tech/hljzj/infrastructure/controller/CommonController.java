@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 import tech.hljzj.framework.base.BaseController;
 import tech.hljzj.framework.bean.R;
 import tech.hljzj.framework.util.password.ParamEncryption;
+import tech.hljzj.infrastructure.domain.SysUser;
+import tech.hljzj.infrastructure.util.UserPasswordContext;
 import tech.hljzj.protect.password.PasswordScorer;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("infrastructure/common")
@@ -23,9 +23,9 @@ public class CommonController extends BaseController {
     }
 
     @PostMapping("password-score")
-    public R<Number> passwordScore(String password, @RequestBody(required = false) List<String> bodyLines) {
+    public R<Number> passwordScore(String password, @RequestBody SysUser user) {
         String decrypt = paramEncryption.decrypt(password);
-        Strength sl = PasswordScorer.getPasswordStrengthScore(decrypt, bodyLines);
+        Strength sl = PasswordScorer.getPasswordStrengthScore(decrypt, UserPasswordContext.getContext(user));
         return R.ok(sl.getScore());
     }
 }

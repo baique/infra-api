@@ -181,6 +181,8 @@ public interface SysUserService extends IService<SysUser> {
      */
     void changePasswordByUsername(String username, String oldPassword, String newPassword);
 
+    void validatePasswordStorage(String newPassword, SysUser userInfo);
+
     /**
      * 更新数据排序
      *
