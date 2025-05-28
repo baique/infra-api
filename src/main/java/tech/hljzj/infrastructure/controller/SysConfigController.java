@@ -12,6 +12,7 @@ import tech.hljzj.framework.util.excel.ExcelUtil;
 import tech.hljzj.infrastructure.domain.SysConfig;
 import tech.hljzj.infrastructure.service.SysConfigService;
 import tech.hljzj.infrastructure.vo.SysConfig.*;
+import tech.hljzj.protect.anno.Xss;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
@@ -46,6 +47,7 @@ public class SysConfigController extends BaseController {
     @PreAuthorize("auth({'sys:config:query','sys:config:edit'})")
     @GetMapping("/{id}")
     @Log(title = MODULE_NAME, operType = BusinessType.DETAIL)
+    @Xss(enable = false)
     public R<SysConfigDetailVo> entityGet(@PathVariable Serializable id) {
         SysConfig dto = this.service.entityGet(id);
         return R.ok(new SysConfigDetailVo().fromDto(dto));
@@ -61,6 +63,7 @@ public class SysConfigController extends BaseController {
     @PreAuthorize("auth('sys:config:add')")
     @Log(title = MODULE_NAME, operType = BusinessType.INSERT)
     @PostMapping("/insert")
+    @Xss(enable = false)
     public R<SysConfigDetailVo> entityCreate(@RequestBody @Validated SysConfigNewVo entity) {
         SysConfig dto = entity.toDto();
         this.service.entityCreate(dto);
@@ -77,6 +80,7 @@ public class SysConfigController extends BaseController {
     @PreAuthorize("auth('sys:config:edit')")
     @Log(title = MODULE_NAME, operType = BusinessType.UPDATE)
     @PostMapping("/update")
+    @Xss(enable = false)
     public R<SysConfigDetailVo> entityUpdate(@RequestBody @Validated SysConfigUpdateVo entity) {
         SysConfig dto = entity.toDto();
         this.service.entityUpdate(dto);
