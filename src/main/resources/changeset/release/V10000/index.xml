@@ -11,16 +11,16 @@
         http://www.liquibase.org/xml/ns/pro
         http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-    <changeSet id="2025-4-29-1" author="wa">
+    <changeSet id="2025-4-29-1" author="wa"  dbms="mysql">
         <sqlFile relativeToChangelogFile="true" path="mysql/base.sql"/>
     </changeSet>
-    <changeSet id="2025-4-29-2" author="wa">
+    <changeSet id="2025-4-29-2" author="wa"  dbms="mysql">
         <sqlFile relativeToChangelogFile="true" path="mysql/view.sql"/>
     </changeSet>
-    <changeSet id="2025-4-29-3" author="wa">
+    <changeSet id="2025-4-29-3" author="wa"  dbms="mysql">
         <sqlFile relativeToChangelogFile="true" path="mysql/data.sql"/>
     </changeSet>
-    <changeSet id="2025-5-7-1" author="wa">
+    <changeSet id="2025-5-7-1" author="wa"  dbms="mysql">
         <sqlFile relativeToChangelogFile="true" path="mysql/ai-table.sql"/>
     </changeSet>
 </databaseChangeLog>

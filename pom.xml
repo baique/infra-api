@@ -29,5 +29,9 @@
             <groupId>tech.hljzj</groupId>
             <artifactId>framework-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>tech.hljzj</groupId>
+            <artifactId>framework-module-db-pg</artifactId>
+        </dependency>
     </dependencies>
 </project>

@@ -5,9 +5,12 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
+import tech.hljzj.framework.config.mybatis.JsonTypeHandler;
+import tech.hljzj.pgdb.PGJsonTypeHandler;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * 用户扩展信息 sys_user_ext_attr
@@ -30,8 +33,8 @@ public class SysUserExtAttr implements Serializable {
     /**
      * 扩展属性
      */
-    @TableField(value = "attribution_")
-    private String attribution;
+    @TableField(value = "attribution_", typeHandler = JsonTypeHandler.class)
+    private Map<String, Object> attribution;
 
 
     /**

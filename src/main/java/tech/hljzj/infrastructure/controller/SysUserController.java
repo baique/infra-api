@@ -135,7 +135,7 @@ public class SysUserController extends BaseController {
         if (attribution != null) {
             SysUserExtAttr attr = new SysUserExtAttr();
             attr.setId(dto.getId());
-            attr.setAttribution(JSONUtil.toJsonStr(attribution));
+            attr.setAttribution(/*JSONUtil.toJsonStr*/(attribution));
             // save or update
             sysUserExtAttrService.saveOrUpdate(attr);
         }
