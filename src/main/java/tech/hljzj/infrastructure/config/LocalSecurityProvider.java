@@ -168,7 +168,8 @@ public class LocalSecurityProvider implements SecurityProvider {
             .setRank(principal.getWorkRank());
 
         //设置用户主页路径
-        loginUser.setMainHomePath(CollUtil.isEmpty(roleInfoList) ? scopeApp.getMainPagePath() : roleInfoList.stream().findFirst().map(RoleInfo::getMainHomePage).orElse(""));
+        loginUser.setMainHomePath(CollUtil.isEmpty(roleInfoList) ? scopeApp.getMainPagePath() : roleInfoList
+            .stream().sorted().findFirst().map(RoleInfo::getMainHomePage).orElse(""));
         loginUser.setMainHomePath(StrUtil.blankToDefault(loginUser.getMainHomePath(), scopeApp.getMainPagePath()));
         loginUser.setPermission(sysMenus.stream().map(SysMenu::getKey).collect(Collectors.toSet()));
         return loginUser;

@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import tech.hljzj.framework.exception.UserException;
+import tech.hljzj.framework.service.IConfigService;
 import tech.hljzj.framework.service.SortService;
+import tech.hljzj.framework.service.entity.IConfigData;
 import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.domain.SysConfig;
@@ -20,9 +22,7 @@ import tech.hljzj.infrastructure.util.AppScopeHolder;
 import tech.hljzj.infrastructure.vo.SysConfig.SysConfigQueryVo;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 /**
@@ -32,7 +32,7 @@ import java.util.Objects;
  * @author wa
  */
 @Service
-public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig> implements SysConfigService {
+public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig> implements SysConfigService, IConfigService {
 
     private final SortService sortService;
 
@@ -54,7 +54,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     @Override
     public boolean entityCreate(SysConfig entity) {
         if (baseMapper.exists(Wrappers.<SysConfig>query().lambda()
-                .eq(SysConfig::getKey, entity.getKey())
+            .eq(SysConfig::getKey, entity.getKey())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "标识"));
         }
@@ -65,8 +65,8 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     @Override
     public boolean entityUpdate(SysConfig entity) {
         if (baseMapper.exists(Wrappers.<SysConfig>query().lambda()
-                .eq(SysConfig::getKey, entity.getKey())
-                .ne(SysConfig::getId, entity.getId())
+            .eq(SysConfig::getKey, entity.getKey())
+            .ne(SysConfig::getId, entity.getId())
 
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "标识"));
@@ -124,15 +124,15 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     @Transactional(rollbackFor = Exception.class)
     public void applySort(String id, String toPrevId, String toNextId) {
         updateBatchById(sortService.applySort(
-                id, toPrevId, toNextId,
-                baseMapper,
-                c -> c.where()
-                        .eq(SysConfig::getOwnerAppId, c.row().getOwnerAppId())
-                        .orderByAsc(SysConfig::getSort)
-                        .orderByDesc(SysConfig::getCreateTime)
-                        .orderByDesc(SysConfig::getId)
-                ,
-                100
+            id, toPrevId, toNextId,
+            baseMapper,
+            c -> c.where()
+                .eq(SysConfig::getOwnerAppId, c.row().getOwnerAppId())
+                .orderByAsc(SysConfig::getSort)
+                .orderByDesc(SysConfig::getCreateTime)
+                .orderByDesc(SysConfig::getId)
+            ,
+            100
         ));
     }
 
@@ -140,23 +140,23 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     public SysConfig getByKey(String key) {
         String firstQueryAppId = AppScopeHolder.getScopeAppIdOrDefault();
         SysConfig config = getOne(Wrappers
-                        .<SysConfig>lambdaQuery()
-                        .eq(SysConfig::getKey, key)
-                        .eq(SysConfig::getOwnerAppId, firstQueryAppId)
-                        .orderByAsc(SysConfig::getSort)
-                        .orderByDesc(SysConfig::getCreateTime)
-                        .orderByDesc(SysConfig::getId)
-                , false);
+                .<SysConfig>lambdaQuery()
+                .eq(SysConfig::getKey, key)
+                .eq(SysConfig::getOwnerAppId, firstQueryAppId)
+                .orderByAsc(SysConfig::getSort)
+                .orderByDesc(SysConfig::getCreateTime)
+                .orderByDesc(SysConfig::getId)
+            , false);
 
         if (config == null && !StrUtil.equals(AppConst.ID, firstQueryAppId)) {
             return getOne(Wrappers
-                            .<SysConfig>lambdaQuery()
-                            .eq(SysConfig::getKey, key)
-                            .eq(SysConfig::getOwnerAppId, AppConst.ID)
-                            .orderByAsc(SysConfig::getSort)
-                            .orderByDesc(SysConfig::getCreateTime)
-                            .orderByDesc(SysConfig::getId)
-                    , false);
+                    .<SysConfig>lambdaQuery()
+                    .eq(SysConfig::getKey, key)
+                    .eq(SysConfig::getOwnerAppId, AppConst.ID)
+                    .orderByAsc(SysConfig::getSort)
+                    .orderByDesc(SysConfig::getCreateTime)
+                    .orderByDesc(SysConfig::getId)
+                , false);
         }
         return config;
     }
@@ -166,5 +166,20 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         SysConfig config = getByKey(key);
         Assert.notNull(config, MsgUtil.t("data.not.exists", "配置" + key));
         return config.getValue();
+    }
+
+    @Override
+    public Map<String, IConfigData> getConfig(List<String> keys) {
+        if (CollUtil.isEmpty(keys)) {
+            return Collections.emptyMap();
+        }
+        List<SysConfig> dictTypeList = list(
+            Wrappers.<SysConfig>lambdaQuery()
+                .in(SysConfig::getKey, keys)
+        );
+
+        Map<String, IConfigData> dd = new LinkedHashMap<>();
+        dictTypeList.forEach(v -> dd.put(v.getKey(), v));
+        return dd;
     }
 }
