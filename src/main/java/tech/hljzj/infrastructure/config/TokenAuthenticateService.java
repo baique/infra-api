@@ -10,7 +10,7 @@ import tech.hljzj.framework.security.SecurityProvider;
 import tech.hljzj.framework.security.SessionStoreDecorator;
 import tech.hljzj.framework.security.bean.TokenAuthentication;
 import tech.hljzj.framework.security.bean.UserInfo;
-import tech.hljzj.framework.service.ITokenAuthenticateService;
+import tech.hljzj.framework.security.service.ITokenAuthenticateService;
 import tech.hljzj.infrastructure.service.SysAppService;
 import tech.hljzj.infrastructure.service.SysUserService;
 import tech.hljzj.infrastructure.util.AppScopeHolder;
@@ -42,7 +42,7 @@ public class TokenAuthenticateService implements SecurityProvider, ITokenAuthent
     }
 
     @Override
-    public UserInfo login(Authentication authentication) throws Exception {
+    public tech.hljzj.framework.security.bean.UserInfo login(Authentication authentication) throws Exception {
         String token = (String) authentication.getPrincipal();
         return tokenAuth(token);
     }

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tech.hljzj.framework.bean.R;
 import tech.hljzj.framework.security.bean.TokenAuthentication;
-import tech.hljzj.framework.service.ITokenAuthenticateService;
+import tech.hljzj.framework.security.service.ITokenAuthenticateService;
 import tech.hljzj.framework.util.web.AuthUtil;
 
 @RestController
