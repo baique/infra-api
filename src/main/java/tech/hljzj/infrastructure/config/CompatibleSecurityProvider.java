@@ -23,7 +23,7 @@ public class CompatibleSecurityProvider extends LocalSecurityProvider {
             return true;
         }
         //首先还是检查旧的密码
-        if (principal.getOldPassword().startsWith("tyrz:")) {
+        if (StrUtil.isNotBlank(principal.getOldPassword()) && principal.getOldPassword().startsWith("tyrz:")) {
             //但这一次是直接使用用户输入的密码和加密后比较
             if (password.equals(principal.getOldPassword().substring(5))) {
                 return true;

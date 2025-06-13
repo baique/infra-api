@@ -1,5 +1,6 @@
 package tech.hljzj.infrastructure.compatible.util;
 
+import cn.hutool.core.util.StrUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import javax.annotation.PostConstruct;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import tech.hljzj.framework.security.bean.LoginUser;
 import tech.hljzj.framework.security.bean.TokenAuthentication;
 import tech.hljzj.framework.security.store.JwtTokenStore;
+import tech.hljzj.infrastructure.util.AppScopeHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -29,6 +31,10 @@ public class AppHelper {
     }
 
     public static String getLoginApp(HttpServletRequest request) {
+        String scopeAppId = AppScopeHolder.getScopeAppId();
+        if (StrUtil.isNotBlank(scopeAppId)) {
+            return scopeAppId;
+        }
         String sign = getSign(request);
         DecodedJWT jwt = JWT.decode(sign);
         return jwt.getSubject();
