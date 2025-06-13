@@ -418,7 +418,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 密码强度检查
         String passwordStrengthPattern = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_STRENGTH);
         // 密码最低强度分，基于zxcvbn
-        int passwordScore = 1;
+        int passwordScore = Integer.parseInt(sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_SCORE));;
         // 低于指定强度时提示信息
         String errorMessage = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_STRENGTH_DESC);
         PasswordScorer.validatePassword(newPassword,
