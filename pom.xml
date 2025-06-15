@@ -5,7 +5,7 @@
     <parent>
         <groupId>tech.hljzj</groupId>
         <artifactId>frm-parent</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.5-SNAPSHOT</version>
         <relativePath/>
     </parent>
 

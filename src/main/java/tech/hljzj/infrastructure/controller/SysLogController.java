@@ -8,9 +8,11 @@ import tech.hljzj.framework.base.BaseController;
 import tech.hljzj.framework.bean.R;
 import tech.hljzj.framework.logger.BusinessType;
 import tech.hljzj.framework.logger.Log;
+import tech.hljzj.framework.security.an.Anonymous;
 import tech.hljzj.framework.util.excel.ExcelUtil;
 import tech.hljzj.infrastructure.domain.SysLog;
 import tech.hljzj.infrastructure.service.SysLogService;
+import tech.hljzj.infrastructure.util.AppScopeHolder;
 import tech.hljzj.infrastructure.vo.SysLog.SysLogDetailVo;
 import tech.hljzj.infrastructure.vo.SysLog.SysLogListVo;
 import tech.hljzj.infrastructure.vo.SysLog.SysLogNewVo;
@@ -47,8 +49,7 @@ public class SysLogController extends BaseController {
      * @return 数据详情
      */
     @PreAuthorize("auth({'sys:log:query','sys:log:edit'})")
-    @GetMapping("/{id}")
-    @Log(title = MODULE_NAME, operType = BusinessType.DETAIL)
+    @GetMapping("/{id}") // 操作日志查看详情的行为将不被记录，否则会导致日志体积越来越大
     public R<SysLogDetailVo> entityGet(@PathVariable Serializable id) {
         SysLog dto = this.service.entityGet(id);
         return R.ok(new SysLogDetailVo().fromDto(dto));
@@ -61,11 +62,14 @@ public class SysLogController extends BaseController {
      * @param entity 数据体
      * @return 新增
      */
-    @PreAuthorize("auth('sys:log:add')")
-    @Log(title = MODULE_NAME, operType = BusinessType.INSERT)
     @PostMapping("/insert")
+    @Anonymous
     public R<SysLogDetailVo> entityCreate(@RequestBody @Validated SysLogNewVo entity) {
+        String appId = AppScopeHolder.requiredScopeAppId();
+
         SysLog dto = entity.toDto();
+        dto.setOpAppId(appId);
+
         this.service.entityCreate(dto);
         return R.ok(new SysLogDetailVo().fromDto(dto));
     }
@@ -75,7 +79,6 @@ public class SysLogController extends BaseController {
      * 导出数据
      *
      * @param query 数据查询
-     * @return 导出结果
      */
     @PostMapping("/export")
     @PreAuthorize("auth('sys:log:export')")

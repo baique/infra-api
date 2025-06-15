@@ -14,4 +14,8 @@
     <changeSet id="2025-4-29-3-PG" author="wa" dbms="postgresql">
         <sqlFile relativeToChangelogFile="true" path="sql/data.sql"/>
     </changeSet>
+
+    <changeSet id="2025-6-15-PG" author="wa" dbms="postgresql">
+        <sqlFile relativeToChangelogFile="true" path="sql/add-field-to-log.sql"/>
+    </changeSet>
 </databaseChangeLog>

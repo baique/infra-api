@@ -339,6 +339,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw UserException.defaultError("管理员尚未配置默认密码，请联系管理配置后使用此功能！");
         }
         try {
+            // 找出用户记录用户的密码
             update(Wrappers.lambdaUpdate(SysUser.class)
                 .eq(SysUser::getId, userId)
                 .set(SysUser::getPassword, SMUtil.sm3(defaultPassword))

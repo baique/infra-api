@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.security.AppObtainPassword;
@@ -24,6 +23,7 @@ import tech.hljzj.infrastructure.domain.*;
 import tech.hljzj.infrastructure.service.*;
 import tech.hljzj.infrastructure.util.AppScopeHolder;
 import tech.hljzj.infrastructure.vo.SysMenu.SysMenuQueryVo;
+import tech.hljzj.protect.password.PasswordNotSafeException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -103,17 +103,17 @@ public class LocalSecurityProvider implements SecurityProvider {
         try {
             sysUserService.validatePasswordStorage(password, principal);
         } catch (Exception e) {
-            throw new PasswordExpiredException("密码强度不符合安全要求，请修改后重新登录");
+            throw new PasswordNotSafeException("密码强度不符合安全要求，请修改后重新登录");
         }
 
         if (AppConst.PASSWORD_POLICY.EXPIRED.equals(principal.getPasswordPolicy())) {
-            throw new PasswordExpiredException("密码已过期，请修改后重新登录；或联系管理员进行解锁");
+            throw new PasswordNotSafeException("密码已过期，请修改后重新登录；或联系管理员进行解锁");
         } else if (AppConst.PASSWORD_POLICY.EXPIRED_AT.equals(principal.getPasswordPolicy())) {
             if (principal.getPasswordExpired() == null || principal.getPasswordExpired().before(new Date())) {
-                throw new PasswordExpiredException("密码已过期，请修改后重新登录；或联系管理员进行解锁");
+                throw new PasswordNotSafeException("密码已过期，请修改后重新登录；或联系管理员进行解锁");
             }
         } else if (AppConst.PASSWORD_POLICY.NEXT_LOGIN_TIME_MUST_UPDATE.equals(principal.getPasswordPolicy())) {
-            throw new PasswordExpiredException("密码已过期，请修改后重新登录；或联系管理员进行解锁");
+            throw new PasswordNotSafeException("密码已过期，请修改后重新登录；或联系管理员进行解锁");
         }
 
         return buildLoginInfo(principal, app);
@@ -201,12 +201,6 @@ public class LocalSecurityProvider implements SecurityProvider {
     @Override
     public boolean independentVerification() {
         return false;
-    }
-
-    public static class PasswordExpiredException extends AuthenticationException {
-        public PasswordExpiredException(String msg) {
-            super(msg);
-        }
     }
 }
 

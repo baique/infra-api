@@ -6,12 +6,13 @@ import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tech.hljzj.framework.logger.LogEvent;
 import tech.hljzj.framework.logger.SysLogEntity;
 import tech.hljzj.framework.service.ILoggerService;
-import tech.hljzj.infrastructure.compatible.util.AppHelper;
 import tech.hljzj.infrastructure.domain.SysApp;
 import tech.hljzj.infrastructure.domain.SysLog;
 import tech.hljzj.infrastructure.mapper.SysLogMapper;
@@ -96,8 +97,9 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         return this.page(query).getRecords();
     }
 
-    @Override
-    public void recordLog(SysLogEntity entity) {
+    @EventListener(LogEvent.class)
+    public void recordLog(LogEvent logEvent) {
+        SysLogEntity entity = logEvent.getEntity();
         SysLog log = new SysLog();
         log.setOpAppId(AppScopeHolder.getScopeAppId());
         BeanUtil.copyProperties(entity, log);

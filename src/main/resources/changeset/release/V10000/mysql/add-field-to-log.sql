@@ -1,0 +1,1 @@
+alter table sys_log_ add column cost_time_ int(4) comment '操作耗时';
