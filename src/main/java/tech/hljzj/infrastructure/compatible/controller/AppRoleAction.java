@@ -35,7 +35,6 @@ public class AppRoleAction extends MController {
     @ResponseBody
     public Object findHasPermissionUsers(Role roleInfo) {
         List<String> roleList = sysRoleService.list(roleInfo.toQuery()).stream().map(SysRole::getId).collect(Collectors.toList());
-
         VSysUserQueryVo q = new VSysUserQueryVo();
         q.setHasRole(roleList);
         return success(sysUserService.list(q)

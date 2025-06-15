@@ -9,17 +9,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import tech.hljzj.framework.security.SessionStoreDecorator;
 import tech.hljzj.framework.security.an.Anonymous;
+import tech.hljzj.framework.security.bean.TokenAuthentication;
+import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.compatible.controller.bsae.MController;
 import tech.hljzj.infrastructure.compatible.controller.bsae.R;
 import tech.hljzj.infrastructure.compatible.util.AppHelper;
 import tech.hljzj.infrastructure.compatible.vo.AppInfo;
 import tech.hljzj.infrastructure.compatible.vo.department.Department;
 import tech.hljzj.infrastructure.compatible.vo.role.Role;
+import tech.hljzj.infrastructure.config.LocalSecurityProvider;
+import tech.hljzj.infrastructure.config.TokenAuthenticateService;
 import tech.hljzj.infrastructure.domain.*;
 import tech.hljzj.infrastructure.service.SysAppService;
 import tech.hljzj.infrastructure.service.SysDeptService;
 import tech.hljzj.infrastructure.service.SysRoleService;
 import tech.hljzj.infrastructure.service.SysUserService;
+import tech.hljzj.infrastructure.util.AppScopeHolder;
 import tech.hljzj.infrastructure.vo.SysApp.SysAppQueryVo;
 import tech.hljzj.infrastructure.vo.SysDept.SysDeptQueryVo;
 import tech.hljzj.infrastructure.vo.SysRole.SysRoleQueryVo;
@@ -41,14 +46,18 @@ public class AppAdminController extends MController {
     private final SessionStoreDecorator sessionStoreDecorator;
     private final SysRoleService sysRoleService;
     private final SysAppService sysAppService;
+    private final LocalSecurityProvider localSecurityProvider;
+    private final TokenAuthenticateService tokenAuthenticateService;
 
-    public AppAdminController(SysDeptService sysDeptService, SysUserService sysUserService, SessionStoreDecorator sessionStoreDecorator, SysRoleService sysRoleService, SysAppService sysAppService) {
+    public AppAdminController(SysDeptService sysDeptService, SysUserService sysUserService, SessionStoreDecorator sessionStoreDecorator, SysRoleService sysRoleService, SysAppService sysAppService, LocalSecurityProvider localSecurityProvider, TokenAuthenticateService tokenAuthenticateService) {
         super();
         this.sysDeptService = sysDeptService;
         this.sysUserService = sysUserService;
         this.sessionStoreDecorator = sessionStoreDecorator;
         this.sysRoleService = sysRoleService;
         this.sysAppService = sysAppService;
+        this.localSecurityProvider = localSecurityProvider;
+        this.tokenAuthenticateService = tokenAuthenticateService;
     }
 
     @PostMapping("/tyrz/departments/dp/get")
@@ -142,7 +151,16 @@ public class AppAdminController extends MController {
     @ResponseBody
     public Object getToken(String ticket) {
         try {
-            return R.ok(AppHelper.getLoginInfo(ticket));
+            AppHelper.Info loginInfo = AppHelper.getLoginInfo(ticket);
+            // 此处需要将用户登录的系统转换为基座服务本身的token，所以需要登录基座服务获取token
+            AppScopeHolder.setScopeAppId(AppConst.ID);
+            TokenAuthentication currentServerAuth = tokenAuthenticateService.authenticate(loginInfo.getToken());
+
+            // 这里变更了登录指向
+            loginInfo.setAppId(AppConst.ID);
+            loginInfo.setToken(currentServerAuth.getToken());
+
+            return R.ok(loginInfo);
         } catch (Exception e) {
             return R.fail().setMsg("用户登录状态可能已失效！");
         }

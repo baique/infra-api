@@ -3,8 +3,6 @@ package tech.hljzj.infrastructure.interceptor;
 import cn.hutool.core.util.StrUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
@@ -17,6 +15,9 @@ import tech.hljzj.infrastructure.config.AppLoginUserInfo;
 import tech.hljzj.infrastructure.domain.SysApp;
 import tech.hljzj.infrastructure.service.SysAppService;
 import tech.hljzj.infrastructure.util.AppScopeHolder;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 应用信息校验拦截
@@ -31,7 +32,17 @@ public class AppInterceptor implements BaseInterceptor {
         this.sysAppService = sysAppService;
     }
 
-    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/token", "POST");
+    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher(
+        "/token",
+        "POST"
+    );
+
+
+    private static final AntPathRequestMatcher GET_TOKEN_REQUEST_MATCHER = new AntPathRequestMatcher(
+        "/tyrz/getToken",
+        "POST"
+    );
+
 
     @Override
     public boolean preHandle(HttpServletRequest request,
@@ -48,7 +59,7 @@ public class AppInterceptor implements BaseInterceptor {
             JWT.require(Algorithm.HMAC384(sysApp.getSecret())).build().verify(token);
             if (AuthUtil.isLogin()) {
                 // 验证是否单点登录请求
-                if (!DEFAULT_ANT_PATH_REQUEST_MATCHER.matcher(request).isMatch()) {
+                if (!isCrossSystemLogin(request)) {
                     LoginUser loginUser = AuthUtil.getLoginUser();
                     AppLoginUserInfo userInfo = (AppLoginUserInfo) loginUser.getUserInfo();
                     String s = userInfo.getLoginAppId();
@@ -63,5 +74,9 @@ public class AppInterceptor implements BaseInterceptor {
             ReqUtil.writeResponse(response, R.fail().setMsg("非法的请求:无法正确解析请求客户端!"));
             return false;
         }
+    }
+
+    private static boolean isCrossSystemLogin(HttpServletRequest request) {
+        return DEFAULT_ANT_PATH_REQUEST_MATCHER.matcher(request).isMatch() || GET_TOKEN_REQUEST_MATCHER.matcher(request).isMatch();
     }
 }

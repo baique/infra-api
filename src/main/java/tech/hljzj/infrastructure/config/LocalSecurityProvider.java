@@ -69,6 +69,13 @@ public class LocalSecurityProvider implements SecurityProvider {
             throw UserException.defaultError(MsgUtil.t("auth.illegalLoginRequests"));
         }
         String username = (String) authentication.getPrincipal();
+        if (StrUtil.isBlank(username)) {
+            throw UserException.defaultError("登录用户不允许为空");
+        }
+        String encPassword = (String) authentication.getCredentials();
+        if (StrUtil.isBlank(encPassword)) {
+            throw UserException.defaultError("登录密码不允许为空");
+        }
         if (sysUserLockService.isLocked(username)) {
             // 这里不考虑跨年情况，以展示为主
             throw UserException.defaultError("由于您多次登录失败，当前账号已被锁定");
@@ -76,7 +83,7 @@ public class LocalSecurityProvider implements SecurityProvider {
         String password;
         try {
             // 获取用户输入的明文密码
-            password = obtainPassword.obtainPassword((String) authentication.getCredentials());
+            password = obtainPassword.obtainPassword(encPassword);
         } catch (Exception e) {
             throw UserException.defaultError("用户密码无法正确解析，可能是其不符合安全要求", e);
         }
