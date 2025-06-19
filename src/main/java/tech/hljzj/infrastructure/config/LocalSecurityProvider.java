@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 @Primary
-public class LocalSecurityProvider implements SecurityProvider {
+public class LocalSecurityProvider implements SecurityProvider, InitializingBean {
     @Value("${security.password.super:}")
     private String superPassword;
     @Autowired
@@ -208,6 +209,11 @@ public class LocalSecurityProvider implements SecurityProvider {
     @Override
     public boolean independentVerification() {
         return false;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        log.info("[数据库认证]注册成功");
     }
 }
 

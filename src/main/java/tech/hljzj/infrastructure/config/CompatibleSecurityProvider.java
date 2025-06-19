@@ -2,6 +2,7 @@ package tech.hljzj.infrastructure.config;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import tech.hljzj.infrastructure.domain.SysUser;
 
@@ -9,6 +10,7 @@ import tech.hljzj.infrastructure.domain.SysUser;
  * 兼容过往统一认证的登录认证方式
  */
 @Component
+@Slf4j
 public class CompatibleSecurityProvider extends LocalSecurityProvider {
     private final SwapEncoder swapEncoder;
 
@@ -42,5 +44,10 @@ public class CompatibleSecurityProvider extends LocalSecurityProvider {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        log.info("[统一认证兼容认证器]注册成功");
     }
 }
