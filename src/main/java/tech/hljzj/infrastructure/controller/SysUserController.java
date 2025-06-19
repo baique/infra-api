@@ -2,7 +2,6 @@ package tech.hljzj.infrastructure.controller;
 
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tech.hljzj.framework.base.BaseController;
 import tech.hljzj.framework.bean.R;
+import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.logger.BusinessType;
 import tech.hljzj.framework.logger.Log;
 import tech.hljzj.framework.security.an.Anonymous;
@@ -373,11 +373,16 @@ public class SysUserController extends BaseController {
      *
      * @param userId 用户标识
      */
-    @Log(title = MODULE_NAME, functionName = "重置密码", operType = BusinessType.UPDATE, isSaveRequestData = false, isSaveResponseData = false)
+    @Log(title = MODULE_NAME, functionName = "重置密码", operType = BusinessType.UPDATE, isSaveRequestData = true, isSaveResponseData = true)
     @PostMapping("resetPassword")
-    public R<Void> resetPassword(String userId) {
+    public R<SysUserListVo> resetPassword(String userId) {
+        SysUser user = service.getById(userId);
+        if (user == null) {
+            throw UserException.defaultError("用户不存在");
+        }
+
         service.resetPassword(userId);
-        return R.ok();
+        return R.ok(new SysUserListVo().fromDto(user));
     }
 
     /**

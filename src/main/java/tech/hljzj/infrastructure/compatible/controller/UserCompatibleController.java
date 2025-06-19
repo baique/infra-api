@@ -21,11 +21,11 @@ import tech.hljzj.infrastructure.compatible.controller.bsae.R;
 import tech.hljzj.infrastructure.compatible.util.AppHelper;
 import tech.hljzj.infrastructure.compatible.vo.user.userDetails.UserDetails;
 import tech.hljzj.infrastructure.config.CompatibleSecurityProvider;
-import tech.hljzj.infrastructure.config.LocalSecurityProvider;
 import tech.hljzj.infrastructure.domain.VSysUser;
 import tech.hljzj.infrastructure.service.SysDeptService;
 import tech.hljzj.infrastructure.service.SysUserService;
 import tech.hljzj.infrastructure.util.AppScopeHolder;
+import tech.hljzj.protect.password.PasswordNotSafeException;
 
 /**
  * 这里是统一认证的兼容接口
@@ -74,11 +74,12 @@ public class UserCompatibleController extends MController {
             //这里直接响应token
             return success(details.getAccessToken());
         } catch (IllegalArgumentException | AuthenticationServiceException e) {
+            if (e.getCause() instanceof PasswordNotSafeException) {
+                log.warn("客户端请求登录认证失败，因为密码存在问题", e);
+                return BeanUtil.copyProperties(R.code(402).setMsg(e.getMessage()), R.class);
+            }
             log.warn("客户端请求登录认证失败", e);
             return BeanUtil.copyProperties(R.code(902).setMsg(e.getMessage()), R.class);
-        } catch (LocalSecurityProvider.PasswordExpiredException e) {
-            log.warn("客户端请求登录认证失败，因为密码存在问题", e);
-            return BeanUtil.copyProperties(R.code(402).setMsg(e.getMessage()), R.class);
         } catch (Exception e) {
             log.warn("客户端请求登录认证失败", e);
             return BeanUtil.copyProperties(R.code(902).setMsg("登录认证失败"), R.class);

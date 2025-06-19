@@ -1,5 +1,6 @@
 package tech.hljzj.infrastructure.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -64,21 +65,37 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
     @Override
     public boolean entityUpdate(SysConfig entity) {
-        if (baseMapper.exists(Wrappers.<SysConfig>query().lambda()
-            .eq(SysConfig::getKey, entity.getKey())
-            .ne(SysConfig::getId, entity.getId())
+        // 这里必须要先做一个检查，配置可以被读取出去，但是它的所属应用应该由发起操作的应用提供
+        String appId = AppScopeHolder.requiredScopeAppId();
+        // 那么此时需要对比，配置是不是属于那个目标应用，如果是，正常更新，如果不是
+        SysConfig mergeFromEntity = getById(entity.getId());
 
-        )) {
-            throw UserException.defaultError(MsgUtil.t("data.exists", "标识"));
-        }
+        if (!appId.equals(mergeFromEntity.getOwnerAppId())) {
+            // 防止受到orm框架生命周期追踪
+            SysConfig mergeEntity = BeanUtil.copyProperties(mergeFromEntity, SysConfig.class);
+            mergeEntity.setId(null);
+            mergeEntity.setOwnerAppId(appId);
+            mergeEntity.updateForm(entity);
+            // 后续执行的就成为了新增的代码逻辑
+            return entityCreate(mergeEntity);
+        } else {
 
-        SysConfig existsEntity = getById(entity.getId());
-        // 如果数据依然是锁定的
-        if (Objects.equals(AppConst.YES, existsEntity.getLocked()) && Objects.equals(existsEntity.getLocked(), entity.getLocked())) {
-            throw UserException.defaultError(MsgUtil.t("data.locked", "配置项"));
+            if (baseMapper.exists(Wrappers.<SysConfig>query().lambda()
+                .eq(SysConfig::getKey, entity.getKey())
+                .eq(SysConfig::getOwnerAppId, entity.getOwnerAppId())
+                .ne(SysConfig::getId, entity.getId())
+
+            )) {
+                throw UserException.defaultError(MsgUtil.t("data.exists", "标识"));
+            }
+
+            // 如果数据依然是锁定的
+            if (Objects.equals(AppConst.YES, mergeFromEntity.getLocked()) && Objects.equals(mergeFromEntity.getLocked(), entity.getLocked())) {
+                throw UserException.defaultError(MsgUtil.t("data.locked", "配置项"));
+            }
+            mergeFromEntity.updateForm(entity);
+            return updateById(mergeFromEntity);
         }
-        existsEntity.updateForm(entity);
-        return updateById(existsEntity);
     }
 
 

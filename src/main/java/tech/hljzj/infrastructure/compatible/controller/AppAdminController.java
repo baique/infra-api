@@ -46,7 +46,6 @@ public class AppAdminController extends MController {
     private final SessionStoreDecorator sessionStoreDecorator;
     private final SysRoleService sysRoleService;
     private final SysAppService sysAppService;
-    private final LocalSecurityProvider localSecurityProvider;
     private final TokenAuthenticateService tokenAuthenticateService;
 
     public AppAdminController(SysDeptService sysDeptService, SysUserService sysUserService, SessionStoreDecorator sessionStoreDecorator, SysRoleService sysRoleService, SysAppService sysAppService, LocalSecurityProvider localSecurityProvider, TokenAuthenticateService tokenAuthenticateService) {
@@ -56,7 +55,6 @@ public class AppAdminController extends MController {
         this.sessionStoreDecorator = sessionStoreDecorator;
         this.sysRoleService = sysRoleService;
         this.sysAppService = sysAppService;
-        this.localSecurityProvider = localSecurityProvider;
         this.tokenAuthenticateService = tokenAuthenticateService;
     }
 
