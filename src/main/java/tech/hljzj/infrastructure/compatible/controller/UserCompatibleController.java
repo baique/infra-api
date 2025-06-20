@@ -3,6 +3,8 @@ package tech.hljzj.infrastructure.compatible.controller;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -93,13 +95,21 @@ public class UserCompatibleController extends MController {
     @Anonymous
     public R<?> appTicket() {
         try {
-            String sign = AppHelper.getSign(request);
-            return success(sign);
+            LoginUser loginUser = AppHelper.getLoginUser(request);
+            if (loginUser == null) {
+                return BeanUtil.copyProperties(R.code(902).setMsg("登录会话失效"), R.class);
+            }
+
+
+            String ticket = AppHelper.createTicket(loginUser);
+
+            return success(ticket);
         } catch (Exception e) {
             log.warn("客户端请求登录认证失败", e);
             return BeanUtil.copyProperties(R.code(902).setMsg("登录认证失败"), R.class);
         }
     }
+
 
     @RequestMapping(value = "/app/userlogincheck", method = {RequestMethod.GET, RequestMethod.POST})
     @Anonymous

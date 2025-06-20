@@ -2,8 +2,11 @@ package tech.hljzj.infrastructure.compatible.util;
 
 import cn.hutool.core.util.StrUtil;
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+
 import javax.annotation.PostConstruct;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +21,21 @@ import java.util.Optional;
 
 @Component
 public class AppHelper {
+    public static final String TICKET_TOKEN_KEY = "TYRZTOKEN";
     @Autowired
     private JwtTokenStore _nameSessionRepository;
 
     private static JwtTokenStore nameSessionRepository;
+
+
+    public static String createTicket(LoginUser loginUser) {
+        Algorithm al = Algorithm.HMAC256("tyrzxt");
+        return JWT.create()
+            .withIssuer(AppScopeHolder.requiredScopeAppId())
+            .withClaim("ac", loginUser.getUserInfo().getAccount())
+            .withClaim(TICKET_TOKEN_KEY, loginUser.getUserInfo().getAccount())
+            .sign(al);
+    }
 
     @Getter
     @Setter
@@ -49,8 +63,8 @@ public class AppHelper {
         return f;
     }
 
-    public static Info getLoginInfo(String sign) {
-        DecodedJWT jwt = JWT.decode(sign);
+    public static Info getLoginInfo(String ticket) {
+        DecodedJWT jwt = JWT.decode(ticket);
         Info f = new Info();
         f.setAppId(jwt.getSubject());
         f.setToken(jwt.getClaim("TYRZTOKEN").asString());
@@ -62,7 +76,6 @@ public class AppHelper {
     }
 
     public static LoginUser getLoginUser(HttpServletRequest request) {
-
         AppHelper.Info loginInfo = AppHelper.getLoginInfo(request);
         String token = loginInfo.getToken();
 
