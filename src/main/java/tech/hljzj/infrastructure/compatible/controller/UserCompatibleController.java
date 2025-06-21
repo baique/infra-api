@@ -95,15 +95,17 @@ public class UserCompatibleController extends MController {
     @Anonymous
     public R<?> appTicket() {
         try {
-            LoginUser loginUser = AppHelper.getLoginUser(request);
-            if (loginUser == null) {
-                return BeanUtil.copyProperties(R.code(902).setMsg("登录会话失效"), R.class);
-            }
+            String sign = AppHelper.getSign(request);
+            return success(sign);
+//            LoginUser loginUser = AppHelper.getLoginUser(request);
+//            if (loginUser == null) {
+//                return BeanUtil.copyProperties(R.code(902).setMsg("登录会话失效"), R.class);
+//            }
+//
+//
+//            String ticket = AppHelper.createTicket(loginUser);
 
-
-            String ticket = AppHelper.createTicket(loginUser);
-
-            return success(ticket);
+//            return success(ticket);
         } catch (Exception e) {
             log.warn("客户端请求登录认证失败", e);
             return BeanUtil.copyProperties(R.code(902).setMsg("登录认证失败"), R.class);
