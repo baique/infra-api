@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.hljzj.framework.logger.LogEvent;
 import tech.hljzj.framework.logger.SysLogEntity;
-import tech.hljzj.framework.service.ILoggerService;
 import tech.hljzj.infrastructure.domain.SysApp;
 import tech.hljzj.infrastructure.domain.SysLog;
 import tech.hljzj.infrastructure.mapper.SysLogMapper;
@@ -33,7 +32,7 @@ import java.util.List;
  * @author wa
  */
 @Service
-public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> implements SysLogService, ILoggerService {
+public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> implements SysLogService {
 
     private final AsyncTaskExecutor asyncTaskExecutor;
     private final SysAppService sysAppService;

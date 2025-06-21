@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import tech.hljzj.framework.logger.LogEvent;
 import tech.hljzj.framework.logger.SysLogEntity;
+import tech.hljzj.framework.security.bean.LoginUser;
 import tech.hljzj.framework.security.handler.On;
 import tech.hljzj.framework.service.ILoggerService;
 
@@ -24,7 +25,8 @@ public class AppLoginLogHandle {
         SysLogEntity sysLogEntity = loggerService.createBaseEntity();
         sysLogEntity.setModuleName("登录");
         sysLogEntity.setOperType("登录");
-        sysLogEntity.setOperContent("登录成功");
+        LoginUser principal = event.getPrincipal();
+        sysLogEntity.setOperContent(principal.getUserInfo().getAccount() + "登录成功");
         applicationEventPublisher.publishEvent(new LogEvent(sysLogEntity));
     }
 
