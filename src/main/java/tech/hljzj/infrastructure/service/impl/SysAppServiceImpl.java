@@ -1,5 +1,6 @@
 package tech.hljzj.infrastructure.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -18,6 +19,7 @@ import tech.hljzj.infrastructure.vo.SysApp.SysAppQueryVo;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -172,9 +174,9 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         List<SysMenu> menu = sysMenuService.list(Wrappers.<SysMenu>lambdaQuery()
             .eq(SysMenu::getOwnerAppId, appId)
         );
-        List<SysRoleMenu> roleMenuGrantList = sysRoleMenuService.list(Wrappers.<SysRoleMenu>lambdaQuery()
+        List<SysRoleMenu> roleMenuGrantList = CollUtil.isNotEmpty(role) ? sysRoleMenuService.list(Wrappers.<SysRoleMenu>lambdaQuery()
             .in(SysRoleMenu::getRoleId, role.stream().map(SysRole::getId).collect(Collectors.toList()))
-        );
+        ) : Collections.emptyList();
         // 传输为一组加密的json数据
         SysAppExport export = new SysAppExport();
         export.setSysApp(appInfo);
