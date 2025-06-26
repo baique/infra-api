@@ -12,7 +12,7 @@
     <artifactId>infra-api</artifactId>
     <version>3.0.2</version>
     <packaging>jar</packaging>
-    <description>基座服务-api</description>
+    <description>基座服务</description>
 
     <url/>
 

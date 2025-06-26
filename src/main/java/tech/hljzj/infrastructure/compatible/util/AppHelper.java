@@ -4,18 +4,18 @@ import cn.hutool.core.util.StrUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-
-import javax.annotation.PostConstruct;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import tech.hljzj.framework.security.SessionStoreDecorator;
 import tech.hljzj.framework.security.bean.LoginUser;
 import tech.hljzj.framework.security.bean.TokenAuthentication;
-import tech.hljzj.framework.security.store.JwtTokenStore;
+import tech.hljzj.infrastructure.compatible.vo.AppInfo;
+import tech.hljzj.infrastructure.domain.SysApp;
 import tech.hljzj.infrastructure.util.AppScopeHolder;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
@@ -23,9 +23,9 @@ import java.util.Optional;
 public class AppHelper {
     public static final String TICKET_TOKEN_KEY = "TYRZTOKEN";
     @Autowired
-    private JwtTokenStore _nameSessionRepository;
+    private SessionStoreDecorator storeDecorator;
 
-    private static JwtTokenStore nameSessionRepository;
+    private static SessionStoreDecorator nameSessionRepository;
 
 
     public static String createTicket(LoginUser loginUser) {
@@ -41,6 +41,7 @@ public class AppHelper {
     @Setter
     public static class Info {
         private String appId;
+        private SysApp appInfo;
         private String token;
     }
 
@@ -87,6 +88,6 @@ public class AppHelper {
 
     @PostConstruct
     void init() {
-        nameSessionRepository = this._nameSessionRepository;
+        nameSessionRepository = this.storeDecorator;
     }
 }

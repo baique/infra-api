@@ -154,8 +154,10 @@ public class AppAdminController extends MController {
             AppScopeHolder.setScopeAppId(AppConst.ID);
             TokenAuthentication currentServerAuth = tokenAuthenticateService.authenticate(loginInfo.getToken());
 
+            SysApp sysApp = sysAppService.entityGet(loginInfo.getAppId());
             // 这里变更了登录指向
             loginInfo.setAppId(AppConst.ID);
+            loginInfo.setAppInfo(sysApp);
             loginInfo.setToken(currentServerAuth.getToken());
 
             return R.ok(loginInfo);
