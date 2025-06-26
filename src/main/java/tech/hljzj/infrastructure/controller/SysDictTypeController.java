@@ -17,7 +17,6 @@ import tech.hljzj.infrastructure.service.SysDictTypeService;
 import tech.hljzj.infrastructure.vo.SysDictType.*;
 
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.function.Function;
@@ -139,7 +138,7 @@ public class SysDictTypeController extends BaseController {
     @PreAuthorize("auth('sys:dict:import')")
     @Log(title = MODULE_NAME, operType = BusinessType.IMPORT)
     public R<Void> importData(@RequestPart(name = "files") MultipartFile file) throws Exception {
-        this.service.importData(ExcelUtil.getType(file.getOriginalFilename()),file.getInputStream());
+        this.service.importData(ExcelUtil.getType(file.getOriginalFilename()), file.getInputStream());
         return R.ok();
     }
 
@@ -164,6 +163,21 @@ public class SysDictTypeController extends BaseController {
 
         pageVo.setRecords(list);
         return R.ok(pageVo);
+    }
+
+
+    /**
+     * 修改数据
+     *
+     * @param cloneInfo 数据体
+     * @return 修改后
+     */
+    @PreAuthorize("auth('sys:dict:edit')")
+    @Log(title = MODULE_NAME, operType = BusinessType.UPDATE, content = "克隆字典")
+    @PostMapping("/cloneToApp")
+    public R<Void> cloneToApp(@RequestBody @Validated SysDictTypeClone cloneInfo) {
+        service.cloneToApp(cloneInfo);
+        return R.ok();
     }
 
 }

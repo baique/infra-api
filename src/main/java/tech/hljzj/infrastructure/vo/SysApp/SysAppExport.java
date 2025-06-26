@@ -13,5 +13,7 @@ public class SysAppExport {
     private List<SysConfig> configList;
     private List<SysRole> roleList;
     private List<SysMenu> menuList;
+    private List<SysDictType> dictTypeList;
+    private List<SysDictData> dictDataList;
     private List<SysRoleMenu> roleMenuGrantList;
 }

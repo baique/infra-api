@@ -4,6 +4,7 @@ import com.alibaba.excel.support.ExcelTypeEnum;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import tech.hljzj.infrastructure.domain.SysDictType;
+import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeClone;
 import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeQueryVo;
 
 import java.io.InputStream;
@@ -81,7 +82,10 @@ public interface SysDictTypeService extends IService<SysDictType> {
 
     boolean entityUpdateSort(String rowId, String prevRowId, String nextRowId);
 
+    void cloneToApp(SysDictTypeClone cloneInfo);
+
     void exportData(SysDictTypeQueryVo query, OutputStream outputStream) throws Exception;
 
     void importData(ExcelTypeEnum typeEnum, InputStream inputStream) throws Exception;
+
 }

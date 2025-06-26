@@ -1,6 +1,8 @@
 package tech.hljzj.infrastructure.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
@@ -23,15 +25,19 @@ import tech.hljzj.framework.service.SortService;
 import tech.hljzj.framework.service.entity.IDictData;
 import tech.hljzj.framework.util.excel.ExcelUtil;
 import tech.hljzj.framework.util.web.MsgUtil;
+import tech.hljzj.framework.util.web.ReqUtil;
+import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.domain.SysDictData;
 import tech.hljzj.infrastructure.domain.SysDictType;
 import tech.hljzj.infrastructure.mapper.SysDictTypeMapper;
 import tech.hljzj.infrastructure.service.SysDictDataService;
 import tech.hljzj.infrastructure.service.SysDictTypeService;
 import tech.hljzj.infrastructure.vo.SysDictData.SysDictDataListVo;
+import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeClone;
 import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeListVo;
 import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeQueryVo;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Validator;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -72,6 +78,7 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
     public boolean entityCreate(SysDictType entity) {
         if (baseMapper.exists(Wrappers.lambdaQuery(SysDictType.class)
             .eq(SysDictType::getKey, entity.getKey())
+            .eq(SysDictType::getOwnerAppId, entity.getOwnerAppId())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "字典组标识"));
         }
@@ -84,6 +91,7 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
         SysDictType existsEntity = getById(entity.getId());
         if (baseMapper.exists(Wrappers.lambdaQuery(SysDictType.class)
             .eq(SysDictType::getKey, entity.getKey())
+            .eq(SysDictType::getOwnerAppId, entity.getOwnerAppId())
             .ne(SysDictType::getId, existsEntity.getId())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "字典组标识"));
@@ -153,15 +161,39 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
         if (CollUtil.isEmpty(keys)) {
             return Collections.emptyMap();
         }
+
+        //此处需要判定，如果应用本身提供了字典，那么就使用应用的字典
+        //反之，如果应用本身没有提供字典，那么就使用基座服务的字典
+        HttpServletRequest req = ReqUtil.getReq();
+        String appId = req.getHeader("ownerAppId");
+
+        appId = StrUtil.blankToDefault(appId, AppConst.ID);
+
         List<SysDictType> dictTypeList = list(
             Wrappers.<SysDictType>lambdaQuery()
+                .eq(SysDictType::getOwnerAppId, appId)
                 .in(SysDictType::getKey, keys)
-
         );
+        List<String> loadFromDefault = new ArrayList<>(keys);
         Map<String, String> keyMapping = new LinkedHashMap<>();
         dictTypeList.forEach(dictType -> {
+            loadFromDefault.remove(dictType.getKey());
             keyMapping.put(dictType.getId(), dictType.getKey());
         });
+        if (CollUtil.isNotEmpty(loadFromDefault)) {
+            List<SysDictType> dictTypeListDef = list(
+                Wrappers.<SysDictType>lambdaQuery()
+                    .eq(SysDictType::getOwnerAppId, AppConst.ID)
+                    .in(SysDictType::getKey, loadFromDefault)
+            );
+
+            loadFromDefault.clear();
+            dictTypeListDef.forEach(dictType -> {
+                keyMapping.put(dictType.getId(), dictType.getKey());
+            });
+        }
+
+
         if (CollUtil.isEmpty(keyMapping)) {
             return Collections.emptyMap();
         }
@@ -182,6 +214,30 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
         });
 
         return dd;
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void cloneToApp(SysDictTypeClone cloneInfo) {
+        SysDictType dictTypeInfo = getById(cloneInfo.getDictId());
+        SysDictType newType = BeanUtil.copyProperties(dictTypeInfo, SysDictType.class, "id", "ownerAppId");
+        newType.setOwnerAppId(cloneInfo.getCloneToAppId());
+
+        boolean newEntity = entityCreate(newType);
+        if (!newEntity) {
+            throw UserException.defaultError("因为未知的原因导致了字典组创建失败");
+        }
+
+        List<SysDictData> dictDataSet = sysDictDataService.list(Wrappers.<SysDictData>lambdaQuery()
+            .eq(SysDictData::getOwnerTypeId, cloneInfo.getDictId())
+        );
+        // 一般如果能创建类型，那么子项一定能克隆成功
+        sysDictDataService.saveBatch(dictDataSet.stream().map(f -> BeanUtil.copyProperties(f, SysDictData.class, "id", "ownerAppId", "ownerTypeId"))
+            .peek(f -> {
+                f.setOwnerAppId(cloneInfo.getCloneToAppId());
+                f.setOwnerTypeId(newType.getId());
+            }).collect(Collectors.toSet()));
     }
 
     @Override
@@ -261,7 +317,6 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
             reader.read(afterReadSheets);
         }
     }
-
 
     public static class DictTypeWithDataImport implements ReadListener<SysDictDataListVo> {
         private final List<SysDictData> dictDataList = new ArrayList<>();

@@ -38,15 +38,19 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     private final SysMenuService sysMenuService;
     private final SysConfigMapper sysConfigMapper;
     private final SysConfigService sysConfigService;
+    private final SysDictDataService sysDictDataService;
+    private final SysDictTypeService sysDictTypeService;
 
 
-    public SysAppServiceImpl(SysUserRoleService sysUserRoleService, SysRoleService sysRoleService, SysRoleMenuService sysRoleMenuService, SysMenuService sysMenuService, SysConfigMapper sysConfigMapper, SysConfigService sysConfigService) {
+    public SysAppServiceImpl(SysUserRoleService sysUserRoleService, SysRoleService sysRoleService, SysRoleMenuService sysRoleMenuService, SysMenuService sysMenuService, SysConfigMapper sysConfigMapper, SysConfigService sysConfigService, SysDictDataService sysDictDataService, SysDictTypeService sysDictTypeService) {
         this.sysUserRoleService = sysUserRoleService;
         this.sysRoleService = sysRoleService;
         this.sysRoleMenuService = sysRoleMenuService;
         this.sysMenuService = sysMenuService;
         this.sysConfigMapper = sysConfigMapper;
         this.sysConfigService = sysConfigService;
+        this.sysDictDataService = sysDictDataService;
+        this.sysDictTypeService = sysDictTypeService;
     }
 
     @Override
@@ -152,6 +156,16 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         List<SysConfig> config = sysConfigService.list(Wrappers.<SysConfig>lambdaQuery()
             .eq(SysConfig::getOwnerAppId, appId)
         );
+
+        List<SysDictType> dictTypes = sysDictTypeService.list(Wrappers.<SysDictType>lambdaQuery()
+            .eq(SysDictType::getOwnerAppId, appId)
+        );
+
+        List<SysDictData> dictData = sysDictDataService.list(Wrappers.<SysDictData>lambdaQuery()
+            .eq(SysDictData::getOwnerAppId, appId)
+        );
+
+
         List<SysRole> role = sysRoleService.list(Wrappers.<SysRole>lambdaQuery()
             .eq(SysRole::getOwnerAppId, appId)
         );
@@ -168,6 +182,8 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         export.setRoleList(role);
         export.setMenuList(menu);
         export.setRoleMenuGrantList(roleMenuGrantList);
+        export.setDictTypeList(dictTypes);
+        export.setDictDataList(dictData);
         return export;
     }
 
@@ -179,5 +195,7 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         sysMenuService.saveOrUpdateBatch(data.getMenuList());
         sysRoleService.saveOrUpdateBatch(data.getRoleList());
         sysRoleMenuService.saveOrUpdateBatch(data.getRoleMenuGrantList());
+        sysDictTypeService.saveOrUpdateBatch(data.getDictTypeList());
+        sysDictDataService.saveOrUpdateBatch(data.getDictDataList());
     }
 }
