@@ -31,6 +31,11 @@ public class VSysDeptMemberUserQueryVo extends VSysUserQueryBaseVo<VSysDeptMembe
      */
     private String followDeptId;
 
+    @Override
+    protected Consumer<MPJLambdaWrapper<? extends VSysDeptMemberUser>> selectSelf() {
+        return query -> query.selectAll(VSysDeptMemberUser.class);
+    }
+
     public <T extends VSysDeptMemberUser> Consumer<MPJLambdaWrapper<T>> conditionMainFollowDeptId() {
         return (builder) -> {
             if (StrUtil.isNotBlank(this.getMainFollowDeptId())) {
@@ -52,7 +57,6 @@ public class VSysDeptMemberUserQueryVo extends VSysUserQueryBaseVo<VSysDeptMembe
             }
         };
     }
-
 
     public <V extends VSysDeptMemberUser> MPJLambdaWrapper<V> buildDeptMemberQueryWrapper() {
         MPJLambdaWrapper<V> q = super.buildQueryWrapper();

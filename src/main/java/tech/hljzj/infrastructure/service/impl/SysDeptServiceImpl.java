@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.hljzj.framework.exception.UserException;
@@ -74,15 +75,15 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Transactional(rollbackFor = Exception.class)
     public boolean entityCreate(SysDept entity) {
         if (exists(Wrappers.lambdaQuery(SysDept.class)
-                .eq(SysDept::getKey, entity.getKey())
-                .eq(SysDept::getParentId, entity.getParentId())
+            .eq(SysDept::getKey, entity.getKey())
+            .eq(SysDept::getParentId, entity.getParentId())
         )) {
             throw UserException.defaultError("当前部门标识已被本层级内的其他部门使用，请修改后重新提交");
         }
 
         if (exists(Wrappers.lambdaQuery(SysDept.class)
-                .eq(SysDept::getName, entity.getName())
-                .eq(SysDept::getParentId, entity.getParentId())
+            .eq(SysDept::getName, entity.getName())
+            .eq(SysDept::getParentId, entity.getParentId())
         )) {
             throw UserException.defaultError("当前部门名称已被本层级内的其他部门使用，请修改后重新提交");
         }
@@ -104,17 +105,17 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Transactional(rollbackFor = Exception.class)
     public boolean entityUpdate(SysDept entity) {
         if (exists(Wrappers.lambdaQuery(SysDept.class)
-                .eq(SysDept::getKey, entity.getKey())
-                .eq(SysDept::getParentId, entity.getParentId())
-                .ne(SysDept::getId, entity.getId())
+            .eq(SysDept::getKey, entity.getKey())
+            .eq(SysDept::getParentId, entity.getParentId())
+            .ne(SysDept::getId, entity.getId())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "组织标识"));
         }
 
         if (exists(Wrappers.lambdaQuery(SysDept.class)
-                .eq(SysDept::getName, entity.getName())
-                .eq(SysDept::getParentId, entity.getParentId())
-                .ne(SysDept::getId, entity.getId())
+            .eq(SysDept::getName, entity.getName())
+            .eq(SysDept::getParentId, entity.getParentId())
+            .ne(SysDept::getId, entity.getId())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "组织名称"));
         }
@@ -158,7 +159,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
 
         // 被删除部门下中不能有兼职用户
         if (sysDeptExternalUserService.exists(Wrappers.<SysDeptExternalUser>
-                lambdaQuery().eq(SysDeptExternalUser::getDeptId, entity.getId()))) {
+            lambdaQuery().eq(SysDeptExternalUser::getDeptId, entity.getId()))) {
             throw UserException.defaultError("如要删除部门必须先移走当前部门内所有成员。");
         }
 
@@ -200,8 +201,8 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Override
     public Page<VSysDeptMemberUser> pageMember(VSysDeptMemberUserQueryVo query) {
         Page<VSysDeptMemberUser> page = query.buildPagePlus();
-
-        return sysDeptMemberUserMapper.selectPage(page, query.buildDeptMemberQueryWrapper());
+        MPJLambdaWrapper<VSysDeptMemberUser> queryWrapper = query.buildDeptMemberQueryWrapper();
+        return sysDeptMemberUserMapper.selectPage(page, queryWrapper);
     }
 
     @Override
@@ -243,9 +244,9 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
             return true;
         }
         return sysDeptExternalUserService.remove(
-                Wrappers.<SysDeptExternalUser>lambdaQuery()
-                        .eq(SysDeptExternalUser::getDeptId, deptId)
-                        .in(SysDeptExternalUser::getUserId, userIds)
+            Wrappers.<SysDeptExternalUser>lambdaQuery()
+                .eq(SysDeptExternalUser::getDeptId, deptId)
+                .in(SysDeptExternalUser::getUserId, userIds)
         );
     }
 
@@ -260,8 +261,8 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         memberUser.setUserIdIn(userIds);
 
         return sysDeptExternalUserService.list(memberUser)
-                .stream().map(SysDeptExternalUser::getUserId)
-                .collect(Collectors.toList());
+            .stream().map(SysDeptExternalUser::getUserId)
+            .collect(Collectors.toList());
     }
 
 
@@ -274,15 +275,15 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Transactional(rollbackFor = Exception.class)
     public void entityUpdateSort(String rowId, String prevRowId, String nextRowId) {
         updateBatchById(sortService.applySort(
-                rowId,
-                prevRowId,
-                nextRowId,
-                baseMapper,
-                (condition) -> condition.where()
-                        .eq(SysDept::getParentId, condition.row().getParentId())
-                        .orderByAsc(SysDept::getSort)
-                        .orderByDesc(SysDept::getCreateTime)
-                        .orderByDesc(SysDept::getId)
+            rowId,
+            prevRowId,
+            nextRowId,
+            baseMapper,
+            (condition) -> condition.where()
+                .eq(SysDept::getParentId, condition.row().getParentId())
+                .orderByAsc(SysDept::getSort)
+                .orderByDesc(SysDept::getCreateTime)
+                .orderByDesc(SysDept::getId)
         ));
     }
 }

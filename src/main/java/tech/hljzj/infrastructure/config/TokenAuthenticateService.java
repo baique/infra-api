@@ -10,7 +10,6 @@ import tech.hljzj.framework.security.SecurityProvider;
 import tech.hljzj.framework.security.SessionStoreDecorator;
 import tech.hljzj.framework.security.bean.TokenAuthentication;
 import tech.hljzj.framework.security.bean.UserInfo;
-import tech.hljzj.framework.security.service.ITokenAuthenticateService;
 import tech.hljzj.infrastructure.service.SysAppService;
 import tech.hljzj.infrastructure.service.SysUserService;
 import tech.hljzj.infrastructure.util.AppScopeHolder;
@@ -18,7 +17,7 @@ import tech.hljzj.infrastructure.util.AppScopeHolder;
 import java.util.Optional;
 
 @Service
-public class TokenAuthenticateService implements SecurityProvider, ITokenAuthenticateService {
+public class TokenAuthenticateService implements SecurityProvider {
 
     private final SessionStoreDecorator sessionStoreDecorator;
     private final SysUserService sysUserService;
@@ -37,14 +36,14 @@ public class TokenAuthenticateService implements SecurityProvider, ITokenAuthent
     }
 
     @Override
-    public TokenAuthentication authenticate(String token) throws Exception {
-        return basicAuthenticationManager.afterAuthenticate(this.tokenAuth(token), this);
-    }
-
-    @Override
     public tech.hljzj.framework.security.bean.UserInfo login(Authentication authentication) throws Exception {
         String token = (String) authentication.getPrincipal();
         return tokenAuth(token);
+    }
+
+    @Override
+    public UserInfo tokenLogin(String token) throws Exception {
+        return this.tokenAuth(token);
     }
 
     private UserInfo tokenAuth(String token) {
@@ -58,13 +57,17 @@ public class TokenAuthenticateService implements SecurityProvider, ITokenAuthent
 
 
         return localSecurityProvider.buildLoginInfo(
-                sysUserService.entityGet(u.getId(), true),
-                sysAppService.entityGet(AppScopeHolder.requiredScopeAppId())
+            sysUserService.entityGet(u.getId(), true),
+            sysAppService.entityGet(AppScopeHolder.requiredScopeAppId())
         );
     }
 
     @Override
     public boolean independentVerification() {
         return false;
+    }
+
+    public TokenAuthentication authenticate(String token) throws Exception {
+        return this.basicAuthenticationManager.afterAuthenticate(this.tokenLogin(token), this);
     }
 }

@@ -197,7 +197,7 @@ public class VSysUserQueryBaseVo<T extends VSysUser> extends SysUserQueryVo<T> {
         return (query) -> {
             if (this.fetchExtAttr || CollUtil.isNotEmpty(this.attrQuery)) {
                 query.leftJoin(SysUserExtAttr.class, "ext", SysUserExtAttr::getId, VSysUser::getId)
-                        .selectAs(SysUserExtAttr::getAttribution, VSysUser::getAttribution)
+                    .selectAs(SysUserExtAttr::getAttribution, VSysUser::getAttribution)
                 ;
                 if (this.attrQuery != null) {
                     this.attrQuery.forEach((k, v) -> {
@@ -253,10 +253,18 @@ public class VSysUserQueryBaseVo<T extends VSysUser> extends SysUserQueryVo<T> {
         };
     }
 
+
+    protected Consumer<MPJLambdaWrapper<? extends T>> selectSelf() {
+        return query -> {
+            query.selectAll(VSysUser.class);
+        };
+    }
+
     @Override
     public <R extends T> MPJLambdaWrapper<R> buildQueryWrapper() {
         MPJLambdaWrapper<R> builder = super.buildQueryWrapper();
-        builder.selectAll(VSysUser.class);
+
+        this.selectSelf().accept(builder);
         this.conditionDeptKey().accept(builder);
         this.conditionDeptName().accept(builder);
         this.conditionDeptAlias().accept(builder);

@@ -64,8 +64,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public boolean entityCreate(SysRole entity) {
         if (baseMapper.exists(Wrappers.lambdaQuery(SysRole.class)
-                .eq(SysRole::getKey, entity.getKey())
-                .eq(SysRole::getOwnerAppId, entity.getOwnerAppId())
+            .eq(SysRole::getKey, entity.getKey())
+            .eq(SysRole::getOwnerAppId, entity.getOwnerAppId())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "角色标识"));
         }
@@ -77,9 +77,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public boolean entityUpdate(SysRole entity) {
         SysRole existsEntity = getById(entity.getId());
         if (baseMapper.exists(Wrappers.lambdaQuery(SysRole.class)
-                .eq(SysRole::getKey, entity.getKey())
-                .eq(SysRole::getOwnerAppId, existsEntity.getOwnerAppId())
-                .ne(SysRole::getId, existsEntity.getId())
+            .eq(SysRole::getKey, entity.getKey())
+            .eq(SysRole::getOwnerAppId, existsEntity.getOwnerAppId())
+            .ne(SysRole::getId, existsEntity.getId())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "角色标识"));
         }
@@ -93,8 +93,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public boolean entityDelete(SysRole entity) {
         //如果授权给了用户
         if (sysUserRoleService.exists(Wrappers
-                .<SysUserRole>lambdaQuery()
-                .eq(SysUserRole::getRoleId, entity.getId())
+            .<SysUserRole>lambdaQuery()
+            .eq(SysUserRole::getRoleId, entity.getId())
         )) {
             throw UserException.defaultError("如要删除角色必须先取消授予所有用户。");
         }
@@ -151,7 +151,17 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             roleMenu.setAppId(appId);
             roleMenu.setMenuId(f);
             return roleMenu;
-        }).forEach(roleMenu -> roleMenuMapper.insert(roleMenu));
+        }).forEach(roleMenu -> {
+            if (roleMenuMapper.exists(Wrappers
+                .<SysRoleMenu>lambdaQuery()
+                .eq(SysRoleMenu::getRoleId, roleId)
+                .eq(SysRoleMenu::getAppId, appId)
+                .eq(SysRoleMenu::getMenuId, menuId)
+            )) {
+                return;
+            }
+            roleMenuMapper.insert(roleMenu);
+        });
     }
 
     @Override
@@ -160,8 +170,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         LambdaQueryWrapper<SysMenu> queryWrapper = queryVo.buildQueryWrapper();
         //获取角色已经授权使用的菜单
         List<String> menuIds = roleMenuMapper.selectList(Wrappers.<SysRoleMenu>lambdaQuery()
-                .eq(SysRoleMenu::getRoleId, roleId)
-                .eq(SysRoleMenu::getAppId, appId)
+            .eq(SysRoleMenu::getRoleId, roleId)
+            .eq(SysRoleMenu::getAppId, appId)
         ).stream().map(SysRoleMenu::getMenuId).collect(Collectors.toList());
         if (CollUtil.isEmpty(menuIds)) {
             return Collections.emptyList();
@@ -184,8 +194,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         LambdaQueryWrapper<SysMenu> queryWrapper = queryVo.buildQueryWrapper();
         //获取角色已经授权使用的菜单
         List<String> menuIds = roleMenuMapper.selectList(Wrappers.<SysRoleMenu>lambdaQuery()
-                .in(SysRoleMenu::getRoleId, roleId)
-                .eq(SysRoleMenu::getAppId, appId)
+            .in(SysRoleMenu::getRoleId, roleId)
+            .eq(SysRoleMenu::getAppId, appId)
         ).stream().map(SysRoleMenu::getMenuId).collect(Collectors.toList());
         if (CollUtil.isEmpty(menuIds)) {
             return Collections.emptyList();
@@ -207,15 +217,15 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Transactional(rollbackFor = Exception.class)
     public void entityUpdateSort(String rowId, String prevRowId, String nextRowId) {
         updateBatchById(sortService.applySort(
-                rowId,
-                prevRowId,
-                nextRowId,
-                baseMapper,
-                (condition) -> condition.where()
-                        .eq(SysRole::getOwnerAppId, condition.row().getOwnerAppId())
-                        .orderByAsc(SysRole::getSort)
-                        .orderByDesc(SysRole::getCreateTime)
-                        .orderByDesc(SysRole::getId)
+            rowId,
+            prevRowId,
+            nextRowId,
+            baseMapper,
+            (condition) -> condition.where()
+                .eq(SysRole::getOwnerAppId, condition.row().getOwnerAppId())
+                .orderByAsc(SysRole::getSort)
+                .orderByDesc(SysRole::getCreateTime)
+                .orderByDesc(SysRole::getId)
         ));
     }
 }
