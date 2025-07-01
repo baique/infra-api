@@ -8,4 +8,5 @@ import tech.hljzj.infrastructure.service.SysRoleMenuService;
 
 @Service
 public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleMenu> implements SysRoleMenuService {
+
 }

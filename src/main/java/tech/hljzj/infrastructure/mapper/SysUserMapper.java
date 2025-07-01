@@ -2,6 +2,7 @@
 package tech.hljzj.infrastructure.mapper;
 
 import com.github.yulichang.base.MPJBaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 import tech.hljzj.infrastructure.domain.SysUser;
 
 /**
@@ -10,5 +11,6 @@ import tech.hljzj.infrastructure.domain.SysUser;
  * 
  * @author wa
  */
+@Mapper
 public interface SysUserMapper extends MPJBaseMapper<SysUser> {
 }

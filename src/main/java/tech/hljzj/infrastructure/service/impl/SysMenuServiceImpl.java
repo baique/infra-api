@@ -60,6 +60,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Autowired
     private TreeCodeGenerate treeCodeGenerate;
 
+
     @Override
     public SysMenu entityGet(SysMenu entity) {
         return getOne(Wrappers.query(entity));
@@ -91,10 +92,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         entity.setNodeKey(treeCodeGenerate.newMenuCode());
         String parentNodePath;
         if (StrUtil.equals("0", entity.getParentId())) {
-            parentNodePath = String.join(TREE_DELIMITER, entity.getNodeKey());
+            parentNodePath = TREE_DELIMITER + entity.getNodeKey();
         } else {
             SysMenu parentNode = getById(entity.getParentId());
-            parentNodePath = String.join(TREE_DELIMITER, parentNode.getNodePath(), parentNode.getNodeKey());
+            parentNodePath = String.join(TREE_DELIMITER, parentNode.getNodePath(), entity.getNodeKey());
         }
         entity.setNodePath(parentNodePath);
         return save(entity);
@@ -130,11 +131,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (parentNodeHasChange) {
             String newParentNodePath;
             if (StrUtil.equals("0", entity.getParentId())) {
-                newParentNodePath = String.join(TREE_DELIMITER, existsEntity.getNodeKey());
+                newParentNodePath = "";
             } else {
                 newParentNodePath = getById(entity.getParentId()).getNodePath();
             }
-            String currentOldNodePath = String.join(TREE_DELIMITER, existsEntity.getNodePath());
+            String currentOldNodePath = existsEntity.getNodePath();
             String currentNewNodePath = String.join(TREE_DELIMITER, newParentNodePath, existsEntity.getNodeKey());
             existsEntity.setNodePath(currentNewNodePath);
 

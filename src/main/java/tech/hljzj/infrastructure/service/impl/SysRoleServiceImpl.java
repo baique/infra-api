@@ -26,6 +26,7 @@ import tech.hljzj.infrastructure.vo.SysMenu.SysMenuQueryVo;
 import tech.hljzj.infrastructure.vo.SysRole.SysRoleQueryVo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -144,6 +145,28 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void grant(String roleId, String appId, List<String> menuId) {
+        List<String> queryMenuFind = new ArrayList<>();
+
+        List<SysMenu> menus = menuService.listByIds(menuId);
+        for (SysMenu f : menus) {
+            SysRoleMenu roleMenu = new SysRoleMenu();
+            roleMenu.setRoleId(roleId);
+            roleMenu.setAppId(appId);
+            roleMenu.setMenuId(f.getId());
+            // 寻觅子集
+            queryMenuFind.add(f.getNodePath() + "%");
+        }
+
+        List<SysRoleMenu> roleMenus = menuId.stream().map(f -> {
+            SysRoleMenu roleMenu = new SysRoleMenu();
+            roleMenu.setRoleId(roleId);
+            roleMenu.setAppId(appId);
+            roleMenu.setMenuId(f);
+            return roleMenu;
+        }).toList();
+        // 授权动作，需要查询出信息如下
+
+
         //保存用户选中的菜单列表
         menuId.stream().map(f -> {
             SysRoleMenu roleMenu = new SysRoleMenu();
@@ -227,5 +250,20 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .orderByDesc(SysRole::getCreateTime)
                 .orderByDesc(SysRole::getId)
         ));
+    }
+
+    @Override
+    public List<SysRole> listHasMenuRoles(Serializable id) {
+        List<SysRoleMenu> roleInfos = roleMenuMapper.selectList(
+            Wrappers.<SysRoleMenu>lambdaQuery()
+                .eq(SysRoleMenu::getMenuId, id)
+                .select(SysRoleMenu::getRoleId)
+        );
+        if (CollUtil.isEmpty(roleInfos)) {
+            return Collections.emptyList();
+        }
+        return super.list(
+            Wrappers.<SysRole>lambdaQuery().in(SysRole::getId, roleInfos.stream().map(SysRoleMenu::getRoleId).collect(Collectors.toSet()))
+        );
     }
 }

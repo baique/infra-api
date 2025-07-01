@@ -11,6 +11,6 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class SysMenuDetailVo extends  SysMenuListVo {
-  // 在这里可以扩展其他属性
+public class SysMenuDetailVo extends SysMenuListVo {
+    // 在这里可以扩展其他属性
 }

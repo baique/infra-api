@@ -2,6 +2,7 @@
 package tech.hljzj.infrastructure.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 import tech.hljzj.infrastructure.domain.SysUserRole;
 
 /**
@@ -10,5 +11,6 @@ import tech.hljzj.infrastructure.domain.SysUserRole;
  * 
  * @author wa
  */
+@Mapper
 public interface SysUserRoleMapper extends BaseMapper<SysUserRole> {
 }

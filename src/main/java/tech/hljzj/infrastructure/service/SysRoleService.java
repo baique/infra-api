@@ -138,4 +138,11 @@ public interface SysRoleService extends IService<SysRole> {
      */
     @Transactional(rollbackFor = Exception.class)
     void entityUpdateSort(String rowId, String prevRowId, String nextRowId);
+
+    /**
+     * 获取拥有某个菜单的角色
+     * @param menuId 菜单标识
+     * @return 角色列表
+     */
+    List<SysRole> listHasMenuRoles(Serializable menuId);
 }

@@ -1,7 +1,6 @@
 package tech.hljzj.infrastructure.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import javax.validation.constraints.NotNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +15,8 @@ import tech.hljzj.infrastructure.service.SysRoleService;
 import tech.hljzj.infrastructure.vo.SysRole.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -52,6 +53,18 @@ public class SysRoleController extends BaseController {
     public R<SysRoleDetailVo> entityGet(@PathVariable Serializable id) {
         SysRole dto = this.service.entityGet(id);
         return R.ok(new SysRoleDetailVo().fromDto(dto));
+    }
+
+    /**
+     * 获取拥有某个菜单的角色
+     * @param menuId 菜单标识
+     * @return 角色列表
+     */
+    @GetMapping("hasMenuRoles/{menuId}")
+    @Log(title = MODULE_NAME, operType = BusinessType.DETAIL)
+    public R<List<SysRoleListVo>> hasMenuRoles(@PathVariable Serializable menuId) {
+        List<SysRole> dto = service.listHasMenuRoles(menuId);
+        return R.ok(dto.stream().map(f -> new SysRoleListVo().<SysRoleListVo>fromDto(f)).collect(Collectors.toList()));
     }
 
 
@@ -149,7 +162,7 @@ public class SysRoleController extends BaseController {
     @PreAuthorize("auth('sys:role:import')")
     @Log(title = MODULE_NAME, operType = BusinessType.IMPORT)
     public R<List<ExcelUtil.FailRowWrap<SysRoleListVo>>> importData(@RequestPart MultipartFile file) throws IOException {
-        return R.ok(ExcelUtil.readExcel(ExcelUtil.getType(file.getOriginalFilename()),file.getInputStream(), SysRoleListVo.class, SysRoleListVo -> {
+        return R.ok(ExcelUtil.readExcel(ExcelUtil.getType(file.getOriginalFilename()), file.getInputStream(), SysRoleListVo.class, SysRoleListVo -> {
             this.service.entityCreate(SysRoleListVo.toDto());
         }));
     }
@@ -205,7 +218,10 @@ public class SysRoleController extends BaseController {
     @PostMapping("/access/menu/list")
     @PreAuthorize("auth('sys:role:grant')")
     @Log(title = MODULE_NAME, functionName = "查看角色可访问菜单", operType = BusinessType.UPDATE)
-    public R<?> grantList(String roleId, String appId) {
+    public R<?> grantList(
+        @NotBlank(message = "角色标识不允许为空") String roleId,
+        @NotBlank(message = "应用标识不允许为空") String appId
+    ) {
         return R.ok(service.listGrantOfRole(roleId, appId));
     }
 
@@ -220,7 +236,9 @@ public class SysRoleController extends BaseController {
     @PreAuthorize("auth('sys:role:grant')")
     @Validated
     @Log(title = MODULE_NAME, functionName = "分配角色可访问菜单", operType = BusinessType.UPDATE)
-    public R<?> grant(@NotNull(message = "需提供角色标识") String roleId, @NotNull(message = "需提供应用标识") String appId, @RequestBody List<String> menuId) {
+    public R<?> grant(@NotNull(message = "需提供角色标识") String roleId,
+                      @NotNull(message = "需提供应用标识") String appId,
+                      @RequestBody List<String> menuId) {
         service.grant(roleId, appId, menuId);
         return R.ok();
     }
@@ -236,7 +254,9 @@ public class SysRoleController extends BaseController {
     @PreAuthorize("auth('sys:role:grant')")
     @Validated
     @Log(title = MODULE_NAME, functionName = "移除角色可访问菜单", operType = BusinessType.UPDATE)
-    public R<?> unGrant(@NotNull(message = "角色标识不允许为空") String roleId, @NotNull(message = "应用标识不允许为空") String appId, @RequestBody List<String> menuId) {
+    public R<?> unGrant(@NotNull(message = "角色标识不允许为空") String roleId,
+                        @NotNull(message = "应用标识不允许为空") String appId,
+                        @RequestBody List<String> menuId) {
         service.unGrant(roleId, appId, menuId);
         return R.ok();
     }
