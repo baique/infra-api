@@ -9,6 +9,8 @@ import java.lang.*;
 import java.util.Date;
 import tech.hljzj.infrastructure.domain.SysConfig;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 系统配置 sys_config 
  * 交互实体 用于新增
@@ -23,14 +25,17 @@ public class SysConfigNewBaseVo implements Serializable {
     /**
      * 所属应用标识
      */
+    @NotBlank
     private String ownerAppId;
     /**
      * 配置标识
      */
+    @NotBlank
     private String key;
     /**
      * 配置名称
      */
+    @NotBlank
     private String name;
     /**
      * 配置项值
@@ -39,6 +44,7 @@ public class SysConfigNewBaseVo implements Serializable {
     /**
      * 配置状态
      */
+    @NotBlank
     private String status;
     /**
      * 配置描述

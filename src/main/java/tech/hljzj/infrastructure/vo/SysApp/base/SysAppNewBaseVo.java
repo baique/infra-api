@@ -9,6 +9,8 @@ import java.lang.*;
 import java.util.Date;
 import tech.hljzj.infrastructure.domain.SysApp;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 应用管理 sys_app 
  * 交互实体 用于新增
@@ -23,10 +25,12 @@ public class SysAppNewBaseVo implements Serializable {
     /**
      * 应用标识
      */
+    @NotBlank
     private String key;
     /**
      * 应用名称
      */
+    @NotBlank
     private String name;
     /**
      * 主页地址
@@ -35,10 +39,12 @@ public class SysAppNewBaseVo implements Serializable {
     /**
      * 应用密钥
      */
+    @NotBlank
     private String secret;
     /**
      * 应用状态
      */
+    @NotBlank
     private String status;
     /**
      * 应用描述

@@ -165,7 +165,7 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
 
         //此处需要判定，如果应用本身提供了字典，那么就使用应用的字典
         //反之，如果应用本身没有提供字典，那么就使用基座服务的字典
-        String appId = AppScopeHolder.getScopeAppIdIfNotInfra();
+        String appId = AppScopeHolder.getScopeAppId();
         if (StrUtil.isBlank(appId)) {
             return Collections.emptyMap();
         }

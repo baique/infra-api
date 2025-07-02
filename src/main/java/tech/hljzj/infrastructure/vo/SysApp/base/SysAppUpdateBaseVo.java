@@ -9,6 +9,8 @@ import java.lang.*;
 import java.util.Date;
 import tech.hljzj.infrastructure.domain.SysApp;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 应用管理 sys_app_ 
  * 交互实体 用于更新
@@ -24,14 +26,17 @@ public class SysAppUpdateBaseVo implements Serializable {
     /**
      * bigint
      */
+    @NotBlank
     private String id;
     /**
      * 应用标识
      */
+    @NotBlank
     private String key;
     /**
      * 应用名称
      */
+    @NotBlank
     private String name;
     /**
      * 主页地址
@@ -40,6 +45,7 @@ public class SysAppUpdateBaseVo implements Serializable {
     /**
      * 应用密钥
      */
+    @NotBlank
     private String secret;
     /**
      * 应用状态
