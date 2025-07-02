@@ -13,5 +13,5 @@ import java.util.List;
 @Setter
 public class GrantAppRoleVo {
     private SysAppListVo appInfo;
-    private List<SysRoleListVo> roleList;
+    private List<SysGrantRoleListVo> roleList;
 }

@@ -22,6 +22,7 @@ import tech.hljzj.infrastructure.domain.SysRole;
 import tech.hljzj.infrastructure.domain.SysRoleMenu;
 import tech.hljzj.infrastructure.service.*;
 import tech.hljzj.infrastructure.vo.SysMenu.SysMenuQueryVo;
+import tech.hljzj.infrastructure.vo.SysRole.SysLoginBindRole;
 import tech.hljzj.infrastructure.vo.VSysUser.VSysUserQueryVo;
 
 import java.util.Collections;
@@ -42,13 +43,15 @@ public class AppPermissionAction extends MController {
     private final SysRoleService sysRoleService;
     private final SysUserService sysUserService;
     private final SysRoleMenuService sysRoleMenuService;
+    private final SysUserLoginService sysUserLoginService;
 
-    public AppPermissionAction(SysMenuService sysMenuService, SysRoleService sysRoleService, SysUserService sysUserService, SysRoleMenuService sysRoleMenuService) {
+    public AppPermissionAction(SysMenuService sysMenuService, SysRoleService sysRoleService, SysUserService sysUserService, SysRoleMenuService sysRoleMenuService, SysUserLoginService sysUserLoginService) {
         super();
         this.sysMenuService = sysMenuService;
         this.sysRoleService = sysRoleService;
         this.sysUserService = sysUserService;
         this.sysRoleMenuService = sysRoleMenuService;
+        this.sysUserLoginService = sysUserLoginService;
     }
 
     @PostMapping("/permission/hasPermissionUsers")
@@ -61,8 +64,8 @@ public class AppPermissionAction extends MController {
             return R.fail().setMsg("未找到权限数据");
         }
         List<SysRoleMenu> roleIds = sysRoleMenuService.list(Wrappers
-                .<SysRoleMenu>lambdaQuery()
-                .in(SysRoleMenu::getMenuId, byPermission.stream().map(SysMenu::getId).collect(Collectors.toList()))
+            .<SysRoleMenu>lambdaQuery()
+            .in(SysRoleMenu::getMenuId, byPermission.stream().map(SysMenu::getId).collect(Collectors.toList()))
         );
         if (CollUtil.isEmpty(byPermission)) {
             return R.fail().setMsg("未找到权限数据");
@@ -125,8 +128,8 @@ public class AppPermissionAction extends MController {
             return success(Collections.emptyList());
         }
         List<SysMenu> sysMenus = sysRoleService.listGrantOfRoles(
-                roleList.stream().map(SysRole::getId).collect(Collectors.toList()),
-                AppHelper.getLoginApp(request)
+            roleList.stream().map(SysRole::getId).collect(Collectors.toList()),
+            AppHelper.getLoginApp(request)
         );
         return success(sysMenus.stream().map(Permission::from).collect(Collectors.toList())).addProperty("count", sysMenus.size());
     }
@@ -204,17 +207,17 @@ public class AppPermissionAction extends MController {
         }
 
 
-        List<SysRole> roleList = sysUserService.listGrantRoleOfUser(userId, appId);
+        List<SysLoginBindRole> roleList = sysUserLoginService.listGrantRoleOfUserAndDept(userId, appId);
         if (CollUtil.isEmpty(roleList)) {
             return R.fail().setMsg("未找到相关数据");
         }
         // 查询当前用户的，属于某个父级的权限……
         List<SysMenu> menus = sysRoleService.listGrantOfRoles(
-                roleList.stream()
-                        .map(SysRole::getId)
-                        .collect(Collectors.toList()),
-                appId,
-                f -> f.ne(idNot != null, SysMenu::getId, idNot).likeRight(StrUtil.isNotBlank(parentNodePath), SysMenu::getNodePath, parentNodePath)
+            roleList.stream()
+                .map(SysLoginBindRole::getId)
+                .collect(Collectors.toList()),
+            appId,
+            f -> f.ne(idNot != null, SysMenu::getId, idNot).likeRight(StrUtil.isNotBlank(parentNodePath), SysMenu::getNodePath, parentNodePath)
         );
 
         // 这里是需要在内存中进行动作的完成吗？
@@ -243,19 +246,19 @@ public class AppPermissionAction extends MController {
             idNot = parentMenu.getId();
         }
 
-        List<SysRole> roleList = sysUserService.listGrantRoleOfUser(userId, appId);
+        List<SysLoginBindRole> roleList = sysUserLoginService.listGrantRoleOfUserAndDept(userId, appId);
         if (CollUtil.isEmpty(roleList)) {
             return success(Collections.emptyList()).setMsg("未找到相关数据");
         }
 
         // 查询当前用户的，属于某个父级的权限……
         List<SysMenu> menus = sysRoleService.listGrantOfRoles(roleList.stream()
-                        .map(SysRole::getId)
-                        .collect(Collectors.toList()), appId,
-                f -> f
-                        .ne(idNot != null, SysMenu::getId, idNot)
-                        .likeRight(StrUtil.isNotBlank(parentNodePath), SysMenu::getNodePath, parentNodePath
-                        )
+                .map(SysLoginBindRole::getId)
+                .collect(Collectors.toList()), appId,
+            f -> f
+                .ne(idNot != null, SysMenu::getId, idNot)
+                .likeRight(StrUtil.isNotBlank(parentNodePath), SysMenu::getNodePath, parentNodePath
+                )
         );
 
         List<Permission> ms = PermissionTree.from(menus);
@@ -270,14 +273,14 @@ public class AppPermissionAction extends MController {
     @ResponseBody
     private Object findPermissionByUser(String userId) {
         String appId = AppHelper.getLoginApp(request);
-        List<SysRole> roleList = sysUserService.listGrantRoleOfUser(userId, appId);
+        List<SysLoginBindRole> roleList = sysUserLoginService.listGrantRoleOfUserAndDept(userId, appId);
         if (CollUtil.isEmpty(roleList)) {
             return success(Collections.emptyList()).setMsg("未找到相关数据");
         }
         // 查询当前用户的，属于某个父级的权限……
         List<SysMenu> menus = sysRoleService.listGrantOfRoles(roleList.stream()
-                .map(SysRole::getId)
-                .collect(Collectors.toList()), appId, f -> f);
+            .map(SysLoginBindRole::getId)
+            .collect(Collectors.toList()), appId, f -> f);
         return success(menus.stream().map(Permission::from).collect(Collectors.toList())).addProperty("count", menus.size());
     }
 
@@ -302,9 +305,9 @@ public class AppPermissionAction extends MController {
         }
 
         List<SysMenu> menus = sysRoleService.listGrantOfRoles(Collections.singleton(roleId), AppHelper.getLoginApp(request),
-                f -> f
-                        .ne(idNot != null, SysMenu::getId, idNot)
-                        .likeRight(StrUtil.isNotBlank(parentNodePath), SysMenu::getNodePath, parentNodePath)
+            f -> f
+                .ne(idNot != null, SysMenu::getId, idNot)
+                .likeRight(StrUtil.isNotBlank(parentNodePath), SysMenu::getNodePath, parentNodePath)
         );
         return success(menus.stream().map(Permission::from).collect(Collectors.toList())).addProperty("count", menus.size());
     }
@@ -330,11 +333,11 @@ public class AppPermissionAction extends MController {
         }
 
         return success(PermissionTree.from(sysRoleService.
-                listGrantOfRoles(Collections.singleton(roleId),
-                        AppHelper.getLoginApp(request),
-                        f -> f
-                                .ne(idNot != null, SysMenu::getId, idNot)
-                                .likeRight(StrUtil.isNotBlank(parentNodePath), SysMenu::getNodePath, parentNodePath)))
+            listGrantOfRoles(Collections.singleton(roleId),
+                AppHelper.getLoginApp(request),
+                f -> f
+                    .ne(idNot != null, SysMenu::getId, idNot)
+                    .likeRight(StrUtil.isNotBlank(parentNodePath), SysMenu::getNodePath, parentNodePath)))
         );
     }
 
@@ -346,8 +349,8 @@ public class AppPermissionAction extends MController {
     @ResponseBody
     private Object findPermissionByUserAll(String roleId) {
         return success(sysRoleService
-                .listGrantOfRole(roleId, AppHelper.getLoginApp(request))
-                .stream().map(Permission::from).collect(Collectors.toList())
+            .listGrantOfRole(roleId, AppHelper.getLoginApp(request))
+            .stream().map(Permission::from).collect(Collectors.toList())
         );
     }
 
@@ -448,13 +451,13 @@ public class AppPermissionAction extends MController {
     @PostMapping("/IdentificationOfPermissions")
     @ResponseBody
     private Object IdentificationOfPermissions(String userId, String permissionId) {
-        List<SysRole> roleList = sysUserService.listGrantRoleOfUser(userId, AppHelper.getLoginApp(request));
+        List<SysLoginBindRole> roleList = sysUserLoginService.listGrantRoleOfUserAndDept(userId, AppHelper.getLoginApp(request));
         if (CollUtil.isEmpty(roleList)) {
             return success(false);
         }
         return success(sysRoleMenuService.getOne(Wrappers.<SysRoleMenu>lambdaQuery()
-                .in(SysRoleMenu::getRoleId, roleList.stream().map(SysRole::getId).collect(Collectors.toList()))
-                .eq(SysRoleMenu::getMenuId, permissionId)
+            .in(SysRoleMenu::getRoleId, roleList.stream().map(SysLoginBindRole::getId).collect(Collectors.toList()))
+            .eq(SysRoleMenu::getMenuId, permissionId)
         ) != null);
     }
 
@@ -466,8 +469,8 @@ public class AppPermissionAction extends MController {
     @ResponseBody
     private Object findByPermissionValue(String permissionvalue) {
         List<SysMenu> c = sysMenuService.list(Wrappers.<SysMenu>lambdaQuery()
-                .eq(SysMenu::getOwnerAppId, AppHelper.getLoginApp(request))
-                .eq(SysMenu::getKey, permissionvalue)
+            .eq(SysMenu::getOwnerAppId, AppHelper.getLoginApp(request))
+            .eq(SysMenu::getKey, permissionvalue)
         );
         return success(c.stream().map(Permission::from)).addProperty("count", c.size());
     }

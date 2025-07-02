@@ -1,6 +1,5 @@
 package tech.hljzj.infrastructure.controller;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,12 +13,10 @@ import tech.hljzj.framework.config.AppBanner;
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.logger.BusinessType;
 import tech.hljzj.framework.logger.Log;
-import tech.hljzj.framework.security.an.Anonymous;
 import tech.hljzj.framework.util.excel.ExcelUtil;
 import tech.hljzj.infrastructure.config.SwapEncoder;
 import tech.hljzj.infrastructure.domain.SysApp;
 import tech.hljzj.infrastructure.service.SysAppService;
-import tech.hljzj.infrastructure.util.AppScopeHolder;
 import tech.hljzj.infrastructure.vo.SysApp.*;
 
 import javax.servlet.ServletOutputStream;
@@ -29,7 +26,6 @@ import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -54,25 +50,6 @@ public class SysAppController extends BaseController {
         this.swapEncoder = swapEncoder;
         this.sysAppService = sysAppService;
         this.appBanner = appBanner;
-    }
-
-    @GetMapping("/connection")
-    @Anonymous
-    public R<Map<String, String>> connectionApp() {
-        String scopeAppId = AppScopeHolder.getScopeAppId();
-        if (StrUtil.isBlank(scopeAppId)) {
-            throw UserException.defaultError("无法定位具体应用");
-        }
-        SysApp app = this.service.getById(scopeAppId);
-        if (app == null) {
-            throw UserException.defaultError("无效应用");
-        }
-
-        return R.ok(Map.of(
-            "appId", app.getId(),
-            "secret", app.getSecret(),
-            "version", appBanner.getAppVersion()
-        ));
     }
 
     /**
@@ -220,7 +197,5 @@ public class SysAppController extends BaseController {
         } catch (Exception e) {
             throw UserException.defaultError("文件内容解析失败", e);
         }
-
     }
-
 }

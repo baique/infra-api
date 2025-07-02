@@ -2,7 +2,7 @@ package tech.hljzj.infrastructure.vo.SysDictType;
 
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.infrastructure.vo.SysDictType.base.*;
+import tech.hljzj.infrastructure.vo.SysDictType.base.SysDictTypeQueryBaseVo;
 
 /**
  * 字典类型 sys_dict_type 
@@ -12,6 +12,6 @@ import tech.hljzj.infrastructure.vo.SysDictType.base.*;
  */
 @Getter
 @Setter
-public class SysDictTypeQueryVo extends  SysDictTypeQueryBaseVo {
-  // 在这里可以扩展其他属性
+public class SysDictTypeQueryVo extends SysDictTypeQueryBaseVo {
+    // 在这里可以扩展其他属性
 }

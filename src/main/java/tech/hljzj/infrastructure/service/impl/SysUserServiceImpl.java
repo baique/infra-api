@@ -2,6 +2,7 @@ package tech.hljzj.infrastructure.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.comparator.CompareUtil;
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.toolkit.MPJWrappers;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -19,9 +21,11 @@ import reactor.util.annotation.Nullable;
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.security.SessionStoreDecorator;
 import tech.hljzj.framework.security.bean.TokenAuthentication;
+import tech.hljzj.framework.security.bean.UserInfo;
 import tech.hljzj.framework.service.SortService;
 import tech.hljzj.framework.util.password.ParamEncryption;
 import tech.hljzj.framework.util.password.SMUtil;
+import tech.hljzj.framework.util.web.AuthUtil;
 import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.config.AppLoginUserInfo;
@@ -35,7 +39,8 @@ import tech.hljzj.infrastructure.service.*;
 import tech.hljzj.infrastructure.util.UserPasswordContext;
 import tech.hljzj.infrastructure.vo.SysApp.SysAppListVo;
 import tech.hljzj.infrastructure.vo.SysRole.GrantAppRoleVo;
-import tech.hljzj.infrastructure.vo.SysRole.SysRoleListVo;
+import tech.hljzj.infrastructure.vo.SysRole.SysGrantRoleListVo;
+import tech.hljzj.infrastructure.vo.SysRole.SysLoginBindRole;
 import tech.hljzj.infrastructure.vo.SysRole.SysRoleQueryVo;
 import tech.hljzj.infrastructure.vo.SysUser.TokenInfoVo;
 import tech.hljzj.infrastructure.vo.VSysUser.VSysUserQueryVo;
@@ -54,31 +59,22 @@ import java.util.stream.Collectors;
  * @author wa
  */
 @Service
+@RequiredArgsConstructor
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
-    @Autowired
-    private SysUserRoleMapper userRoleMapper;
-    @Autowired
-    private SysUserViewMapper userViewMapper;
-    @Autowired
-    private SysRoleService sysRoleService;
-    @Autowired
-    private SysUserRoleService sysUserRoleService;
-    @Autowired
-    private SysAppService sysAppService;
-    @Autowired
-    private SessionStoreDecorator sessionStoreDecorator;
-    @Autowired
-    private SysConfigService sysConfigService;
+    private final SysUserRoleMapper userRoleMapper;
+    private final SysUserViewMapper userViewMapper;
+    private final SysRoleService sysRoleService;
+    private final SysUserRoleService sysUserRoleService;
+    private final SysAppService sysAppService;
+    private final SessionStoreDecorator sessionStoreDecorator;
+    private final SysConfigService sysConfigService;
+    private final SwapEncoder swapEncoder;
+    private final SortService sortService;
+    private final ParamEncryption paramEncryption;
     @Autowired
     @Lazy
-    private LocalSecurityProvider localSecurityProvider;
-    @Autowired
-    private SwapEncoder swapEncoder;
-    @Autowired
-    private SortService sortService;
-    @Autowired
-    private ParamEncryption paramEncryption;
+    private LocalSecurityProvider localSecurity;
 
     @Override
     public VSysUser entityGet(VSysUser entity, boolean fetchExtAttr) {
@@ -144,7 +140,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean entityDelete(SysUser entity) {
+        if (AuthUtil.isLogin()) {
+            UserInfo userInfo = AuthUtil.getLoginUserDetail();
+            if (userInfo.getId().equals(entity.getId())) {
+                // 此时要进行验证
+                String valueByKey = sysConfigService.getValueByKey(AppConst.CONFIG_ALLOW_SELF_DROP);
+                if (!AppConst.YES.equals(valueByKey)) {
+                    throw UserException.defaultError("系统禁止删除您正在使用的账号");
+                }
+            }
+        }
+        // 与用户关联的角色需要删除
+        userRoleMapper.delete(Wrappers.lambdaQuery(SysUserRole.class)
+            .eq(SysUserRole::getUserId, entity.getId())
+        );
+
+        // 用户在部门内应该是有
         return removeById(entity);
     }
 
@@ -152,7 +165,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean entityBatchDelete(Collection<Serializable> ids) {
-        return removeBatchByIds(ids);
+        for (SysUser item : listByIds(ids)) {
+            entityDelete(item);
+        }
+        return true;
     }
 
 
@@ -192,6 +208,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }).collect(Collectors.toSet()));
     }
 
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean grantRoles(String userId, List<String> roleIds) {
+        sysUserRoleService.saveBatch(sysRoleService.listByIds(roleIds).stream().map(f -> {
+            SysUserRole userRole = new SysUserRole();
+            userRole.setUserId(userId);
+            userRole.setAppId(f.getOwnerAppId());
+            userRole.setRoleId(f.getId());
+            return userRole;
+        }).collect(Collectors.toSet()));
+        return true;
+    }
+
     @Override
     public boolean unGrantRole(String roleId, List<String> userIds) {
         SysRole role = sysRoleService.getById(roleId);
@@ -203,6 +233,42 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             .eq(SysUserRole::getRoleId, roleId)
             .in(SysUserRole::getUserId, userIds)
         );
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean unGrantRoles(String userId, List<String> roleIds) {
+        sysUserRoleService.remove(Wrappers
+            .<SysUserRole>lambdaQuery()
+            .in(SysUserRole::getRoleId, roleIds)
+            .eq(SysUserRole::getUserId, userId)
+        );
+        return true;
+    }
+
+    /**
+     * 修改角色的过期时间
+     * @param userId 用户标识
+     * @param roleId 角色标识
+     * @param expiredTime 过期时间
+     * @return 是否成功修改
+     */
+    public boolean updateGrantRoleExpiredTime(String userId, String roleId, Date expiredTime) {
+        if (expiredTime != null) {
+            return sysUserRoleService.update(
+                Wrappers.<SysUserRole>lambdaUpdate()
+                    .eq(SysUserRole::getUserId, userId)
+                    .eq(SysUserRole::getRoleId, roleId)
+                    .set(SysUserRole::getExpiredTime, expiredTime)
+            );
+        } else {
+            return sysUserRoleService.update(
+                Wrappers.<SysUserRole>lambdaUpdate()
+                    .eq(SysUserRole::getUserId, userId)
+                    .eq(SysUserRole::getRoleId, roleId)
+                    .setSql("expired_time_ = null")
+            );
+        }
     }
 
     @Override
@@ -237,10 +303,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public List<GrantAppRoleVo> grantAppWithRole(String userId) {
+    public List<GrantAppRoleVo> grantAppWithRole(String userId, String appId) {
         // 这将同时得到应用和角色标识
         List<SysUserRole> grantUserRoleIds = sysUserRoleService.list(Wrappers.<SysUserRole>lambdaQuery()
             .eq(SysUserRole::getUserId, userId)
+            .eq(StrUtil.isNotBlank(appId), SysUserRole::getAppId, appId)
         );
         Map<String, List<SysUserRole>> appRoleGroup = grantUserRoleIds
             .stream().collect(Collectors.groupingBy(SysUserRole::getAppId));
@@ -250,10 +317,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
 
         return sysAppService.listByIds(appRoleGroup.keySet()).stream().map(app -> {
-                Set<String> roleIds = appRoleGroup.get(app.getId()).stream().map(SysUserRole::getRoleId).collect(Collectors.toSet());
-                List<SysRoleListVo> roleList = sysRoleService
+                Map<String, SysUserRole> userRoleMap = new HashMap<>();
+                Set<String> roleIds = appRoleGroup.get(app.getId())
+                    .stream()
+                    .peek(f -> userRoleMap.put(f.getRoleId(), f))
+                    .map(SysUserRole::getRoleId)
+                    .collect(Collectors.toSet());
+                List<SysGrantRoleListVo> roleList = sysRoleService
                     .listByIds(roleIds).stream()
-                    .map(f -> new SysRoleListVo().<SysRoleListVo>fromDto(f))
+                    .map(f -> new SysGrantRoleListVo().<SysGrantRoleListVo>fromDto(f))
+                    .peek(f -> {
+                        SysUserRole sysUserRole = userRoleMap.get(f.getId());
+                        f.setExpiredTime(sysUserRole.getExpiredTime());
+                    })
                     .collect(Collectors.toList());
                 GrantAppRoleVo grantAppRoleVo = new GrantAppRoleVo();
                 grantAppRoleVo.setRoleList(roleList);
@@ -264,16 +340,22 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public List<SysRole> listGrantRoleOfUser(String userId, @Nullable String appId) {
+    public List<SysLoginBindRole> listGrantRoleOfUser(String userId, @Nullable String appId) {
+        Date loginDate = new Date();
         List<SysUserRole> sysUserRoles = userRoleMapper.selectList(Wrappers
             .<SysUserRole>lambdaQuery()
             .eq(SysUserRole::getUserId, userId)
             .eq(SysUserRole::getAppId, appId)
-        );
+        ).stream().filter(f -> {
+            if (ObjUtil.isNull(f.getExpiredTime())) {
+                return true;
+            }
+            return f.getExpiredTime().after(loginDate);
+        }).toList();
+
         SysRoleQueryVo q = new SysRoleQueryVo();
         LambdaQueryWrapper<SysRole> queryWrapper = q.buildQueryWrapper();
         // 获取应用默认授予用户的角色，与自然角色
-
         if (Objects.nonNull(appId)) {
             queryWrapper.eq(SysRole::getOwnerAppId, appId);
         } else if (CollUtil.isEmpty(sysUserRoles)) {
@@ -285,7 +367,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         });
         queryWrapper.orderByAsc(SysRole::getSort);
         queryWrapper.orderByDesc(SysRole::getId);
-        return sysRoleService.list(queryWrapper);
+        return sysRoleService.list(queryWrapper).stream()
+            .map(f -> {
+                SysLoginBindRole sysLoginBindRole = new SysLoginBindRole().fromDto(f);
+                sysLoginBindRole.setSource("用户自有角色");
+                return sysLoginBindRole;
+            }).collect(Collectors.toList());
     }
 
     @Override
@@ -366,7 +453,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         user.setPasswordPolicy(AppConst.PASSWORD_POLICY.NEVER);
         validatePasswordStorage(newPassword, user);
         // 检查密码
-        if (!localSecurityProvider.validatePassword(oldPassword, user)) {
+        if (!localSecurity.validatePassword(oldPassword, user)) {
             throw UserException.defaultError("用户名或密码错误导致失败");
         }
         try {
@@ -389,7 +476,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser user = getById(userId);
         validatePasswordStorage(newPassword, user);
         //这里需要使用登录认证的类似逻辑
-        if (localSecurityProvider.validatePassword(oldPassword, user)) {
+        if (localSecurity.validatePassword(oldPassword, user)) {
             try {
                 update(Wrappers.lambdaUpdate(SysUser.class)
                     .eq(SysUser::getId, user.getId())
@@ -419,7 +506,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 密码强度检查
         String passwordStrengthPattern = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_STRENGTH);
         // 密码最低强度分，基于zxcvbn
-        int passwordScore = Integer.parseInt(sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_SCORE));;
+        int passwordScore = Integer.parseInt(sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_SCORE));
         // 低于指定强度时提示信息
         String errorMessage = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_STRENGTH_DESC);
         PasswordScorer.validatePassword(newPassword,
@@ -444,4 +531,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .orderByDesc(SysUser::getId)
         ));
     }
+
+
 }

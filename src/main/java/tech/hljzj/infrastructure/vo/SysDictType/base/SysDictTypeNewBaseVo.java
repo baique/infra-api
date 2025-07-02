@@ -9,6 +9,8 @@ import java.lang.*;
 import java.util.Date;
 import tech.hljzj.infrastructure.domain.SysDictType;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 字典类型 sys_dict_type 
  * 交互实体 用于新增
@@ -23,14 +25,17 @@ public class SysDictTypeNewBaseVo implements Serializable {
     /**
      * 所属应用标识
      */
+    @NotBlank
     private String ownerAppId;
     /**
      * 字典类型标识
      */
+    @NotBlank
     private String key;
     /**
      * 字典类型名称
      */
+    @NotBlank
     private String name;
     /**
      * 字典类型状态

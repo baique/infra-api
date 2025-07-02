@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.infrastructure.domain.SysUser;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
@@ -22,6 +23,7 @@ public class SysUserNewBaseVo implements Serializable {
     /**
      * 所属部门
      */
+    @NotBlank
     private String deptId;
     /**
      * 部门内身份
@@ -30,14 +32,17 @@ public class SysUserNewBaseVo implements Serializable {
     /**
      * 账号
      */
+    @NotBlank
     private String username;
     /**
      * 密码
      */
+    @NotBlank
     private String password;
     /**
      * 密码策略
      */
+    @NotBlank
     private String passwordPolicy;
     /**
      * 现有密码过期时间
@@ -46,10 +51,12 @@ public class SysUserNewBaseVo implements Serializable {
     /**
      * 昵称
      */
+    @NotBlank
     private String nickname;
     /**
      * 真实姓名
      */
+    @NotBlank
     private String realname;
     /**
      * 性别
@@ -106,6 +113,7 @@ public class SysUserNewBaseVo implements Serializable {
     /**
      * 用户状态
      */
+    @NotBlank
     private String status;
     /**
      * 账户是否锁定
@@ -115,9 +123,9 @@ public class SysUserNewBaseVo implements Serializable {
     /**
      * 转换为实际的数据实体
      */
-    public SysUser toDto(){
+    public SysUser toDto() {
         SysUser dto = new SysUser();
-          
+
         dto.setDeptId(this.getDeptId());
         dto.setDeptIdentity(this.getDeptIdentity());
         dto.setUsername(this.getUsername());

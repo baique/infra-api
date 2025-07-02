@@ -9,6 +9,8 @@ import java.lang.*;
 import java.util.Date;
 import tech.hljzj.infrastructure.domain.SysMenu;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 菜单管理 sys_menu 
  * 交互实体 用于更新
@@ -24,18 +26,22 @@ public class SysMenuUpdateBaseVo implements Serializable {
     /**
      * bigint
      */
+    @NotBlank
     private String id;
     /**
      * 菜单标识
      */
+    @NotBlank
     private String key;
     /**
      * 菜单名称
      */
+    @NotBlank
     private String name;
     /**
      * 菜单状态
      */
+    @NotBlank
     private String status;
     /**
      * 菜单描述
@@ -48,10 +54,12 @@ public class SysMenuUpdateBaseVo implements Serializable {
     /**
      * 显示状态
      */
+    @NotBlank
     private String visible;
     /**
      * 菜单类型
      */
+    @NotBlank
     private String menuType;
     /**
      * 访问路径
@@ -80,6 +88,7 @@ public class SysMenuUpdateBaseVo implements Serializable {
     /**
      * 上级权限标识
      */
+    @NotBlank
     private String parentId;
 
     /**
@@ -87,7 +96,7 @@ public class SysMenuUpdateBaseVo implements Serializable {
      */
     public SysMenu toDto(){
         SysMenu dto = new SysMenu();
-          
+
         dto.setId(this.getId());
         dto.setKey(this.getKey());
         dto.setName(this.getName());

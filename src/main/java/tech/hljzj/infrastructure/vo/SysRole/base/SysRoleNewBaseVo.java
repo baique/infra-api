@@ -2,12 +2,12 @@ package tech.hljzj.infrastructure.vo.SysRole.base;
 
 import lombok.Getter;
 import lombok.Setter;
+import tech.hljzj.infrastructure.code.AppConst;
+import tech.hljzj.infrastructure.domain.SysRole;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serial;
 import java.io.Serializable;
-import java.lang.*;
-import java.util.Date;
-import tech.hljzj.infrastructure.domain.SysRole;
 
 /**
  * 角色管理 sys_role 
@@ -23,18 +23,22 @@ public class SysRoleNewBaseVo implements Serializable {
     /**
      * 所属应用标识
      */
+    @NotBlank
     private String ownerAppId;
     /**
      * 角色标识
      */
+    @NotBlank
     private String key;
     /**
      * 角色名称
      */
+    @NotBlank
     private String name;
     /**
      * 角色状态
      */
+    @NotBlank
     private String status;
     /**
      * 角色描述
@@ -43,11 +47,11 @@ public class SysRoleNewBaseVo implements Serializable {
     /**
      * 默认授予登录用户
      */
-    private String defaultGrant;
+    private String defaultGrant = AppConst.NOT;
     /**
      * 优先级（多个角色存在冲突时以哪个角色为主）
      */
-    private Integer priority;
+    private Integer priority = 0;
     /**
      * 主页地址
      */
@@ -55,14 +59,14 @@ public class SysRoleNewBaseVo implements Serializable {
     /**
      * 排序编号
      */
-    private Integer sort;
+    private Integer sort = 0;
 
     /**
      * 转换为实际的数据实体
      */
-    public SysRole toDto(){
+    public SysRole toDto() {
         SysRole dto = new SysRole();
-          
+
         dto.setOwnerAppId(this.getOwnerAppId());
         dto.setKey(this.getKey());
         dto.setName(this.getName());

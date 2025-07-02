@@ -8,6 +8,7 @@ public class AppConst {
     public static final String CONFIG_DEFAULT_PASSWORD = "default_password";
     public static final String CONFIG_MAX_TRY_LOGIN_COUNT = "max_try_login_count";
     public static final String CONFIG_AUTO_UNLOCK = "auto_un_lock";
+    public static final String CONFIG_ALLOW_SELF_DROP = "allow_self_drop";
     public static final String CONFIG_PASSWORD_STRENGTH = "password_strength";
     public static final String CONFIG_PASSWORD_SCORE = "password_score";
     public static final String CONFIG_PASSWORD_STRENGTH_DESC = "password_strength_desc";
@@ -36,5 +37,23 @@ public class AppConst {
          * 已过期
          */
         public static final String EXPIRED = "5";
+    }
+
+    /**
+     * 部门授权策略
+     */
+    public static class DeptGrantScope {
+        /**
+         * 仅本级
+         */
+        public static final int SELF = 1;
+        /**
+         * 下级
+         */
+        public static final int CHILDREN = 2;
+        /**
+         * 所有
+         */
+        public static final int DESCENDANT = 3;
     }
 }

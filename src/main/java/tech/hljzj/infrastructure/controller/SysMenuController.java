@@ -2,7 +2,6 @@ package tech.hljzj.infrastructure.controller;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +17,7 @@ import tech.hljzj.infrastructure.domain.SysMenu;
 import tech.hljzj.infrastructure.service.SysMenuService;
 import tech.hljzj.infrastructure.vo.SysMenu.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 
 /**
  * 菜单管理 sys_menu
- * 控制层
  *
  * @author wa
  */

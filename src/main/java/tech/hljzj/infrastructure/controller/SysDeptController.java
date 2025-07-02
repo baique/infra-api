@@ -1,6 +1,7 @@
 package tech.hljzj.infrastructure.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +15,15 @@ import tech.hljzj.infrastructure.domain.SysDept;
 import tech.hljzj.infrastructure.domain.VSysDeptMemberUser;
 import tech.hljzj.infrastructure.service.SysDeptService;
 import tech.hljzj.infrastructure.vo.SysDept.*;
+import tech.hljzj.infrastructure.vo.SysRole.GrantAppRoleVo;
 import tech.hljzj.infrastructure.vo.VSysDeptMemberUser.VSysDeptMemberUserQueryVo;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotBlank;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -40,6 +44,112 @@ public class SysDeptController extends BaseController {
     public SysDeptController(SysDeptService service) {
         this.service = service;
     }
+
+
+    /**
+     * 获取部门可访问的所有角色
+     *
+     * @param deptId 部门标识
+     * @param appId  应用标识（可选，仅获取特定应用下的数据）
+     * @return 信息
+     */
+    @PostMapping("/grantDeptAppWithRole")
+    @Log(title = MODULE_NAME, functionName = "查看部门可访问应用和角色", operType = BusinessType.DETAIL)
+    public R<List<GrantAppRoleVo>> grantDeptAppWithRole(@NotBlank String deptId, String appId) {
+        return R.ok(service.grantDeptAppWithRole(deptId, appId));
+    }
+
+
+    /**
+     * 授权某个角色给部门
+     *
+     * @param roleId  角色标识
+     * @param deptId 部门
+     * @param expiredTime 过期时间，null表示不限
+     * @return 授权动作是否成功
+     */
+    @PostMapping("updateGrantRoleExpiredTime")
+    @Log(title = MODULE_NAME, functionName = "设置已分配角色的过期时间", operType = BusinessType.UPDATE)
+    public R<Boolean> updateGrantRoleExpiredTime(@NotBlank String deptId,
+                                                 @NotBlank String roleId,
+                                                 @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date expiredTime) {
+        return R.ok(service.updateGrantRoleExpiredTime(deptId, roleId, expiredTime));
+    }
+
+
+    /**
+     * 授权某个角色给部门
+     *
+     * @param roleId  角色标识
+     * @param deptId 部门
+     * @param scope 授权范围
+     *              1：仅本级
+     *              2：仅子级
+     *              3：所有后代共享
+     * @return 授权动作是否成功
+     */
+    @PostMapping("updateGrantRoleScope")
+    @Log(title = MODULE_NAME, functionName = "设置已分配角色的授权范围", operType = BusinessType.UPDATE)
+    public R<Boolean> updateGrantRoleScope(@NotBlank String deptId,
+                                           @NotBlank String roleId,
+                                           int scope) {
+        return R.ok(service.updateGrantRoleGrantScope(deptId, roleId, scope));
+    }
+
+    /**
+     * 授权某个角色给部门
+     *
+     * @param roleId  角色标识
+     * @param deptIds 部门列表
+     * @return 授权动作是否成功
+     */
+    @PostMapping("grantRoleToDepts")
+    @Log(title = MODULE_NAME, functionName = "分配部门可用角色", operType = BusinessType.UPDATE)
+    public R<Boolean> grantRoleToDepts(String roleId, @RequestBody List<String> deptIds) {
+        return R.ok(service.grantRole(roleId, deptIds));
+    }
+
+    /**
+     * 取消授权某个角色给部门
+     *
+     * @param roleId  角色标识
+     * @param deptIds 部门列表
+     * @return 取消授权动作是否成功
+     */
+    @PostMapping("revokeRoleFromDepts")
+    @Log(title = MODULE_NAME, functionName = "移除部门可用角色", operType = BusinessType.UPDATE)
+    public R<Boolean> revokeRoleFromDepts(String roleId, @RequestBody List<String> deptIds) {
+        return R.ok(service.unGrantRole(roleId, deptIds));
+    }
+
+
+    /**
+     * 授权某些角色给部门
+     *
+     * @param deptId  部门标识
+     * @param roleIds 角色列表
+     * @return 动作是否成功
+     */
+    @PostMapping("grantRolesToDept")
+    @Log(title = MODULE_NAME, functionName = "分配部门可用角色", operType = BusinessType.UPDATE)
+    public R<Boolean> grantRolesToDept(String deptId, @RequestBody List<String> roleIds) {
+        return R.ok(service.grantRoles(deptId, roleIds));
+    }
+
+
+    /**
+     * 取消授权某个角色给部门
+     *
+     * @param deptId  部门标识
+     * @param roleIds 角色列表
+     * @return 动作是否成功
+     */
+    @PostMapping("revokeRolesToDept")
+    @Log(title = MODULE_NAME, functionName = "移除部门可用角色", operType = BusinessType.UPDATE)
+    public R<Boolean> revokeRolesToDept(String deptId, @RequestBody List<String> roleIds) {
+        return R.ok(service.unGrantRoles(deptId, roleIds));
+    }
+
 
     /**
      * 获取数据
@@ -88,7 +198,7 @@ public class SysDeptController extends BaseController {
     }
 
     /**
-     * 数据排序
+     * 修改部门排序
      *
      * @param rowId     当前行ID
      * @param prevRowId 目标位置上一行ID
@@ -149,7 +259,7 @@ public class SysDeptController extends BaseController {
     @PreAuthorize("auth('sys:dept:import')")
     @Log(title = MODULE_NAME, operType = BusinessType.IMPORT)
     public R<List<ExcelUtil.FailRowWrap<SysDeptListVo>>> importData(@RequestPart MultipartFile file) throws IOException {
-        return R.ok(ExcelUtil.readExcel(ExcelUtil.getType(file.getOriginalFilename()),file.getInputStream(), SysDeptListVo.class, SysDeptListVo -> {
+        return R.ok(ExcelUtil.readExcel(ExcelUtil.getType(file.getOriginalFilename()), file.getInputStream(), SysDeptListVo.class, SysDeptListVo -> {
             this.service.entityCreate(SysDeptListVo.toDto());
         }));
     }
@@ -195,6 +305,38 @@ public class SysDeptController extends BaseController {
         return R.ok(list);
     }
 
+
+    /**
+     * 获取某个部门所有后代部门
+     * @param deptId 部门标识
+     * @return 后代部门
+     */
+    @PostMapping("/descendants")
+    public R<List<SysDeptListVo>> descendants(String deptId) {
+        return R.ok(
+            service.descendantsAll(deptId)
+                .stream()
+                .map(f -> new SysDeptListVo().<SysDeptListVo>fromDto(f))
+                .collect(Collectors.toList())
+        );
+    }
+
+    /**
+     * 获取某个部门所有先祖部门
+     * @param deptId 部门标识
+     * @return 后代部门
+     */
+    @PostMapping("/ancestors")
+    public R<SysDeptAncestors.Vo> ancestors(String deptId) {
+        SysDeptAncestors deptAncestors = service.ancestorNodes(deptId);
+        return R.ok(deptAncestors.toVo());
+    }
+
+    /**
+     * 获取部门内成员信息
+     * @param query 查询条件
+     * @return 成员列表
+     */
     @PostMapping("/member/list")
     @Log(title = MODULE_NAME, content = "查看成员", operType = BusinessType.DETAIL, isSaveResponseData = false)
     public R<R.PageResult<SysDeptMemberListVo>> pageMemeber(@RequestBody VSysDeptMemberUserQueryVo query) {
@@ -210,9 +352,8 @@ public class SysDeptController extends BaseController {
         return R.ok(pageVo);
     }
 
-
     /**
-     * 添加成员
+     * 添加兼属成员
      *
      * @param deptId  部门标识
      * @param userIds 用户
@@ -226,7 +367,7 @@ public class SysDeptController extends BaseController {
     }
 
     /**
-     * 移出成员
+     * 移出兼属成员
      *
      * @param deptId  部门标识
      * @param userIds 用户
@@ -240,10 +381,10 @@ public class SysDeptController extends BaseController {
     }
 
     /**
-     * 验证用户是否已经在指定的部门兼任某些职务
+     * 验证用户是否已经在指定的部门（兼属或主属）
      *
      * @param deptId  部门标识
-     * @param userIds 用户
+     * @param userIds 用户列表
      * @return 兼属于此部门的用户标识
      */
     @PostMapping("validateUserFollowStatus")

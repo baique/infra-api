@@ -1,6 +1,7 @@
 package tech.hljzj.infrastructure.compatible.vo.role;
 
 import tech.hljzj.infrastructure.domain.SysRole;
+import tech.hljzj.infrastructure.vo.SysRole.SysLoginBindRole;
 import tech.hljzj.infrastructure.vo.SysRole.SysRoleQueryVo;
 
 import java.io.Serializable;
@@ -63,6 +64,15 @@ public class Role implements Serializable {
     }
 
     public static Role from(SysRole sysRole) {
+        Role r = new Role();
+        r.setRoleId(sysRole.getId());
+        r.setRoleName(sysRole.getName());
+        r.setRoleDesc(sysRole.getDesc());
+        r.setRoleValue(sysRole.getKey());
+        r.setCreateTime(new Timestamp(sysRole.getCreateTime().getTime()));
+        return r;
+    }
+    public static Role from(SysLoginBindRole sysRole) {
         Role r = new Role();
         r.setRoleId(sysRole.getId());
         r.setRoleName(sysRole.getName());

@@ -45,8 +45,9 @@ public class AppUserAction extends MController {
     private final SysMenuService sysMenuService;
     private final SysUserManagerDeptService sysUserManagerDeptService;
     private final SysDeptExternalUserService sysDeptExternalUserService;
+    private final SysUserLoginService sysUserLoginService;
 
-    public AppUserAction(SysUserService sysUserService, SysRoleService sysRoleService, SysDeptService sysDeptService, SysMenuService sysMenuService, SysUserManagerDeptService sysUserManagerDeptService, SysDeptExternalUserService sysDeptExternalUserService) {
+    public AppUserAction(SysUserService sysUserService, SysRoleService sysRoleService, SysDeptService sysDeptService, SysMenuService sysMenuService, SysUserManagerDeptService sysUserManagerDeptService, SysDeptExternalUserService sysDeptExternalUserService, SysUserLoginService sysUserLoginService) {
         super();
         this.sysUserService = sysUserService;
         this.sysRoleService = sysRoleService;
@@ -54,6 +55,7 @@ public class AppUserAction extends MController {
         this.sysMenuService = sysMenuService;
         this.sysUserManagerDeptService = sysUserManagerDeptService;
         this.sysDeptExternalUserService = sysDeptExternalUserService;
+        this.sysUserLoginService = sysUserLoginService;
     }
 
     /**
@@ -78,7 +80,7 @@ public class AppUserAction extends MController {
         // 获取用户在某接通二中的权限
         String appId = AppHelper.getLoginApp(request);
         // 获取授权给某个用户的角色和权限列表
-        List<RolePermission> roles = sysUserService.listGrantRoleOfUser(userInfo.getUserId(), appId).stream()
+        List<RolePermission> roles = sysUserLoginService.listGrantRoleOfUserAndDept(userInfo.getUserId(), appId, userInfo.getUserDepartment()).stream()
             .map(f -> {
                 Role r = Role.from(f);
                 return BeanUtil.copyProperties(r, RolePermission.class);

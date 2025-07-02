@@ -37,13 +37,13 @@ public class SysMenuListBaseVo implements Serializable {
      * 菜单标识
      */
     @ExcelProperty(value = "菜单标识")
-    @NotBlank(message = "菜单标识不可为空")
+    @NotBlank
     private String key;
     /**
      * 菜单名称
      */
     @ExcelProperty(value = "菜单名称")
-    @NotBlank(message = "菜单名称不可为空")
+    @NotBlank
     private String name;
     /**
      * 菜单状态

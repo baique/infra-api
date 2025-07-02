@@ -3,8 +3,7 @@
     "serverAddress": "",
     "author": "wa",
     "codeSelector": [
-      "new-admin",
-      "web-new"
+      "new-admin"
     ]
   },
   "genConfig": {
@@ -28,6 +27,7 @@
       "name": "id_",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": false,
       "insert": false,
       "update": false,
@@ -40,7 +40,7 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": false,
+      "keep": true,
       "id": "dLQ94ID-3LrFZIKTNNS-s"
     },
     {
@@ -48,6 +48,7 @@
       "name": "用户标识",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": false,
       "insert": false,
       "update": false,
@@ -68,6 +69,7 @@
       "name": "角色标识",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": false,
       "insert": false,
       "update": false,
@@ -80,7 +82,7 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": false,
+      "keep": true,
       "id": "AIJr4hHJlGzEfvPp1w_JT"
     },
     {
@@ -88,6 +90,7 @@
       "name": "应用标识",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": false,
       "insert": false,
       "update": false,
@@ -100,8 +103,29 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": false,
+      "keep": true,
       "id": "f3fa2pg-3hYcvuQLPrMpQ"
+    },
+    {
+      "key": "expired_time_",
+      "name": "角色过期时间",
+      "type": "Date",
+      "description": null,
+      "typeNumber": false,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 30,
+      "component": "DatePicker",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": false,
+      "id": "LOxU4Z7aHwFtEHNifpZ7x"
     }
   ],
   "serverConfig": {}

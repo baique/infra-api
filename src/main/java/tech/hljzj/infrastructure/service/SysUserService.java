@@ -4,16 +4,17 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import reactor.util.annotation.Nullable;
-import tech.hljzj.infrastructure.domain.SysRole;
 import tech.hljzj.infrastructure.domain.SysUser;
 import tech.hljzj.infrastructure.domain.VSysUser;
 import tech.hljzj.infrastructure.vo.SysRole.GrantAppRoleVo;
+import tech.hljzj.infrastructure.vo.SysRole.SysLoginBindRole;
 import tech.hljzj.infrastructure.vo.SysUser.TokenInfoVo;
 import tech.hljzj.infrastructure.vo.VSysUser.VSysUserQueryVo;
 import tech.hljzj.protect.password.PasswordNotSafeException;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -102,12 +103,28 @@ public interface SysUserService extends IService<SysUser> {
     boolean grantRole(String roleId, List<String> userIds);
 
     /**
+     * 授予用户可访问的角色
+     * @param userId 用户标识
+     * @param roleIds  角色标识
+     * @return 是否授权成功
+     */
+    boolean grantRoles(String userId, List<String> roleIds);
+
+    /**
      * 取消授权用户可访问的角色
      *
      * @param roleId  角色标识
      * @param userIds 用户标识
      */
     boolean unGrantRole(String roleId, List<String> userIds);
+
+    /**
+     * 授予用户可访问的角色
+     * @param userId 用户标识
+     * @param roleIds  角色标识
+     * @return 是否授权成功
+     */
+    boolean unGrantRoles(String userId, List<String> roleIds);
 
     /**
      * 验证某个角色是否分配给了指定的用户
@@ -125,8 +142,16 @@ public interface SysUserService extends IService<SysUser> {
      * @param userId 用户标识
      * @return 应用角色信息
      */
-    List<GrantAppRoleVo> grantAppWithRole(String userId);
+    public List<GrantAppRoleVo> grantAppWithRole(String userId, String appId);
 
+    /**
+     * 修改角色的过期时间
+     * @param userId 用户标识
+     * @param roleId 角色标识
+     * @param expiredTime 过期时间
+     * @return 是否成功修改
+     */
+    public boolean updateGrantRoleExpiredTime(String userId, String roleId, Date expiredTime);
 
     /**
      * 获取某个应用中分配给某个用户的所有角色
@@ -134,7 +159,7 @@ public interface SysUserService extends IService<SysUser> {
      * @param userId 用户标识
      * @param appId  应用标识
      */
-    List<SysRole> listGrantRoleOfUser(String userId, @Nullable String appId);
+    List<SysLoginBindRole> listGrantRoleOfUser(String userId, @Nullable String appId);
 
     /**
      * 查看某用户当前所有在线凭据
@@ -198,4 +223,5 @@ public interface SysUserService extends IService<SysUser> {
      * @param toNextId 后一个元素
      */
     void updateSortData(String id, String toPrevId, String toNextId);
+
 }

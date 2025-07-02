@@ -46,12 +46,12 @@ public abstract class SysUserQueryVo<V extends SysUser> extends SysUserQueryBase
             belongDeptId = StrUtil.blankToDefault(belongDeptId, "0");
             if (Objects.nonNull(belongDeptId) && !Objects.equals("0", belongDeptId)) {
                 List<SysDept> deptIds = SpringUtil.getBean(SysDeptService.class).descendantsAll(belongDeptId);
-                query.and(and -> {
-                    and.or(f -> f.eq("dept_id_", belongDeptId));
-                    if (CollUtil.isNotEmpty(deptIds)) {
-                        and.or(f -> f.in("dept_id_", deptIds.stream().map(SysDept::getId).collect(Collectors.toList())));
-                    }
-                });
+                if (CollUtil.isNotEmpty(deptIds)) {
+                    query.in("dept_id_", deptIds.stream().map(SysDept::getId).collect(Collectors.toList()));
+                } else {
+                    // false condition
+                    query.apply("1 = 2");
+                }
             }
         };
     }
@@ -69,9 +69,9 @@ public abstract class SysUserQueryVo<V extends SysUser> extends SysUserQueryBase
                     hasRole = roleList.stream().map(SysRole::getId).collect(Collectors.toList());
                     SqlParamHelper.InPreparedStatementParam roleParam = SqlParamHelper.toInPs(p -> "{" + hasRole.indexOf(p) + "}", hasRole);
                     query.and(q -> q.exists(
-                            "select user_id_ from sys_user_role_ " +
-                                    "where user_id_ = t.id_ and role_id_ in (" + roleParam.paramPart + ")",
-                            roleParam.paramValue
+                        "select user_id_ from sys_user_role_ " +
+                            "where user_id_ = t.id_ and role_id_ in (" + roleParam.paramPart + ")",
+                        roleParam.paramValue
                     ));
                 }
             }

@@ -219,8 +219,8 @@ public class SysRoleController extends BaseController {
     @PreAuthorize("auth('sys:role:grant')")
     @Log(title = MODULE_NAME, functionName = "查看角色可访问菜单", operType = BusinessType.UPDATE)
     public R<?> grantList(
-        @NotBlank(message = "角色标识不允许为空") String roleId,
-        @NotBlank(message = "应用标识不允许为空") String appId
+        @NotBlank String roleId,
+        @NotBlank String appId
     ) {
         return R.ok(service.listGrantOfRole(roleId, appId));
     }

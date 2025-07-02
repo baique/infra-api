@@ -3,7 +3,7 @@ package tech.hljzj.infrastructure.vo.SysRole;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import tech.hljzj.infrastructure.vo.SysRole.base.*;
+import tech.hljzj.infrastructure.vo.SysRole.base.SysRoleQueryBaseVo;
 
 /**
  * 角色管理 sys_role 
@@ -14,6 +14,6 @@ import tech.hljzj.infrastructure.vo.SysRole.base.*;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class SysRoleQueryVo extends  SysRoleQueryBaseVo {
-  // 在这里可以扩展其他属性
+public class SysRoleQueryVo extends SysRoleQueryBaseVo {
+    // 在这里可以扩展其他属性
 }

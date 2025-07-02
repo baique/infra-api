@@ -32,6 +32,7 @@ import tech.hljzj.infrastructure.domain.SysDictType;
 import tech.hljzj.infrastructure.mapper.SysDictTypeMapper;
 import tech.hljzj.infrastructure.service.SysDictDataService;
 import tech.hljzj.infrastructure.service.SysDictTypeService;
+import tech.hljzj.infrastructure.util.AppScopeHolder;
 import tech.hljzj.infrastructure.vo.SysDictData.SysDictDataListVo;
 import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeClone;
 import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeListVo;
@@ -164,8 +165,10 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
 
         //此处需要判定，如果应用本身提供了字典，那么就使用应用的字典
         //反之，如果应用本身没有提供字典，那么就使用基座服务的字典
-        HttpServletRequest req = ReqUtil.getReq();
-        String appId = req.getHeader("ownerAppId");
+        String appId = AppScopeHolder.getScopeAppIdIfNotInfra();
+        if (StrUtil.isBlank(appId)) {
+            return Collections.emptyMap();
+        }
 
         appId = StrUtil.blankToDefault(appId, AppConst.ID);
 

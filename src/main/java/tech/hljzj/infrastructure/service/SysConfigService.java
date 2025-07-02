@@ -87,5 +87,10 @@ public interface SysConfigService extends IService<SysConfig> {
 
     SysConfig getByKey(String key);
 
+    /**
+     * 获取配置，如果配置不存在，将抛出错误
+     * @param key 配置标识
+     * @return 配置值
+     */
     String getValueByKey(String key);
 }

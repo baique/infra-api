@@ -11,11 +11,11 @@ public class SysDictTypeClone {
     /**
      * 字典标识
      */
-    @NotBlank(message = "字典标识不允许为空")
+    @NotBlank
     private String dictId;
     /**
      * 目标应用标识
      */
-    @NotBlank(message = "应用标识不允许为空")
+    @NotBlank
     private String cloneToAppId;
 }

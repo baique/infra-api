@@ -6,18 +6,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import tech.hljzj.framework.security.an.Anonymous;
 import tech.hljzj.infrastructure.compatible.controller.bsae.MController;
 import tech.hljzj.infrastructure.compatible.util.AppHelper;
 import tech.hljzj.infrastructure.compatible.vo.bean.PageUtil;
 import tech.hljzj.infrastructure.compatible.vo.role.Role;
 import tech.hljzj.infrastructure.compatible.vo.user.userDetails.UserDetails;
-import tech.hljzj.framework.security.an.Anonymous;
 import tech.hljzj.infrastructure.domain.SysRole;
+import tech.hljzj.infrastructure.domain.SysUser;
+import tech.hljzj.infrastructure.service.SysDeptService;
 import tech.hljzj.infrastructure.service.SysRoleService;
+import tech.hljzj.infrastructure.service.SysUserLoginService;
 import tech.hljzj.infrastructure.service.SysUserService;
+import tech.hljzj.infrastructure.vo.SysRole.SysLoginBindRole;
 import tech.hljzj.infrastructure.vo.SysRole.SysRoleQueryVo;
 import tech.hljzj.infrastructure.vo.VSysUser.VSysUserQueryVo;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +35,10 @@ public class AppRoleAction extends MController {
     private SysUserService sysUserService;
     @Autowired
     private SysRoleService sysRoleService;
+    @Autowired
+    private SysDeptService sysDeptService;
+    @Autowired
+    private SysUserLoginService sysUserLoginService;
 
     @PostMapping("/role/hasRoleUsers")
     @ResponseBody
@@ -38,7 +47,7 @@ public class AppRoleAction extends MController {
         VSysUserQueryVo q = new VSysUserQueryVo();
         q.setHasRole(roleList);
         return success(sysUserService.list(q)
-                .stream().map(UserDetails::from).collect(Collectors.toList())
+            .stream().map(UserDetails::from).collect(Collectors.toList())
         );
     }
 
@@ -81,11 +90,19 @@ public class AppRoleAction extends MController {
     @PostMapping("/roleByUser")
     @ResponseBody
     private Object findUserRoles(String userId) {
-        //获取某个用户持有的角色
-        List<SysRole> roles = sysUserService.listGrantRoleOfUser(userId, AppHelper.getLoginApp(request));
+        SysUser u = sysUserService.getById(userId);
+        List<SysLoginBindRole> roles;
+        if (u == null) {
+            roles = Collections.emptyList();
+        } else {
+            //获取某个用户持有的角色
+            roles = sysUserLoginService.listGrantRoleOfUserAndDept(userId, AppHelper.getLoginApp(request), u.getDeptId());
+
+        }
+
         List<Role> roleList = roles.stream()
-                .map(Role::from)
-                .collect(Collectors.toList());
+            .map(Role::from)
+            .collect(Collectors.toList());
         return success(roleList).addProperty("count", roleList.size());
     }
 }

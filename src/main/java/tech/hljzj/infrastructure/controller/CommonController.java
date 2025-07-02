@@ -12,6 +12,9 @@ import tech.hljzj.infrastructure.domain.SysUser;
 import tech.hljzj.infrastructure.util.UserPasswordContext;
 import tech.hljzj.protect.password.PasswordScorer;
 
+/**
+ * 工具接口
+ */
 @RestController
 @RequestMapping("infrastructure/common")
 public class CommonController extends BaseController {
@@ -22,6 +25,12 @@ public class CommonController extends BaseController {
         this.paramEncryption = paramEncryption;
     }
 
+    /**
+     * 检查密码复杂度
+     * @param password 密码
+     * @param user 与密码相关的用户信息
+     * @return 复杂度
+     */
     @PostMapping("password-score")
     public R<Number> passwordScore(String password, @RequestBody SysUser user) {
         String decrypt = paramEncryption.decrypt(password);

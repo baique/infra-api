@@ -2,12 +2,11 @@ package tech.hljzj.infrastructure.vo.SysMenu.base;
 
 import lombok.Getter;
 import lombok.Setter;
+import tech.hljzj.infrastructure.domain.SysMenu;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serial;
 import java.io.Serializable;
-import java.lang.*;
-import java.util.Date;
-import tech.hljzj.infrastructure.domain.SysMenu;
 
 /**
  * 菜单管理 sys_menu 
@@ -23,18 +22,22 @@ public class SysMenuNewBaseVo implements Serializable {
     /**
      * 所属应用标识
      */
+    @NotBlank
     private String ownerAppId;
     /**
      * 菜单标识
      */
+    @NotBlank
     private String key;
     /**
      * 菜单名称
      */
+    @NotBlank
     private String name;
     /**
      * 菜单状态
      */
+    @NotBlank
     private String status;
     /**
      * 菜单描述
@@ -47,10 +50,12 @@ public class SysMenuNewBaseVo implements Serializable {
     /**
      * 显示状态
      */
+    @NotBlank
     private String visible;
     /**
      * 菜单类型
      */
+    @NotBlank
     private String menuType;
     /**
      * 访问路径
@@ -79,14 +84,15 @@ public class SysMenuNewBaseVo implements Serializable {
     /**
      * 上级权限标识
      */
+    @NotBlank
     private String parentId;
 
     /**
      * 转换为实际的数据实体
      */
-    public SysMenu toDto(){
+    public SysMenu toDto() {
         SysMenu dto = new SysMenu();
-          
+
         dto.setOwnerAppId(this.getOwnerAppId());
         dto.setKey(this.getKey());
         dto.setName(this.getName());

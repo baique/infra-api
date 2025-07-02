@@ -3,6 +3,7 @@ package tech.hljzj.infrastructure.util;
 import cn.hutool.core.util.StrUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.security.core.parameters.P;
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.framework.util.web.ReqUtil;
@@ -48,8 +49,22 @@ public class AppScopeHolder {
         return ownerAppId.toString();
     }
 
+    /**
+     * 获取请求方ID并且如果不是基座服务本身就返回
+     * @return 结果
+     */
+    public static String getScopeAppIdIfNotInfra() {
+        String id = getScopeAppId();
+        if (StrUtil.isBlank(id)) {
+            return null;
+        }
+        if (AppConst.ID.equals(id)) {
+            return null;
+        }
+        return id;
+    }
 
-    public static String getRawAppToken(){
+    public static String getRawAppToken() {
         HttpServletRequest req = ReqUtil.getReq();
         if (req == null) {
             return null;

@@ -2,7 +2,7 @@ package tech.hljzj.infrastructure.vo.SysRole;
 
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.infrastructure.vo.SysRole.base.*;
+import tech.hljzj.infrastructure.vo.SysRole.base.SysRoleListBaseVo;
 
 /**
  * 角色管理 sys_role 
@@ -12,6 +12,6 @@ import tech.hljzj.infrastructure.vo.SysRole.base.*;
  */
 @Getter
 @Setter
-public class SysRoleListVo extends  SysRoleListBaseVo {
-  // 在这里可以扩展其他属性
+public class SysRoleListVo extends SysRoleListBaseVo {
+    // 在这里可以扩展其他属性
 }

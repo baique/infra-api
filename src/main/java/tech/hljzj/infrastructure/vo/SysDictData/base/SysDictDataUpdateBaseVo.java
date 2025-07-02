@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.infrastructure.domain.SysDictData;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
@@ -23,14 +24,17 @@ public class SysDictDataUpdateBaseVo implements Serializable {
     /**
      * bigint
      */
+    @NotBlank
     private String id;
     /**
      * 字典标识
      */
+    @NotBlank
     private String key;
     /**
      * 字典名称
      */
+    @NotBlank
     private String name;
     /**
      * 字典项值
@@ -47,6 +51,7 @@ public class SysDictDataUpdateBaseVo implements Serializable {
     /**
      * 字典状态
      */
+    @NotBlank
     private String status;
     /**
      * 选项说明

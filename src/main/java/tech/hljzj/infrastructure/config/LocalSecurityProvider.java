@@ -20,10 +20,14 @@ import tech.hljzj.framework.security.bean.UserInfo;
 import tech.hljzj.framework.util.password.SMUtil;
 import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.infrastructure.code.AppConst;
-import tech.hljzj.infrastructure.domain.*;
+import tech.hljzj.infrastructure.domain.SysApp;
+import tech.hljzj.infrastructure.domain.SysMenu;
+import tech.hljzj.infrastructure.domain.SysUser;
+import tech.hljzj.infrastructure.domain.VSysUser;
 import tech.hljzj.infrastructure.service.*;
 import tech.hljzj.infrastructure.util.AppScopeHolder;
 import tech.hljzj.infrastructure.vo.SysMenu.SysMenuQueryVo;
+import tech.hljzj.infrastructure.vo.SysRole.SysLoginBindRole;
 import tech.hljzj.protect.password.PasswordNotSafeException;
 
 import java.util.*;
@@ -49,6 +53,8 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
     private SysConfigService sysConfigService;
     @Autowired
     private SysUserLockService sysUserLockService;
+    @Autowired
+    private SysUserLoginService sysUserLoginService;
 
 
     @Override
@@ -133,7 +139,7 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
         AppLoginUserInfo loginUser = new AppLoginUserInfo();
         loginUser.setEnabled(Objects.equals(AppConst.YES, principal.getStatus()));
         loginUser.setLock(Objects.equals(AppConst.YES, principal.getAccountLock()));
-        List<SysRole> sysRoles = sysUserService.listGrantRoleOfUser(principal.getId(), scopeAppId);
+        List<SysLoginBindRole> sysRoles = sysUserLoginService.listGrantRoleOfUserAndDept(principal.getId(), scopeAppId, principal.getDeptId());
         Map<String, RoleInfo> roleMapping = sysRoles.stream()
             .map(f -> {
                 RoleInfo roleInfo = new RoleInfo();
@@ -142,6 +148,7 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
                 roleInfo.setName(f.getName());
                 roleInfo.setMainHomePage(f.getMainPagePath());
                 roleInfo.setPriority(f.getPriority());
+                roleInfo.setSource(f.getSource());
                 return roleInfo;
             }).collect(Collectors.toMap(RoleInfo::getKey, f -> f));
 
@@ -157,7 +164,7 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
             sysMenus = sysMenuService.list(q);
         } else {
             sysMenus = sysRoleService.listGrantOfRoles(sysRoles.stream()
-                .map(SysRole::getId)
+                .map(SysLoginBindRole::getId)
                 .collect(Collectors.toList()), scopeAppId, f -> f);
         }
 

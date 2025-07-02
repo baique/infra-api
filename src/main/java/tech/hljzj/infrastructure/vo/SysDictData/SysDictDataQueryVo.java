@@ -21,8 +21,8 @@ public class SysDictDataQueryVo extends SysDictDataQueryBaseVo<SysDictData> {
     @Override
     public Consumer<LambdaQueryWrapper<? extends SysDictData>> defaultSortBy() {
         return (w) -> w.orderByAsc(SysDictData::getSort)
-                .orderByDesc(SysDictData::getCreateTime)
-                .orderByDesc(SysDictData::getId);
+            .orderByDesc(SysDictData::getCreateTime)
+            .orderByDesc(SysDictData::getId);
     }
 
     // 在这里可以扩展其他属性

@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * sys_user_role_ sys_user_role_
@@ -43,11 +44,17 @@ public class SysUserRole implements Serializable {
      */
     @TableField(value = "app_id_")
     private String appId;
+    /**
+     * 角色过期时间
+     */
+    @TableField(value = "expired_time_")
+    private Date expiredTime;
 
 
     /**
      * 从新的实体中更新属性
      */
     public void updateForm(SysUserRole entity) {
+        this.setExpiredTime(entity.getExpiredTime());
     }
 }

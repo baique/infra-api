@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +28,10 @@ import tech.hljzj.infrastructure.vo.VSysUser.VSysUserQueryVo;
 import tech.hljzj.protect.password.PasswordNotSafeException;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotBlank;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -112,7 +111,7 @@ public class SysUserController extends BaseController {
     }
 
     /**
-     * 用户锁定状态调整
+     * 修改用户锁定状态
      *
      * @param userId      用户标识
      * @param accountLock 锁定状态
@@ -159,7 +158,6 @@ public class SysUserController extends BaseController {
      * 导出数据
      *
      * @param query 数据查询
-     * @return 导出结果
      */
     @PostMapping("/export")
     @PreAuthorize("auth('sys:user:export')")
@@ -250,22 +248,40 @@ public class SysUserController extends BaseController {
 
 
     /**
-     * 获取用户可访问的所有应用和角色
+     * 获取用户可访问的角色
      *
      * @param userId 用户标识
+     * @param appId  应用标识（可选，不传时获取所有应用下数据）
      * @return 信息
      */
     @PostMapping("/grantUserAppWithRole")
     @Log(title = MODULE_NAME, functionName = "查看用户可访问应用和角色", operType = BusinessType.DETAIL)
-    public R<List<GrantAppRoleVo>> grantUserAppWithRole(String userId) {
-        return R.ok(service.grantAppWithRole(userId));
+    public R<List<GrantAppRoleVo>> grantUserAppWithRole(@NotBlank String userId, String appId) {
+        return R.ok(service.grantAppWithRole(userId, appId));
+    }
+
+
+    /**
+     * 授权某个角色给用户
+     *
+     * @param roleId  角色标识
+     * @param userId 用户
+     * @param expiredTime 过期时间，null表示不限
+     * @return 授权动作是否成功
+     */
+    @PostMapping("updateGrantRoleExpiredTime")
+    @Log(title = MODULE_NAME, functionName = "设置已分配角色的过期时间", operType = BusinessType.UPDATE)
+    public R<Boolean> updateGrantRoleExpiredTime(@NotBlank String userId,
+                                                 @NotBlank String roleId,
+                                                 @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date expiredTime) {
+        return R.ok(service.updateGrantRoleExpiredTime(userId, roleId, expiredTime));
     }
 
     /**
      * 授权某个角色给用户
      *
      * @param roleId  角色标识
-     * @param userIds 用户
+     * @param userIds 用户列表
      * @return 授权动作是否成功
      */
     @PostMapping("grantRoleToUsers")
@@ -278,7 +294,7 @@ public class SysUserController extends BaseController {
      * 取消授权某个角色给用户
      *
      * @param roleId  角色标识
-     * @param userIds 用户
+     * @param userIds 用户列表
      * @return 取消授权动作是否成功
      */
     @PostMapping("revokeRoleFromUsers")
@@ -286,6 +302,34 @@ public class SysUserController extends BaseController {
     public R<Boolean> revokeRoleFromUsers(String roleId, @RequestBody List<String> userIds) {
         return R.ok(service.unGrantRole(roleId, userIds));
     }
+
+    /**
+     * 授权某些角色给用户
+     *
+     * @param userId  用户标识
+     * @param roleIds 角色列表
+     * @return 动作是否成功
+     */
+    @PostMapping("grantRolesToUser")
+    @Log(title = MODULE_NAME, functionName = "分配用户可用角色", operType = BusinessType.UPDATE)
+    public R<Boolean> grantRolesToUser(String userId, @RequestBody List<String> roleIds) {
+        return R.ok(service.grantRoles(userId, roleIds));
+    }
+
+
+    /**
+     * 取消授权某些角色给用户
+     *
+     * @param userId  用户标识
+     * @param roleIds 角色列表
+     * @return 动作是否成功
+     */
+    @PostMapping("revokeRolesToUser")
+    @Log(title = MODULE_NAME, functionName = "移除用户可用角色", operType = BusinessType.UPDATE)
+    public R<Boolean> revokeRolesToUser(String userId, @RequestBody List<String> roleIds) {
+        return R.ok(service.unGrantRoles(userId, roleIds));
+    }
+
 
     /**
      * 获取用户当前所有有效会话
@@ -352,7 +396,7 @@ public class SysUserController extends BaseController {
     }
 
     /**
-     * 获取用户的管辖组织
+     * 获取用户的管辖组织列表
      *
      * @param userId 用户标识
      */
@@ -386,7 +430,7 @@ public class SysUserController extends BaseController {
     }
 
     /**
-     * 修改密码
+     * 修改密码（使用ID重置）
      *
      * @param userId      用户标识
      * @param oldPassword 原密码
@@ -403,7 +447,7 @@ public class SysUserController extends BaseController {
     }
 
     /**
-     * 修改密码
+     * 修改密码（使用账号重置）
      *
      * @param username    用户账号
      * @param oldPassword 原密码
@@ -421,7 +465,7 @@ public class SysUserController extends BaseController {
     }
 
     /**
-     * 修改数据
+     * 调整用户排序
      *
      * @param rowId     当前行ID
      * @param prevRowId 目标位置上一行ID

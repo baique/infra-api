@@ -9,6 +9,8 @@ import java.lang.*;
 import java.util.Date;
 import tech.hljzj.infrastructure.domain.SysDept;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 组织机构 sys_dept_ 
  * 交互实体 用于新增
@@ -23,14 +25,17 @@ public class SysDeptNewBaseVo implements Serializable {
     /**
      * 上级组织
      */
+    @NotBlank
     private String parentId;
     /**
      * 组织标识
      */
+    @NotBlank
     private String key;
     /**
      * 组织名称
      */
+    @NotBlank
     private String name;
     /**
      * 组织别名
@@ -67,6 +72,7 @@ public class SysDeptNewBaseVo implements Serializable {
     /**
      * 是否启用
      */
+    @NotBlank
     private String enable;
     /**
      * 允许用户加入

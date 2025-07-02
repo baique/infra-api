@@ -5,7 +5,23 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
+    <!--    字典功能调整为多租户模式-->
     <changeSet id="2025-6-26-1" author="wa">
         <sqlFile relativeToChangelogFile="true" path="sql/2025-6-26-1.sql"/>
     </changeSet>
+
+    <!--    角色授权增加时间限制-->
+    <changeSet id="2025-7-1-1" author="wa">
+        <sqlFile relativeToChangelogFile="true" path="sql/2025-7-1-1.sql"/>
+    </changeSet>
+    <!--    增加部门级授权功能-->
+    <changeSet id="2025-7-1-2" author="wa">
+        <sqlFile relativeToChangelogFile="true" path="sql/2025-7-1-2.sql"/>
+    </changeSet>
+
+    <!--    增加新的配置项-->
+    <changeSet id="2025-7-2-1" author="wa">
+        <sqlFile relativeToChangelogFile="true" path="sql/2025-7-2-1.sql"/>
+    </changeSet>
+
 </databaseChangeLog>
