@@ -37,7 +37,7 @@ public class SysUser extends BizBaseEntity implements ISort {
     @TableField(value = "dept_id_")
     private String deptId;
     /**
-     * 部门内身份
+     * 岗位
      */
     @TableField(value = "dept_identity_")
     private String deptIdentity;
@@ -62,7 +62,7 @@ public class SysUser extends BizBaseEntity implements ISort {
     @TableField(value = "password_policy_")
     private String passwordPolicy;
     /**
-     * 现有密码过期时间
+     * 密码过期时间
      */
     @TableField(value = "password_expired_")
     private Date passwordExpired;

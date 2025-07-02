@@ -26,7 +26,7 @@ public class SysUserNewBaseVo implements Serializable {
     @NotBlank
     private String deptId;
     /**
-     * 部门内身份
+     * 岗位
      */
     private String deptIdentity;
     /**

@@ -91,16 +91,16 @@ public class SysConfigController extends BaseController {
     /**
      * 应用排序
      *
-     * @param id       标识
-     * @param toPrevId 前一个元素的标识
-     * @param toNextId 后一个元素的标识
+     * @param rowId       标识
+     * @param prevRowId 前一个元素的标识
+     * @param nextRowId 后一个元素的标识
      * @return 操作结果
      */
 
     @Log(title = MODULE_NAME, operType = BusinessType.UPDATE, functionName = "排序")
     @PostMapping("/sort")
-    public R<Void> applySort(String id, String toPrevId, String toNextId) {
-        this.service.applySort(id, toPrevId, toNextId);
+    public R<Void> applySort(String rowId, String prevRowId, String nextRowId) {
+        this.service.applySort(rowId, prevRowId, nextRowId);
         return R.ok();
     }
 

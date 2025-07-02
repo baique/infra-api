@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.hljzj.infrastructure.mapper.SysDeptIdentityMapper">
+
+	<resultMap type="SysDeptIdentity" id="SysDeptIdentityResult">
+		<id     property="id"        column="id_"       />
+		<result property="deptId"        column="dept_id_"     />
+		<result property="key"        column="key_"     />
+		<result property="name"        column="name_"     />
+		<result property="sort"        column="sort_"     />
+		<result property="desc"        column="desc_"     />
+		<result property="createBy"      column="create_by"     />
+		<result property="createTime"    column="create_time"   />
+		<result property="updateBy"      column="update_by"     />
+		<result property="updateTime"    column="update_time"   />
+		<result property="remark"        column="remark"        />
+	</resultMap>
+	
+	<sql id="selectAllField">
+        select 
+		    id_,
+		    dept_id_,
+		    key_,
+		    name_,
+		    sort_,
+		    desc_,
+        create_by,
+        create_time,
+        update_by,
+        update_time,
+        remark
+		    from sys_dept_identity_
+    </sql>
+</mapper>

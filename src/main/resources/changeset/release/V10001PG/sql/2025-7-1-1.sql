@@ -15,3 +15,22 @@ CREATE TABLE IF NOT EXISTS `sys_dept_role_`  (
 CREATE INDEX idx_dept_role_dept_id ON sys_dept_role_ (dept_id_);
 CREATE INDEX idx_dept_role_role_id ON sys_dept_role_ (role_id_);
 CREATE INDEX idx_dept_role_app_id ON sys_dept_role_ (app_id_);
+
+DROP TABLE IF EXISTS sys_dept_identity_;
+CREATE TABLE sys_dept_identity_ (
+    id_       CHAR(32) PRIMARY KEY,
+    dept_id_  CHAR(128),
+    key_      VARCHAR(100),
+    name_     VARCHAR(255),
+    sort_     INTEGER,
+    desc_     VARCHAR(2000)
+);
+
+COMMENT ON COLUMN sys_dept_identity_.dept_id_ IS '部门标识';
+COMMENT ON COLUMN sys_dept_identity_.key_ IS '身份标识';
+COMMENT ON COLUMN sys_dept_identity_.name_ IS '身份说明';
+COMMENT ON COLUMN sys_dept_identity_.sort_ IS '岗位顺序';
+COMMENT ON COLUMN sys_dept_identity_.desc_ IS '岗位描述';
+
+CREATE INDEX idx_dept_identity_dept_id ON sys_dept_identity_ (dept_id_);
+CREATE INDEX idx_dept_identity_key ON sys_dept_identity_ (key_);

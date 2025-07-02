@@ -32,9 +32,9 @@ public class SysUserListBaseVo implements Serializable {
     @ExcelProperty(value = "所属部门")
     private String deptId;
     /**
-     * 部门内身份
+     * 岗位
      */
-    @ExcelProperty(value = "部门内身份")
+    @ExcelProperty(value = "岗位")
     private String deptIdentity;
     /**
      * 账号

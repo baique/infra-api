@@ -23,5 +23,9 @@
     <changeSet id="2025-7-2-1" author="wa">
         <sqlFile relativeToChangelogFile="true" path="sql/2025-7-2-1.sql"/>
     </changeSet>
+    <!--    增加岗位信息维护-->
+    <changeSet id="2025-7-2-2" author="wa">
+        <sqlFile relativeToChangelogFile="true" path="sql/2025-7-2-2.sql"/>
+    </changeSet>
 
 </databaseChangeLog>

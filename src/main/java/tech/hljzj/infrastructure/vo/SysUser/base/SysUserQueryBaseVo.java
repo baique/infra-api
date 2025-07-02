@@ -37,11 +37,9 @@ public class SysUserQueryBaseVo<T extends SysUser> extends PageDomain implements
     private String deptId, deptIdNot, deptIdLike, deptIdPrefix, deptIdSuffix;
     private List<String> deptIdIn, deptIdNotIn;
 
-    /**
-     * 部门内身份
-     */
-    private String deptIdentity, deptIdentityNot, deptIdentityLike, deptIdentityPrefix, deptIdentitySuffix;
-    private List<String> deptIdentityIn, deptIdentityNotIn;
+    /** 岗位     */
+    private String deptIdentity,deptIdentityNot,deptIdentityLike,deptIdentityPrefix,deptIdentitySuffix;
+    private List<String> deptIdentityIn,deptIdentityNotIn;
 
     /**
      * 账号

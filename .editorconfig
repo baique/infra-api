@@ -1,6 +1,4 @@
 # 顶级配置
-root = true
-
 [*]
 charset = utf-8
 
