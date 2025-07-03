@@ -1,5 +1,6 @@
 package tech.hljzj.infrastructure.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -287,7 +288,7 @@ public class SysDeptController extends BaseController {
     }
 
     /**
-     * 查询数据
+     * 查询数据全部数据
      *
      * @param query 数据查询
      * @return 查询结果
@@ -329,6 +330,34 @@ public class SysDeptController extends BaseController {
     @PostMapping("/ancestors")
     public R<SysDeptAncestors.Vo> ancestors(String deptId) {
         SysDeptAncestors deptAncestors = service.ancestorNodes(deptId);
+        return R.ok(deptAncestors.toVo());
+    }
+
+    /**
+     * 通过部门编码获取某个部门所有后代部门
+     * @param deptKey 部门编码
+     * @return 后代部门
+     */
+    @PostMapping("/descendantsByKey")
+    public R<List<SysDeptListVo>> descendantsByKey(String deptKey) {
+        SysDept dept = service.getOne(Wrappers.lambdaQuery(SysDept.class).eq(SysDept::getKey, deptKey));
+        return R.ok(
+            service.descendantsAll(dept.getId())
+                .stream()
+                .map(f -> new SysDeptListVo().<SysDeptListVo>fromDto(f))
+                .collect(Collectors.toList())
+        );
+    }
+
+    /**
+     * 通过部门编码获取某个部门所有先祖部门
+     * @param deptKey 部门编码
+     * @return 后代部门
+     */
+    @PostMapping("/ancestorsByKey")
+    public R<SysDeptAncestors.Vo> ancestorsByKey(String deptKey) {
+        SysDept dept = service.getOne(Wrappers.lambdaQuery(SysDept.class).eq(SysDept::getKey, deptKey));
+        SysDeptAncestors deptAncestors = service.ancestorNodes(dept.getId());
         return R.ok(deptAncestors.toVo());
     }
 

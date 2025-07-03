@@ -2,14 +2,11 @@ package tech.hljzj.infrastructure.vo.SysApp.base;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serial;
-import java.io.Serializable;
-import java.lang.*;
-import java.util.Date;
 import tech.hljzj.infrastructure.domain.SysApp;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * 应用管理 sys_app_ 
@@ -59,13 +56,21 @@ public class SysAppUpdateBaseVo implements Serializable {
      * 排序编号
      */
     private Integer sort;
+    /**
+     * 是否校验授信IP
+     */
+    private String verifyIp;
+    /**
+     * 信任IP
+     */
+    private String trustIp;
 
     /**
      * 转换为实际的数据实体
      */
     public SysApp toDto(){
         SysApp dto = new SysApp();
-          
+
         dto.setId(this.getId());
         dto.setKey(this.getKey());
         dto.setName(this.getName());
@@ -74,6 +79,8 @@ public class SysAppUpdateBaseVo implements Serializable {
         dto.setStatus(this.getStatus());
         dto.setDesc(this.getDesc());
         dto.setSort(this.getSort());
+        dto.setVerifyIp(this.getVerifyIp());
+        dto.setTrustIp(this.getTrustIp());
 
         return dto;
     }

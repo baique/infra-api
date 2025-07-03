@@ -8,7 +8,7 @@
     ]
   },
   "genConfig": {
-    "perm": "sys:app",
+    "perm": "sys_app_",
     "key": "sys_app_",
     "name": "应用管理",
     "packageName": "tech.hljzj.infrastructure",
@@ -17,16 +17,16 @@
     "primaryKeyColumn": "id_",
     "dateTime": "",
     "params": {
-      "extendBizBaseEntity": "biz"
-    },
-    "used": true
+      "extendBizBaseEntity": ""
+    }
   },
   "genColumn": [
     {
       "key": "id_",
-      "name": "bigint",
+      "name": "id_",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": false,
       "insert": false,
       "update": false,
@@ -39,14 +39,14 @@
         "param": {}
       },
       "hasDataSource": false,
-      "id": "BkpfEpObmtVGqs_-z9lS7",
-      "keep": true
+      "id": "13aajKN4AQBVboDfa214Q"
     },
     {
       "key": "key_",
       "name": "应用标识",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -59,14 +59,14 @@
         "param": {}
       },
       "hasDataSource": false,
-      "id": "Jv8vV3gyRcbwUW7cXPNho",
-      "keep": true
+      "id": "frC6ShLkG0xYiwciGSTq_"
     },
     {
       "key": "name_",
       "name": "应用名称",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -79,14 +79,14 @@
         "param": {}
       },
       "hasDataSource": false,
-      "id": "_GQQG3vwBjW_iMgI1GFj3",
-      "keep": true
+      "id": "I8ZwT_SFUNfxvlqMS2tbR"
     },
     {
       "key": "main_page_path_",
       "name": "主页地址",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -99,14 +99,14 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true,
-      "id": "_XsS3WwRBrwswBX00ux2K"
+      "id": "m_vp2Ct0esHgpuIwqn8I9"
     },
     {
       "key": "secret_",
       "name": "应用密钥",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -119,14 +119,14 @@
         "param": {}
       },
       "hasDataSource": false,
-      "id": "LkZvru_QCuIuZg77RpXho",
-      "keep": true
+      "id": "sjj3DOse4tcqBBNfhc49z"
     },
     {
       "key": "status_",
       "name": "应用状态",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -141,14 +141,14 @@
         }
       },
       "hasDataSource": false,
-      "id": "kbsb_Yo0aEgBpcednt8Gq",
-      "keep": true
+      "id": "gVIktnVq-grdK3fSgm1W-"
     },
     {
       "key": "desc_",
       "name": "应用描述",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -161,19 +161,19 @@
         "param": {}
       },
       "hasDataSource": false,
-      "id": "1V9_Tj3j65aZyeTvgbJRA",
-      "keep": true
+      "id": "KeEEC-X1USem0avTj_0wz"
     },
     {
       "key": "sort_",
       "name": "排序编号",
       "type": "Integer",
       "description": null,
+      "typeNumber": true,
       "list": true,
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 10,
+      "maxLength": 2147483647,
       "component": "InputNumber",
       "rule": [],
       "dataSource": {
@@ -181,14 +181,14 @@
         "param": {}
       },
       "hasDataSource": false,
-      "id": "cHlEgBB7NjHByVKHbN2Vl",
-      "keep": true
+      "id": "Da1C1IWOYbhxJDsbYMJPm"
     },
     {
       "key": "create_by_",
       "name": "创建人姓名",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -201,34 +201,34 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true,
-      "id": "NDefxcZge6X_7VsJZS80j"
+      "id": "oEPp-mLGA7yD8WPk_vk_6"
     },
     {
       "key": "create_time_",
       "name": "创建时间",
       "type": "Date",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 19,
-      "component": "Input",
+      "maxLength": 30,
+      "component": "DatePicker",
       "rule": [],
       "dataSource": {
         "type": "none",
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true,
-      "id": "0RTE-pE22x4JMCGDafWby"
+      "id": "jRZYFMDxYTJgCdgfA0h0i"
     },
     {
       "key": "update_by_",
       "name": "修改人姓名",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -241,34 +241,34 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true,
-      "id": "647tennRJW5klV7c6ymhx"
+      "id": "2zBNlY_v6_GsfZj-QXLwA"
     },
     {
       "key": "update_time_",
       "name": "修改时间",
       "type": "Date",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 19,
-      "component": "Input",
+      "maxLength": 30,
+      "component": "DatePicker",
       "rule": [],
       "dataSource": {
         "type": "none",
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true,
-      "id": "PpwbiBsuzYfslHy6hs7Pl"
+      "id": "caYw43IptYI48uQxYgZu7"
     },
     {
       "key": "owner_user_id_",
       "name": "所属用户标识",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -281,14 +281,14 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true,
-      "id": "aNNAi6pp7YlWsgZYeTirU"
+      "id": "uQ0Z_AUVHl9KdGzF4GAeo"
     },
     {
       "key": "owner_user_account_",
       "name": "所属用户账号",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -301,14 +301,14 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true,
-      "id": "W5TG-rs1myH7k_u_nVXAX"
+      "id": "rU0YfqUGNTTfRgngoeBGk"
     },
     {
       "key": "owner_dept_id_",
       "name": "所属部门标识",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -321,14 +321,14 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true,
-      "id": "GtdtWYxko7HiM6gAuKZur"
+      "id": "08hJl-3bBucczgP_gQCfr"
     },
     {
       "key": "owner_dept_code_",
       "name": "所属部门编码",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -341,14 +341,14 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true,
-      "id": "misPh6bPvbs7c19an4Eml"
+      "id": "vendjYH29f2ce3O8FLhKR"
     },
     {
       "key": "owner_dept_name_",
       "name": "所属部门名称",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -361,8 +361,49 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true,
-      "id": "x2uK8tDpdvwK47eYrBjnf"
+      "id": "F6Hv2TjGk3apBa5UG7hB2"
+    },
+    {
+      "key": "verify_ip_",
+      "name": "是否校验授信IP",
+      "type": "String",
+      "description": null,
+      "typeNumber": false,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1,
+      "component": "RadioGroup",
+      "rule": [],
+      "dataSource": {
+        "type": "dict",
+        "param": {
+          "key": "yes_no"
+        }
+      },
+      "hasDataSource": false,
+      "id": "OZlYHTE9cuynMIJFiaMvL"
+    },
+    {
+      "key": "trust_ip_",
+      "name": "信任IP",
+      "type": "String",
+      "description": null,
+      "typeNumber": false,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 65535,
+      "component": "InputTextArea",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "id": "eRf2TBzzX4C7kXstOMMqL"
     }
   ],
   "serverConfig": {}

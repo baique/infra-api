@@ -1,5 +1,6 @@
 package tech.hljzj.infrastructure.interceptor;
 
+import cn.hutool.core.net.Ipv4Util;
 import cn.hutool.core.util.StrUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import tech.hljzj.framework.bean.R;
 import tech.hljzj.framework.interceptor.BaseInterceptor;
 import tech.hljzj.framework.security.bean.LoginUser;
+import tech.hljzj.framework.security.bean.UserInfo;
 import tech.hljzj.framework.util.web.AuthUtil;
 import tech.hljzj.framework.util.web.ReqUtil;
 import tech.hljzj.infrastructure.config.AppLoginUserInfo;
@@ -53,20 +55,43 @@ public class AppInterceptor implements BaseInterceptor {
             return true;
         }
         String id = AppScopeHolder.requiredScopeAppId();
-        SysApp sysApp = sysAppService.getById(id);
+        SysApp sysApp = sysAppService.entityGet(id);
 
         try {
             JWT.require(Algorithm.HMAC384(sysApp.getSecret())).build().verify(token);
-            if (AuthUtil.isLogin()) {
-                // 验证是否单点登录请求
-                if (!isCrossSystemLogin(request)) {
-                    LoginUser loginUser = AuthUtil.getLoginUser();
-                    AppLoginUserInfo userInfo = (AppLoginUserInfo) loginUser.getUserInfo();
-                    String s = userInfo.getLoginAppId();
-                    if (!StrUtil.equals(s, id)) {
-                        ReqUtil.writeResponse(response, R.fail().setMsg("非法的请求:用户会话与登录凭据不匹配"));
-                        return false;
+
+            if (StrUtil.isNotBlank(sysApp.getTrustIp())) {
+                // 检查访问IP
+                String ipAddress = ReqUtil.getIP(request);
+
+                if (StrUtil.startWithIgnoreCase(ipAddress, "0:0:0:0:0:0:0:1")) {
+                    return true;
+                }
+
+                String[] allowIps = sysApp.getTrustIp().split("\n");
+                for (String ip : allowIps) {
+                    ip = StrUtil.trim(ip);
+                    if (Ipv4Util.matches(ip, ipAddress)) {
+                        return true;
                     }
+                }
+                ReqUtil.writeResponse(response, R.fail().setMsg("非法的请求:" + ipAddress + "不被信任"));
+                return false;
+            }
+
+            if (!AuthUtil.isLogin()) {
+                return true;
+            }
+            if (isCrossSystemLogin(request)) {
+                return true;
+            }
+            LoginUser loginUser = AuthUtil.getLoginUser();
+            UserInfo info = loginUser.getUserInfo();
+            if (info instanceof AppLoginUserInfo userInfo) {
+                String s = userInfo.getLoginAppId();
+                if (!StrUtil.equals(s, id)) {
+                    ReqUtil.writeResponse(response, R.fail().setMsg("非法的请求:用户会话与登录凭据不匹配"));
+                    return false;
                 }
             }
             return true;

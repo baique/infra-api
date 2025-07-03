@@ -58,6 +58,16 @@ public class SysAppListBaseVo implements Serializable {
      * 排序编号
      */
     private Integer sort;
+    /**
+     * 是否校验授信IP
+     */
+    @ExcelProperty(value = "是否校验授信IP")
+    private String verifyIp;
+        /**
+     * 信任IP
+     */
+    @ExcelProperty(value = "信任IP")
+    private String trustIp;
 
     public <T extends SysAppListBaseVo> T fromDto(SysApp dto) {
         this.setId(dto.getId());
@@ -68,6 +78,8 @@ public class SysAppListBaseVo implements Serializable {
         this.setStatus(dto.getStatus());
         this.setDesc(dto.getDesc());
         this.setSort(dto.getSort());
+        this.setVerifyIp(dto.getVerifyIp());
+        this.setTrustIp(dto.getTrustIp());
         //noinspection unchecked
         return (T) this;
     }
@@ -82,6 +94,8 @@ public class SysAppListBaseVo implements Serializable {
         dto.setStatus(this.getStatus());
         dto.setDesc(this.getDesc());
         dto.setSort(this.getSort());
+        dto.setVerifyIp(this.getVerifyIp());
+        dto.setTrustIp(this.getTrustIp());
         return dto;
     }
 }

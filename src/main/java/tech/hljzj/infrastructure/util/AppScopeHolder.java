@@ -3,7 +3,6 @@ package tech.hljzj.infrastructure.util;
 import cn.hutool.core.util.StrUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.springframework.security.core.parameters.P;
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.framework.util.web.ReqUtil;
@@ -50,6 +49,28 @@ public class AppScopeHolder {
     }
 
     /**
+     * 获取当前请求所限定的应用范围
+     *
+     * @return 应用范围
+     */
+    public static String getScopeAppId(String appToken) {
+        if (StrUtil.isNotBlank(appToken)) {
+            String appId;
+            try {
+                DecodedJWT decode = JWT.decode(appToken);
+                appId = decode.getKeyId();
+            } catch (Exception e) {
+                throw UserException.defaultError("应用标识解析异常");
+            }
+            setScopeAppId(appId);
+            return appId;
+        } else {
+            return null;
+        }
+
+    }
+
+    /**
      * 获取请求方ID并且如果不是基座服务本身就返回
      * @return 结果
      */
@@ -62,14 +83,6 @@ public class AppScopeHolder {
             return null;
         }
         return id;
-    }
-
-    public static String getRawAppToken() {
-        HttpServletRequest req = ReqUtil.getReq();
-        if (req == null) {
-            return null;
-        }
-        return req.getHeader(AK_HEADER_NAME);
     }
 
     /**
@@ -107,4 +120,11 @@ public class AppScopeHolder {
         return StrUtil.blankToDefault(getScopeAppId(), AppConst.ID);
     }
 
+    public static String getRawAppToken() {
+        HttpServletRequest req = ReqUtil.getReq();
+        if (req == null) {
+            return null;
+        }
+        return req.getHeader(AK_HEADER_NAME);
+    }
 }

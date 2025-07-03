@@ -72,6 +72,13 @@ public class SysAppQueryBaseVo<T extends SysApp> extends PageDomain implements S
     private Integer sort, sortNot, sortGt, sortGte, sortLt, sortLte;
     private List<Integer> sortIn, sortNotIn;
 
+    /** 是否校验授信IP     */
+    private String verifyIp,verifyIpNot,verifyIpLike,verifyIpPrefix,verifyIpSuffix;
+    private List<String> verifyIpIn,verifyIpNotIn;
+
+    /** 信任IP     */
+    private String trustIp,trustIpNot,trustIpLike,trustIpPrefix,trustIpSuffix;
+    private List<String> trustIpIn,trustIpNotIn;
 
     public Consumer<LambdaQueryWrapper<? extends T>> conditionId() {
         return (builder) -> {
@@ -215,6 +222,42 @@ public class SysAppQueryBaseVo<T extends SysApp> extends PageDomain implements S
         };
     }
 
+        public Consumer<LambdaQueryWrapper<? extends T>> conditionVerifyIp() {
+        return (builder)->{
+
+          builder.eq(StrUtil.isNotBlank(this.getVerifyIp()),SysApp::getVerifyIp, StrUtil.trim(this.getVerifyIp()));
+          builder.ne(StrUtil.isNotBlank(this.getVerifyIpNot()),T::getVerifyIp, StrUtil.trim(this.getVerifyIpNot()));
+          builder.in(null != this.getVerifyIpIn() && this.getVerifyIpIn().size() > 0,T::getVerifyIp, this.getVerifyIpIn());
+          builder.notIn(null != this.getVerifyIpNotIn() && this.getVerifyIpNotIn().size() > 0,T::getVerifyIp, this.getVerifyIpNotIn());
+          if (StrUtil.isNotBlank(this.getVerifyIpLike())) {
+              builder.like(T::getVerifyIp, StrUtil.trim(this.getVerifyIpLike()));
+          } else {
+              builder.likeRight(StrUtil.isNotBlank(this.getVerifyIpPrefix()),T::getVerifyIp, StrUtil.trim(this.getVerifyIpPrefix()));
+              builder.likeLeft(StrUtil.isNotBlank(this.getVerifyIpSuffix()),T::getVerifyIp, StrUtil.trim(this.getVerifyIpSuffix()));
+          }
+
+
+        };
+    }
+
+    public Consumer<LambdaQueryWrapper<? extends T>> conditionTrustIp() {
+        return (builder)->{
+
+          builder.eq(StrUtil.isNotBlank(this.getTrustIp()),SysApp::getTrustIp, StrUtil.trim(this.getTrustIp()));
+          builder.ne(StrUtil.isNotBlank(this.getTrustIpNot()),T::getTrustIp, StrUtil.trim(this.getTrustIpNot()));
+          builder.in(null != this.getTrustIpIn() && this.getTrustIpIn().size() > 0,T::getTrustIp, this.getTrustIpIn());
+          builder.notIn(null != this.getTrustIpNotIn() && this.getTrustIpNotIn().size() > 0,T::getTrustIp, this.getTrustIpNotIn());
+          if (StrUtil.isNotBlank(this.getTrustIpLike())) {
+              builder.like(T::getTrustIp, StrUtil.trim(this.getTrustIpLike()));
+          } else {
+              builder.likeRight(StrUtil.isNotBlank(this.getTrustIpPrefix()),T::getTrustIp, StrUtil.trim(this.getTrustIpPrefix()));
+              builder.likeLeft(StrUtil.isNotBlank(this.getTrustIpSuffix()),T::getTrustIp, StrUtil.trim(this.getTrustIpSuffix()));
+          }
+
+
+        };
+    }
+
     /**
      * 默认排序
      */
@@ -237,6 +280,8 @@ public class SysAppQueryBaseVo<T extends SysApp> extends PageDomain implements S
         this.conditionStatus().accept(builder);
         this.conditionDesc().accept(builder);
         this.conditionSort().accept(builder);
+        this.conditionVerifyIp().accept(builder);
+        this.conditionTrustIp().accept(builder);
         this.defaultSortBy().accept(builder);
         return builder;
     }

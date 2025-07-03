@@ -17,7 +17,10 @@ import tech.hljzj.framework.logger.Log;
 import tech.hljzj.framework.security.an.Anonymous;
 import tech.hljzj.framework.util.excel.ExcelUtil;
 import tech.hljzj.infrastructure.code.AppConst;
-import tech.hljzj.infrastructure.domain.*;
+import tech.hljzj.infrastructure.domain.SysDictData;
+import tech.hljzj.infrastructure.domain.SysUser;
+import tech.hljzj.infrastructure.domain.SysUserManagerDept;
+import tech.hljzj.infrastructure.domain.VSysUser;
 import tech.hljzj.infrastructure.service.SysUserExtAttrService;
 import tech.hljzj.infrastructure.service.SysUserLockService;
 import tech.hljzj.infrastructure.service.SysUserManagerDeptService;
@@ -29,6 +32,7 @@ import tech.hljzj.protect.password.PasswordNotSafeException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
@@ -62,12 +66,13 @@ public class SysUserController extends BaseController {
      * 获取数据
      *
      * @param id 数据id
+     * @param fetchExtAttr 是否同时加载扩展属性
      * @return 数据详情
      */
     @PreAuthorize("auth({'sys:user:query','sys:user:edit'})")
     @GetMapping("/{id}")
     @Log(title = MODULE_NAME, operType = BusinessType.DETAIL)
-    public R<SysUserDetailVo> entityGet(@PathVariable Serializable id, Boolean fetchExtAttr) {
+    public R<SysUserDetailVo> entityGet(@PathVariable @NotNull Serializable id, Boolean fetchExtAttr) {
         SysUser dto = this.service.entityGet(id, ObjUtil.defaultIfNull(fetchExtAttr, false));
         return R.ok(new SysUserDetailVo().fromDto(dto));
     }
@@ -87,11 +92,10 @@ public class SysUserController extends BaseController {
     @PostMapping("/insert")
     public R<SysUserDetailVo> entityCreate(@RequestBody @Validated SysUserNewVo entity) {
         SysUser dto = entity.toDto();
-        this.service.entityCreate(dto);
+        this.service.entityCreate(dto, entity.getAttribution());
         return R.ok(new SysUserDetailVo().fromDto(dto));
     }
-
-
+    
     /**
      * 修改数据
      *
@@ -103,10 +107,7 @@ public class SysUserController extends BaseController {
     @PostMapping("/update")
     public R<SysUserDetailVo> entityUpdate(@RequestBody @Validated SysUserUpdateVo entity) {
         SysUser dto = entity.toDto();
-        this.service.entityUpdate(dto);
-        //扩展属性
-        Map<String, Object> attribution = entity.getAttribution();
-        updateAttribution(attribution, dto);
+        this.service.entityUpdate(dto, entity.getAttribution());
         return R.ok(new SysUserDetailVo().fromDto(dto));
     }
 
@@ -114,13 +115,13 @@ public class SysUserController extends BaseController {
      * 修改用户锁定状态
      *
      * @param userId      用户标识
-     * @param accountLock 锁定状态
+     * @param accountLock 锁定状态，1：锁定，0：解锁
      * @return 修改后
      */
     @PreAuthorize("auth('sys:user:edit')")
     @Log(title = MODULE_NAME, functionName = "修改锁定状态", operType = BusinessType.UPDATE)
     @PostMapping("/updateLockStatus")
-    public R<Void> updateLockStatus(String userId, String accountLock) {
+    public R<Void> updateLockStatus(@NotNull String userId, @NotNull String accountLock) {
         SysUser u = this.service.getById(userId);
         if (AppConst.NOT.equals(accountLock)) {
             sysUserLockService.unLock(u.getUsername());
@@ -130,15 +131,6 @@ public class SysUserController extends BaseController {
         return R.ok();
     }
 
-    private void updateAttribution(Map<String, Object> attribution, SysUser dto) {
-        if (attribution != null) {
-            SysUserExtAttr attr = new SysUserExtAttr();
-            attr.setId(dto.getId());
-            attr.setAttribution(/*JSONUtil.toJsonStr*/(attribution));
-            // save or update
-            sysUserExtAttrService.saveOrUpdate(attr);
-        }
-    }
 
     /**
      * 删除数据

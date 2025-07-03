@@ -3,6 +3,7 @@ package tech.hljzj.infrastructure.service;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.util.annotation.Nullable;
 import tech.hljzj.infrastructure.domain.SysUser;
 import tech.hljzj.infrastructure.domain.VSysUser;
@@ -32,12 +33,23 @@ public interface SysUserService extends IService<SysUser> {
      */
     boolean entityCreate(SysUser entity);
 
+    @Transactional(rollbackFor = Exception.class)
+    boolean entityCreate(SysUser entity, Map<String, Object> attrs);
+
     /**
      * 实体修改
      *
      * @return 操作是否成功
      */
     boolean entityUpdate(SysUser entity);
+
+    /**
+     * 实体修改
+     * @param entity 实体
+     * @param attrs 扩展属性
+     * @return 是否修改成功
+     */
+    boolean entityUpdate(SysUser entity, Map<String, Object> attrs);
 
     /**
      * 实体删除

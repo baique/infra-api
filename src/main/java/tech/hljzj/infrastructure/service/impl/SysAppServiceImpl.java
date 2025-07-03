@@ -38,7 +38,6 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     private final SysRoleService sysRoleService;
     private final SysRoleMenuService sysRoleMenuService;
     private final SysMenuService sysMenuService;
-    private final SysConfigMapper sysConfigMapper;
     private final SysConfigService sysConfigService;
     private final SysDictDataService sysDictDataService;
     private final SysDictTypeService sysDictTypeService;
@@ -49,7 +48,6 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         this.sysRoleService = sysRoleService;
         this.sysRoleMenuService = sysRoleMenuService;
         this.sysMenuService = sysMenuService;
-        this.sysConfigMapper = sysConfigMapper;
         this.sysConfigService = sysConfigService;
         this.sysDictDataService = sysDictDataService;
         this.sysDictTypeService = sysDictTypeService;
@@ -68,7 +66,7 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
 
 
     @Override
-    @CacheEvict(cacheNames = CAHCE_NAME, allEntries = true)
+    @CacheEvict(cacheNames = CAHCE_NAME, key = "#p0.id")
     public boolean entityCreate(SysApp entity) {
         if (baseMapper.exists(Wrappers.lambdaQuery(SysApp.class)
             .eq(SysApp::getKey, entity.getKey())
@@ -85,7 +83,7 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
 
 
     @Override
-    @CacheEvict(cacheNames = CAHCE_NAME, allEntries = true)
+    @CacheEvict(cacheNames = CAHCE_NAME, key = "#p0.id")
     public boolean entityUpdate(SysApp entity) {
         SysApp existsEntity = getById(entity.getId());
         if (baseMapper.exists(Wrappers.lambdaQuery(SysApp.class)
@@ -107,6 +105,7 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(cacheNames = CAHCE_NAME, key = "#p0.id")
     public boolean entityDelete(SysApp entity) {
         //如果需要删除应用，那么必须保证该应用下的数据已经完全无用
         if (sysUserRoleService.exists(Wrappers
@@ -191,8 +190,13 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(cacheNames = CAHCE_NAME, key = "#p0.sysApp.id")
     public void importData(SysAppExport data) {
-        saveOrUpdate(data.getSysApp());
+        SysApp app = data.getSysApp();
+        SysApp existsApp = getById(app.getId());
+        if (existsApp == null) {
+            super.save(app);
+        }
         sysConfigService.saveOrUpdateBatch(data.getConfigList());
         sysMenuService.saveOrUpdateBatch(data.getMenuList());
         sysRoleService.saveOrUpdateBatch(data.getRoleList());

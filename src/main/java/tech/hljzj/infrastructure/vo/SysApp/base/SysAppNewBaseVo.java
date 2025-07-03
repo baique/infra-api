@@ -54,6 +54,14 @@ public class SysAppNewBaseVo implements Serializable {
      * 排序编号
      */
     private Integer sort;
+    /**
+     * 是否校验授信IP
+     */
+    private String verifyIp;
+    /**
+     * 信任IP
+     */
+    private String trustIp;
 
     /**
      * 转换为实际的数据实体
@@ -68,6 +76,8 @@ public class SysAppNewBaseVo implements Serializable {
         dto.setStatus(this.getStatus());
         dto.setDesc(this.getDesc());
         dto.setSort(this.getSort());
+        dto.setVerifyIp(this.getVerifyIp());
+        dto.setTrustIp(this.getTrustIp());
 
         return dto;
     }

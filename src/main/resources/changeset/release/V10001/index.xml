@@ -27,5 +27,14 @@
     <changeSet id="2025-7-2-2" author="wa">
         <sqlFile relativeToChangelogFile="true" path="sql/2025-7-2-2.sql"/>
     </changeSet>
+    <!--    应用管理增加授信ID-->
+    <changeSet id="2025-7-3-1" author="wa">
+        <sqlFile relativeToChangelogFile="true" path="sql/2025-7-3-1.sql"/>
+    </changeSet>
+
+    <!--    岗位管理权限菜单-->
+    <changeSet id="2025-7-3-2" author="wa">
+        <sqlFile relativeToChangelogFile="true" path="sql/2025-7-3-2.sql"/>
+    </changeSet>
 
 </databaseChangeLog>

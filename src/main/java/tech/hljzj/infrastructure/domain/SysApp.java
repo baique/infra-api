@@ -63,6 +63,16 @@ public class SysApp extends BizBaseEntity {
      */
     @TableField(value = "sort_")
     private Integer sort;
+    /**
+     * 是否校验授信IP
+     */
+    @TableField(value = "verify_ip_")
+    private String verifyIp;
+    /**
+     * 信任IP
+     */
+    @TableField(value = "trust_ip_")
+    private String trustIp;
 
 
     /**
@@ -76,5 +86,7 @@ public class SysApp extends BizBaseEntity {
         this.setStatus(entity.getStatus());
         this.setDesc(entity.getDesc());
         this.setSort(entity.getSort());
+        this.setVerifyIp(entity.getVerifyIp());
+        this.setTrustIp(entity.getTrustIp());
     }
 }

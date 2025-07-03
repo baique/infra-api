@@ -75,6 +75,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Autowired
     @Lazy
     private LocalSecurityProvider localSecurity;
+    @Autowired
+    private SysUserExtAttrService sysUserExtAttrService;
 
     @Override
     public VSysUser entityGet(VSysUser entity, boolean fetchExtAttr) {
@@ -116,6 +118,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return save(entity);
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean entityCreate(SysUser entity, Map<String, Object> attrs) {
+        if (entityCreate(entity)) {
+            updateAttribution(entity.getId(), attrs);
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public boolean entityUpdate(SysUser entity) {
@@ -138,6 +150,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return updateById(existsEntity);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean entityUpdate(SysUser entity, Map<String, Object> attrs) {
+        entityUpdate(entity);
+        updateAttribution(entity.getId(), attrs);
+        return false;
+    }
+
+
+    private void updateAttribution(String id, Map<String, Object> attribution) {
+        if (attribution != null) {
+            SysUserExtAttr attr = new SysUserExtAttr();
+            attr.setId(id);
+            attr.setAttribution(/*JSONUtil.toJsonStr*/(attribution));
+            // save or update
+            sysUserExtAttrService.saveOrUpdate(attr);
+        }
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
