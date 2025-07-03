@@ -13,6 +13,7 @@ import tech.hljzj.framework.security.bean.LoginUser;
 import tech.hljzj.framework.security.bean.UserInfo;
 import tech.hljzj.framework.util.web.AuthUtil;
 import tech.hljzj.framework.util.web.ReqUtil;
+import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.config.AppLoginUserInfo;
 import tech.hljzj.infrastructure.domain.SysApp;
 import tech.hljzj.infrastructure.service.SysAppService;
@@ -60,7 +61,7 @@ public class AppInterceptor implements BaseInterceptor {
         try {
             JWT.require(Algorithm.HMAC384(sysApp.getSecret())).build().verify(token);
 
-            if (StrUtil.isNotBlank(sysApp.getTrustIp())) {
+            if (AppConst.YES.equals(sysApp.getVerifyIp()) && StrUtil.isNotBlank(sysApp.getTrustIp())) {
                 // 检查访问IP
                 String ipAddress = ReqUtil.getIP(request);
 
