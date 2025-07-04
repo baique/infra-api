@@ -266,7 +266,11 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
         );
 
         for (SysDictTypeListVo d : list) {
-            List<SysDictDataListVo> dictData = dd.get(d.getKey()).stream().map(f -> {
+            List<IDictData> dictDataList = dd.get(d.getKey());
+            if (dictDataList == null) {
+                continue;
+            }
+            List<SysDictDataListVo> dictData = dictDataList.stream().map(f -> {
                 SysDictDataListVo v = new SysDictDataListVo();
                 v.fromDto((SysDictData) f);
                 return v;
