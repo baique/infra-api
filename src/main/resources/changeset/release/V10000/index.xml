@@ -21,6 +21,7 @@
         <sqlFile relativeToChangelogFile="true" path="mysql/basic/sys_role_.sql"/>
         <sqlFile relativeToChangelogFile="true" path="mysql/basic/sys_menu_.sql"/>
         <sqlFile relativeToChangelogFile="true" path="mysql/basic/sys_role_menu_.sql"/>
+        <sqlFile relativeToChangelogFile="true" path="mysql/basic/sys_user_role_.sql"/>
     </changeSet>
     <changeSet id="2025-5-7-1" author="wa" dbms="mysql">
         <sqlFile relativeToChangelogFile="true" path="mysql/ai-table.sql"/>

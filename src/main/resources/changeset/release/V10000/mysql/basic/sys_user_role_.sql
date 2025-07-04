@@ -1,0 +1,1 @@
+INSERT IGNORE INTO `sys_user_role_` (`id_`, `user_id_`, `role_id_`, `app_id_`, `expired_time_`) VALUES ('d15a490233b8c946abea0268bd0d5381', '08c13e778cbd40826f394a515cb0f6c0', '888239fc9b9758475350fbc59c0f9849', '0', NULL);
