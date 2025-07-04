@@ -184,7 +184,7 @@
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 25,
+      "maxLength": 30,
       "component": "DatePicker",
       "rule": [],
       "dataSource": {
@@ -193,7 +193,7 @@
       },
       "hasDataSource": false,
       "id": "mJ_Khu4I4pBJj-KGhbjYW",
-      "keep": true
+      "keep": false
     },
     {
       "key": "old_password_",
@@ -591,7 +591,7 @@
       "insert": false,
       "update": false,
       "required": false,
-      "maxLength": 25,
+      "maxLength": 30,
       "component": "Input",
       "rule": [],
       "dataSource": {
@@ -599,7 +599,7 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true,
+      "keep": false,
       "id": "ihC-LtN9eYQrO6CSnJ1Tw"
     },
     {
@@ -633,7 +633,7 @@
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 25,
+      "maxLength": 30,
       "component": "Input",
       "rule": [],
       "dataSource": {
@@ -641,7 +641,7 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true,
+      "keep": false,
       "id": "Bryx9eAkmQW_fJ1CD9H9a"
     },
     {
@@ -675,7 +675,7 @@
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 25,
+      "maxLength": 30,
       "component": "Input",
       "rule": [],
       "dataSource": {
@@ -683,7 +683,7 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true,
+      "keep": false,
       "id": "DHfs95axCHBYpkBxKoEYD"
     },
     {

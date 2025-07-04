@@ -1,6 +1,8 @@
+use infra;
 -- =============================================
 -- 数据库迁移脚本
--- 从 tyrzxt1 迁移到 frm_base_v1
+-- 从 tyrzxt 迁移到 infra
+-- 脚本支持多次执行，如遇到失败可修正后反复执行
 -- =============================================
 
 -- 设置SQL模式和字符集
@@ -14,11 +16,11 @@ SET FOREIGN_KEY_CHECKS = 0;
 START TRANSACTION;
 
 -- 只删除需要更新的数据
-DELETE t FROM frm_base_v1.sys_dept_ t
-                  INNER JOIN tyrzxt1.department s ON t.id_ = s.Department_ID;
+DELETE t FROM sys_dept_ t
+                  INNER JOIN tyrzxt.department s ON t.id_ = s.Department_ID;
 
 -- 插入数据
-INSERT INTO frm_base_v1.sys_dept_ (
+INSERT INTO sys_dept_ (
     id_,
     parent_id_,
     key_,
@@ -57,7 +59,7 @@ SELECT
     Create_TIME,                      -- create_time_
     MODIFY_USER,                      -- update_by_
     MODIFY_TIME                       -- update_time_
-FROM tyrzxt1.department;
+FROM tyrzxt.department;
 
 COMMIT;
 
@@ -67,11 +69,11 @@ COMMIT;
 START TRANSACTION;
 
 -- 只删除需要更新的数据
-DELETE t FROM frm_base_v1.sys_app_ t
-                  INNER JOIN tyrzxt1.app_info s ON t.id_ = s.App_ID;
+DELETE t FROM sys_app_ t
+                  INNER JOIN tyrzxt.app_info s ON t.id_ = s.App_ID;
 
 -- 插入数据
-INSERT INTO frm_base_v1.sys_app_ (
+INSERT INTO sys_app_ (
     id_,
     key_,
     name_,
@@ -101,7 +103,7 @@ SELECT
     Update_User,                      -- update_by_
     Update_Time,                      -- update_time_
     App_Department_ID                 -- owner_dept_id_
-FROM tyrzxt1.app_info;
+FROM tyrzxt.app_info;
 
 COMMIT;
 
@@ -111,11 +113,11 @@ COMMIT;
 START TRANSACTION;
 
 -- 只删除需要更新的数据
-DELETE t FROM frm_base_v1.sys_menu_ t
-                  INNER JOIN tyrzxt1.permission_info s ON t.id_ = s.Permission_ID;
+DELETE t FROM sys_menu_ t
+                  INNER JOIN tyrzxt.permission_info s ON t.id_ = s.Permission_ID;
 
 -- 插入数据
-INSERT INTO frm_base_v1.sys_menu_ (
+INSERT INTO sys_menu_ (
     id_,
     owner_app_id_,
     key_,
@@ -148,7 +150,7 @@ SELECT
     Create_Time,                      -- create_time_
     Update_User,                      -- update_by_
     Update_Time                       -- update_time_
-FROM tyrzxt1.permission_info;
+FROM tyrzxt.permission_info;
 
 COMMIT;
 
@@ -158,11 +160,11 @@ COMMIT;
 START TRANSACTION;
 
 -- 只删除需要更新的数据
-DELETE t FROM frm_base_v1.sys_role_ t
-                  INNER JOIN tyrzxt1.role_info s ON t.id_ = s.Role_ID;
+DELETE t FROM sys_role_ t
+                  INNER JOIN tyrzxt.role_info s ON t.id_ = s.Role_ID;
 
 -- 插入数据
-INSERT INTO frm_base_v1.sys_role_ (
+INSERT INTO sys_role_ (
     id_,
     owner_app_id_,
     key_,
@@ -187,7 +189,7 @@ SELECT
     COALESCE(Create_Time, NOW()),    -- create_time_ (默认当前时间)
     Update_User,                      -- update_by_
     Update_Time                       -- update_time_
-FROM tyrzxt1.role_info;
+FROM tyrzxt.role_info;
 
 COMMIT;
 
@@ -197,11 +199,11 @@ COMMIT;
 START TRANSACTION;
 
 -- 只删除需要更新的数据
-DELETE t FROM frm_base_v1.sys_role_menu_ t
-                  INNER JOIN tyrzxt1.role_permission s ON t.id_ = s.Role_Permission_ID;
+DELETE t FROM sys_role_menu_ t
+                  INNER JOIN tyrzxt.role_permission s ON t.id_ = s.Role_Permission_ID;
 
 -- 插入数据
-INSERT INTO frm_base_v1.sys_role_menu_ (
+INSERT INTO sys_role_menu_ (
     id_,
     role_id_,
     app_id_,
@@ -212,8 +214,8 @@ SELECT
     rp.Role_ID,                       -- role_id_
     r.App_ID,                         -- app_id_ (通过联表查询获取)
     rp.Permission_ID                  -- menu_id_
-FROM tyrzxt1.role_permission rp
-         INNER JOIN tyrzxt1.role_info r ON rp.Role_ID = r.Role_ID;
+FROM tyrzxt.role_permission rp
+         INNER JOIN tyrzxt.role_info r ON rp.Role_ID = r.Role_ID;
 
 COMMIT;
 
@@ -223,11 +225,11 @@ COMMIT;
 START TRANSACTION;
 
 -- 只删除需要更新的数据
-DELETE t FROM frm_base_v1.sys_user_ t
-                  INNER JOIN tyrzxt1.user_info s ON t.id_ = s.USER_ID;
+DELETE t FROM sys_user_ t
+                  INNER JOIN tyrzxt.user_info s ON t.id_ = s.USER_ID;
 
 -- 插入数据
-INSERT INTO frm_base_v1.sys_user_ (
+INSERT INTO sys_user_ (
     id_,
     dept_id_,
     username_,
@@ -274,7 +276,7 @@ SELECT
     COALESCE(USER_createTime, NOW()), -- create_time_ (默认当前时间)
     NULL,                            -- update_by_ (源表无对应字段)
     NULL                             -- update_time_ (源表无对应字段)
-FROM tyrzxt1.user_info;
+FROM tyrzxt.user_info;
 
 COMMIT;
 
@@ -284,11 +286,11 @@ COMMIT;
 START TRANSACTION;
 
 -- 只删除需要更新的数据
-DELETE t FROM frm_base_v1.sys_user_role_ t
-                  INNER JOIN tyrzxt1.user_role s ON t.id_ = s.USER_ROLE_ID;
+DELETE t FROM sys_user_role_ t
+                  INNER JOIN tyrzxt.user_role s ON t.id_ = s.USER_ROLE_ID;
 
 -- 插入数据
-INSERT INTO frm_base_v1.sys_user_role_ (
+INSERT INTO sys_user_role_ (
     id_,
     user_id_,
     role_id_,
@@ -299,8 +301,8 @@ SELECT
     ur.User_ID,                       -- user_id_
     ur.Role_ID,                       -- role_id_
     r.App_ID                          -- app_id_ (通过联表查询获取)
-FROM tyrzxt1.user_role ur
-         INNER JOIN tyrzxt1.role_info r ON ur.Role_ID = r.Role_ID;
+FROM tyrzxt.user_role ur
+         INNER JOIN tyrzxt.role_info r ON ur.Role_ID = r.Role_ID;
 
 COMMIT;
 
@@ -310,13 +312,13 @@ COMMIT;
 START TRANSACTION;
 
 -- 更新菜单表
-UPDATE frm_base_v1.sys_menu_
+UPDATE sys_menu_
 SET parent_id_ = '0'
 WHERE parent_id_ IS NULL OR parent_id_ = '';
-UPDATE frm_base_v1.sys_menu_
+UPDATE sys_menu_
 SET create_time_ = NOW()
 WHERE create_time_ IS NULL;
-UPDATE frm_base_v1.sys_menu_
+UPDATE sys_menu_
 SET update_time_ = NOW()
 WHERE update_time_ IS NULL;
 COMMIT;
@@ -328,112 +330,112 @@ START TRANSACTION;
 
 -- 更新角色表默认值
 -- 状态为空时默认启用
-UPDATE frm_base_v1.sys_role_
+UPDATE sys_role_
 SET status_ = '1'
 WHERE status_ IS NULL OR status_ = '';
 
 -- 排序为空时默认0
-UPDATE frm_base_v1.sys_role_
+UPDATE sys_role_
 SET sort_ = 0
 WHERE sort_ IS NULL OR sort_ = '';
 
 -- 创建时间为空时默认当前时间
-UPDATE frm_base_v1.sys_role_
+UPDATE sys_role_
 SET create_time_ = NOW()
 WHERE create_time_ IS NULL;
-UPDATE frm_base_v1.sys_role_
+UPDATE sys_role_
 SET update_time_ = NOW()
 WHERE update_time_ IS NULL;
-UPDATE frm_base_v1.sys_role_
+UPDATE sys_role_
 SET default_grant_ = 0
 WHERE default_grant_ IS NULL OR default_grant_ = '';
 
 
 -- 更新用户表默认值
 -- 状态为空时默认启用
-UPDATE frm_base_v1.sys_user_
+UPDATE sys_user_
 SET status_ = '1'
 WHERE status_ IS NULL OR status_ = '';
 
 -- 排序为空时默认0
-UPDATE frm_base_v1.sys_user_
+UPDATE sys_user_
 SET sort_ = 0
 WHERE sort_ IS NULL OR sort_ = '';
 
 -- 创建时间为空时默认当前时间
-UPDATE frm_base_v1.sys_user_
+UPDATE sys_user_
 SET create_time_ = NOW()
 WHERE create_time_ IS NULL;
-UPDATE frm_base_v1.sys_user_
+UPDATE sys_user_
 SET update_time_ = NOW()
 WHERE update_time_ IS NULL;
 -- 更新权限表默认值
 -- 状态为空时默认启用
-UPDATE frm_base_v1.sys_menu_
+UPDATE sys_menu_
 SET status_ = '1'
 WHERE status_ IS NULL OR status_ = '';
 
 -- 排序为空时默认0
-UPDATE frm_base_v1.sys_menu_
+UPDATE sys_menu_
 SET sort_ = 0
 WHERE sort_ IS NULL OR sort_ = '';
 
-UPDATE frm_base_v1.sys_menu_
+UPDATE sys_menu_
 SET default_grant_ = 0
 WHERE default_grant_ IS NULL OR default_grant_ = '';
 
 -- 创建时间为空时默认当前时间
-UPDATE frm_base_v1.sys_menu_
+UPDATE sys_menu_
 SET create_time_ = NOW()
 WHERE create_time_ IS NULL;
 
 -- 更新应用表默认值
 -- 状态为空时默认启用
-UPDATE frm_base_v1.sys_app_
+UPDATE sys_app_
 SET status_ = '1'
 WHERE status_ IS NULL OR status_ = '';
 
 -- 排序为空时默认0
-UPDATE frm_base_v1.sys_app_
+UPDATE sys_app_
 SET sort_ = 0
 WHERE sort_ IS NULL OR sort_ = '';
 
 -- 创建时间为空时默认当前时间
-UPDATE frm_base_v1.sys_app_
+UPDATE sys_app_
 SET create_time_ = NOW()
 WHERE create_time_ IS NULL;
-UPDATE frm_base_v1.sys_app_
+UPDATE sys_app_
 SET update_time_ = NOW()
 WHERE update_time_ IS NULL;
 
 
 -- 更新部门表
-UPDATE frm_base_v1.sys_dept_
+UPDATE sys_dept_
 SET parent_id_ = '0'
 WHERE parent_id_ IS NULL OR parent_id_ = '';
 
 -- 更新部门表默认值
 -- 状态为空时默认启用
-UPDATE frm_base_v1.sys_dept_
+UPDATE sys_dept_
 SET status_ = '1'
 WHERE status_ IS NULL OR status_ = '';
 
 -- 是否启用为空时默认启用
-UPDATE frm_base_v1.sys_dept_
+UPDATE sys_dept_
 SET enable_ = '1'
 WHERE enable_ IS NULL OR enable_ = '';
 
 -- 排序为空时默认0
-UPDATE frm_base_v1.sys_dept_
+UPDATE sys_dept_
 SET sort_ = 0
 WHERE sort_ IS NULL OR sort_ = '';
 
 -- 创建时间为空时默认当前时间
-UPDATE frm_base_v1.sys_dept_
+UPDATE sys_dept_
 SET create_time_ = NOW()
 WHERE create_time_ IS NULL;
 
-UPDATE frm_base_v1.sys_dept_
+UPDATE sys_dept_
 SET update_time_ = NOW()
 WHERE update_time_ IS NULL;
 
@@ -468,9 +470,9 @@ WITH RECURSIVE dept_cte AS (
 )
 UPDATE sys_dept_ s
     JOIN dept_cte c ON s.id_ = c.id_
-SET
-    s.node_key_ = c.node_key,
-    s.node_path_ = c.node_path;
+    SET
+        s.node_key_ = c.node_key,
+        s.node_path_ = c.node_path;
 
 
 -- =============================================
@@ -499,10 +501,10 @@ WITH RECURSIVE menu_cte AS (
 )
 UPDATE sys_menu_ s
     JOIN menu_cte c ON s.id_ = c.id_
-SET
-    s.node_key_ = c.node_key,
-    s.node_path_ = c.node_path;
+    SET
+        s.node_key_ = c.node_key,
+        s.node_path_ = c.node_path;
 -- 合并专案组成员信息
-insert ignore into frm_base_v1.sys_dept_external_user_ (id_,dept_id_,user_id_) SELECT id,department_id,user_id FROM `tyrzxt1`.`department_contain_user`;
+insert ignore into sys_dept_external_user_ (id_,dept_id_,user_id_) SELECT id,department_id,user_id FROM `tyrzxt`.`department_contain_user`;
 -- 合并所有管辖部门
-insert ignore into frm_base_v1.sys_user_manager_dept_ (id_,user_id_,dept_id_,data_access_scope_,contain_sub_) select id,user_id,dept_id,if(manager_scope = '0','self','all'),manager_children from tyrzxt1.sys_manager_dept
+insert ignore into sys_user_manager_dept_ (id_,user_id_,dept_id_,data_access_scope_,contain_sub_) select id,user_id,dept_id,if(manager_scope = '0','self','all'),manager_children from tyrzxt.sys_manager_dept
