@@ -15,6 +15,7 @@
         <sqlFile relativeToChangelogFile="true" path="mysql/basic/app.sql"/>
         <sqlFile relativeToChangelogFile="true" path="mysql/basic/dept.sql"/>
         <sqlFile relativeToChangelogFile="true" path="mysql/basic/user.sql"/>
+        <sqlFile relativeToChangelogFile="true" path="mysql/basic/sys_config.sql"/>
         <sqlFile relativeToChangelogFile="true" path="mysql/basic/sys_dict_type_.sql"/>
         <sqlFile relativeToChangelogFile="true" path="mysql/basic/sys_dict_data_.sql"/>
         <sqlFile relativeToChangelogFile="true" path="mysql/basic/sys_role_.sql"/>
