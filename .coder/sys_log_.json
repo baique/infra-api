@@ -8,7 +8,7 @@
     ]
   },
   "genConfig": {
-    "perm": "sys:log",
+    "perm": "sys_log_",
     "key": "sys_log_",
     "name": "操作日志",
     "packageName": "tech.hljzj.infrastructure",
@@ -17,9 +17,8 @@
     "primaryKeyColumn": "id_",
     "dateTime": "",
     "params": {
-      "extendBizBaseEntity": "biz"
+      "extendBizBaseEntity": ""
     },
-    "hasChange": true,
     "used": true
   },
   "genColumn": [
@@ -28,6 +27,7 @@
       "name": "id_",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": false,
       "insert": false,
       "update": false,
@@ -40,13 +40,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": false
+      "keep": true,
+      "id": "gtkAq_SVbHoegUhBZNQio"
     },
     {
       "key": "app_name_",
       "name": "操作应用",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -59,13 +61,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "q3TVgV1zUuwfXUbn9V_Nj"
     },
     {
       "key": "module_name_",
       "name": "模块名称",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -78,13 +82,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "6BClj_3R185SmVxvpI1hk"
     },
     {
       "key": "function_name_",
       "name": "功能名称",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -97,13 +103,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "QfiJIzzRbY0KmfkeqNakI"
     },
     {
       "key": "oper_type_",
       "name": "操作类型",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -116,13 +124,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "Gn_TYUiBvCh8uG8Tl9pHe"
     },
     {
       "key": "oper_content_",
       "name": "操作描述",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -135,18 +145,20 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "kJoU2cVmdsY4iTTYQZUa3"
     },
     {
       "key": "error_code_",
       "name": "状态代码",
       "type": "Integer",
       "description": null,
+      "typeNumber": true,
       "list": true,
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 10,
+      "maxLength": 2147483647,
       "component": "Input",
       "rule": [],
       "dataSource": {
@@ -154,13 +166,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "92aROEvD35hUj8ugWP_Io"
     },
     {
       "key": "addr_",
       "name": "请求地址",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -172,13 +186,16 @@
         "type": "none",
         "param": {}
       },
-      "hasDataSource": false
+      "hasDataSource": false,
+      "keep": true,
+      "id": "rXsxrjXiWz_xt2oOPD5pL"
     },
     {
       "key": "params_",
       "name": "传入参数",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -191,13 +208,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "39UyVG-sWtyQ3WGA1S2wS"
     },
     {
       "key": "result_",
       "name": "返回数据",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -210,13 +229,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "V9IhUSk9gaB7b3ttHd1oy"
     },
     {
       "key": "client_ip_",
       "name": "客户端IP",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -228,13 +249,16 @@
         "type": "none",
         "param": {}
       },
-      "hasDataSource": false
+      "hasDataSource": false,
+      "keep": true,
+      "id": "JgaYBOCRYWK09z8FoQucI"
     },
     {
       "key": "client_agent_",
       "name": "客户端终端",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -246,13 +270,16 @@
         "type": "none",
         "param": {}
       },
-      "hasDataSource": false
+      "hasDataSource": false,
+      "keep": true,
+      "id": "G1ZJ-YyXDOXBUI2vgFWio"
     },
     {
       "key": "op_app_id_",
       "name": "来源应用",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -265,13 +292,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "S0EI4T7ZtQQAFUp5D-UhX"
     },
     {
       "key": "op_user_id_",
       "name": "操作人ID",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -284,13 +313,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "z5gXLud47-5Kv46S2p53O"
     },
     {
       "key": "op_user_username_",
       "name": "操作人账号",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -303,13 +334,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "MoCUbPVzAWUEhIh1EuaTc"
     },
     {
       "key": "op_user_realname_",
       "name": "操作人姓名",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -322,13 +355,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "tIoeaf_oJRCsji8q3QuaF"
     },
     {
       "key": "op_org_id_",
       "name": "操作人部门标识",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -341,13 +376,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": false
+      "keep": true,
+      "id": "BEuxHLP5EoHrnw9QgirKt"
     },
     {
       "key": "op_org_name_",
       "name": "操作人部门",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -360,18 +397,20 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "0cVA0o4dSWP2rR7xvRmGv"
     },
     {
       "key": "op_time_",
       "name": "操作时间",
       "type": "Date",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 19,
+      "maxLength": 25,
       "component": "DatePicker",
       "rule": [],
       "dataSource": {
@@ -379,7 +418,8 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true
+      "keep": true,
+      "id": "Iwj0hlQrmS2uVp3LFxVeP"
     }
   ],
   "serverConfig": {}

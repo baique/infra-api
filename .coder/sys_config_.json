@@ -8,7 +8,7 @@
     ]
   },
   "genConfig": {
-    "perm": "sys:config",
+    "perm": "sys_config_",
     "key": "sys_config_",
     "name": "系统配置",
     "packageName": "tech.hljzj.infrastructure",
@@ -17,16 +17,17 @@
     "primaryKeyColumn": "id_",
     "dateTime": "",
     "params": {
-      "extendBizBaseEntity": "biz"
+      "extendBizBaseEntity": ""
     },
     "used": true
   },
   "genColumn": [
     {
       "key": "id_",
-      "name": "bigint",
+      "name": "id_",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": false,
       "insert": false,
       "update": false,
@@ -39,17 +40,18 @@
         "param": {}
       },
       "hasDataSource": false,
-      "id": "4n0_TVB9_JFCkzVMro6nU",
-      "keep": true
+      "keep": true,
+      "id": "-CN3EGInU4EBvefqd6kKa"
     },
     {
       "key": "owner_app_id_",
       "name": "所属应用标识",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
-      "update": false,
+      "update": true,
       "required": false,
       "maxLength": 64,
       "component": "Input",
@@ -59,14 +61,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "id": "X2NcvYzgw_GoQz2GaLVCV",
-      "keep": true
+      "keep": true,
+      "id": "ixOwxNMjAhhudmAuvM4LL"
     },
     {
       "key": "key_",
       "name": "配置标识",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -79,14 +82,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "id": "KgZ47XTR39SykAoUCYcIB",
-      "keep": true
+      "keep": true,
+      "id": "MdNB_ZmOhH3MWgI8DryKP"
     },
     {
       "key": "name_",
       "name": "配置名称",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -99,14 +103,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "id": "y0-KOoC64pOhV0uZwLq1V",
-      "keep": true
+      "keep": true,
+      "id": "dR2aNQMeFYh4lbqerDZdy"
     },
     {
       "key": "value_",
       "name": "配置项值",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -119,14 +124,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "id": "U56RKjIW-shX8YlHdTwtL",
-      "keep": true
+      "keep": true,
+      "id": "jYuTpV4Z_haHlVcekt55Y"
     },
     {
       "key": "status_",
       "name": "配置状态",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -141,14 +147,15 @@
         }
       },
       "hasDataSource": false,
-      "id": "9Dk2ZgsL44yBlCgyD1933",
-      "keep": true
+      "keep": true,
+      "id": "40MlgX4XOOZcPXkb-Ukxr"
     },
     {
       "key": "desc_",
       "name": "配置描述",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -161,19 +168,20 @@
         "param": {}
       },
       "hasDataSource": false,
-      "id": "3YieT1BNLnmjfiwrpl4lM",
-      "keep": true
+      "keep": true,
+      "id": "_wIUJuz-GMo_eZFaOxnuH"
     },
     {
       "key": "sort_",
       "name": "排序编号",
       "type": "Integer",
       "description": null,
+      "typeNumber": true,
       "list": true,
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 10,
+      "maxLength": 2147483647,
       "component": "InputNumber",
       "rule": [],
       "dataSource": {
@@ -181,14 +189,15 @@
         "param": {}
       },
       "hasDataSource": false,
-      "id": "K6ey1eN0arBj_uA5TzFlQ",
-      "keep": true
+      "keep": true,
+      "id": "gFLB5Ho3rzIywUC5gpKpG"
     },
     {
       "key": "locked_",
       "name": "是否锁定",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -204,13 +213,14 @@
       },
       "hasDataSource": false,
       "keep": true,
-      "id": "9XQoGx3NLUS3BlJDdMmfv"
+      "id": "XMvohPLvjDg4W9N6AzWWx"
     },
     {
       "key": "create_by_",
       "name": "创建人姓名",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -224,19 +234,20 @@
       },
       "hasDataSource": false,
       "keep": true,
-      "id": "7tDNKqKergmCkxR5gblan"
+      "id": "qwrvhS9lkD6Aq26wgEdNy"
     },
     {
       "key": "create_time_",
       "name": "创建时间",
       "type": "Date",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 19,
-      "component": "Input",
+      "maxLength": 25,
+      "component": "DatePicker",
       "rule": [],
       "dataSource": {
         "type": "none",
@@ -244,13 +255,14 @@
       },
       "hasDataSource": false,
       "keep": true,
-      "id": "fKvCYf3MRKrdHsGZ1ej2r"
+      "id": "XVtOuOLrWEt3B8AQ-QGj9"
     },
     {
       "key": "update_by_",
       "name": "修改人姓名",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -264,19 +276,20 @@
       },
       "hasDataSource": false,
       "keep": true,
-      "id": "TaAvWYEPc104vMrCcTp6N"
+      "id": "5GfOOQt91-tO5ZyvXZMJb"
     },
     {
       "key": "update_time_",
       "name": "修改时间",
       "type": "Date",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 19,
-      "component": "Input",
+      "maxLength": 25,
+      "component": "DatePicker",
       "rule": [],
       "dataSource": {
         "type": "none",
@@ -284,13 +297,14 @@
       },
       "hasDataSource": false,
       "keep": true,
-      "id": "BZjKzsAqsfCp9sHHz_yPA"
+      "id": "Jr9YGEi1dM8VUTVRj8y_5"
     },
     {
       "key": "owner_user_id_",
       "name": "所属用户标识",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -304,13 +318,14 @@
       },
       "hasDataSource": false,
       "keep": true,
-      "id": "zm5doBh4e1y9bKJ3KUSdI"
+      "id": "y-7WSg68xTJ1yp80eB6Z4"
     },
     {
       "key": "owner_user_account_",
       "name": "所属用户账号",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -324,13 +339,14 @@
       },
       "hasDataSource": false,
       "keep": true,
-      "id": "CNArcE2_fZkw71JT_hGq4"
+      "id": "Y5fGoKz5X8mUaZJdejIE_"
     },
     {
       "key": "owner_dept_id_",
       "name": "所属部门标识",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -344,13 +360,14 @@
       },
       "hasDataSource": false,
       "keep": true,
-      "id": "wnZK7rNxAb8YyJfR6Dtri"
+      "id": "IZjxX5jgbZxLYgPriOcNd"
     },
     {
       "key": "owner_dept_code_",
       "name": "所属部门编码",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -364,13 +381,14 @@
       },
       "hasDataSource": false,
       "keep": true,
-      "id": "8a30Y7InrYWfkWFHXF7mM"
+      "id": "rNh1VIUCnDBx8O4Tu84IA"
     },
     {
       "key": "owner_dept_name_",
       "name": "所属部门名称",
       "type": "String",
       "description": null,
+      "typeNumber": false,
       "list": true,
       "insert": true,
       "update": true,
@@ -384,7 +402,7 @@
       },
       "hasDataSource": false,
       "keep": true,
-      "id": "8VpFHktP3r7CklivUNAxl"
+      "id": "rIoZ_aUpDAQ3aB8lvicYa"
     }
   ],
   "serverConfig": {}

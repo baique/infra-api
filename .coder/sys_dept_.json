@@ -3,7 +3,8 @@
     "serverAddress": "",
     "author": "wa",
     "codeSelector": [
-      "new-admin"
+      "new-admin",
+      "web-new"
     ]
   },
   "genConfig": {
@@ -462,7 +463,7 @@
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 30,
+      "maxLength": 25,
       "component": "Input",
       "rule": [],
       "dataSource": {
@@ -504,7 +505,7 @@
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 30,
+      "maxLength": 25,
       "component": "Input",
       "rule": [],
       "dataSource": {

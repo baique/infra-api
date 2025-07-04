@@ -1,6 +1,60 @@
 -- ----------------------------
 -- View structure for v_sys_dept_member_user_
 -- ----------------------------
+
+
+-- ----------------------------
+-- View structure for v_sys_user_
+-- ----------------------------
+CREATE
+OR REPLACE VIEW `v_sys_user_` AS
+select `t`.`id_`                   AS `id_`,
+       `t`.`dept_id_`              AS `dept_id_`,
+       `t`.`dept_identity_`        AS `dept_identity_`,
+       `t`.`username_`             AS `username_`,
+       `t`.`password_`             AS `password_`,
+       `t`.`mask_v_`               AS `mask_v_`,
+       `t`.`old_password_`         AS `old_password_`,
+       `t`.`password_policy_`      AS `password_policy_`,
+       `t`.`password_expired_`     AS `password_expired_`,
+       `t`.`nickname_`             AS `nickname_`,
+       `t`.`realname_`             AS `realname_`,
+       `t`.`sex_`                  AS `sex_`,
+       `t`.`card_type_`            AS `card_type_`,
+       `t`.`card_no_`              AS `card_no_`,
+       `t`.`phone_`                AS `phone_`,
+       `t`.`email_`                AS `email_`,
+       `t`.`work_addr_`            AS `work_addr_`,
+       `t`.`work_unit_`            AS `work_unit_`,
+       `t`.`work_pos_`             AS `work_pos_`,
+       `t`.`work_rank_`            AS `work_rank_`,
+       `t`.`home_addr_`            AS `home_addr_`,
+       `t`.`home_phone_`           AS `home_phone_`,
+       `t`.`source_`               AS `source_`,
+       `t`.`sort_`                 AS `sort_`,
+       `t`.`status_`               AS `status_`,
+       `t`.`account_lock_`         AS `account_lock_`,
+       `t`.`owner_user_id_`        AS `owner_user_id_`,
+       `t`.`owner_user_account_`   AS `owner_user_account_`,
+       `t`.`owner_dept_id_`        AS `owner_dept_id_`,
+       `t`.`owner_dept_code_`      AS `owner_dept_code_`,
+       `t`.`owner_dept_name_`      AS `owner_dept_name_`,
+       `t`.`create_by_`            AS `create_by_`,
+       `t`.`create_time_`          AS `create_time_`,
+       `t`.`update_by_`            AS `update_by_`,
+       `t`.`update_time_`          AS `update_time_`,
+       `t`.`last_change_password_` AS `last_change_password_`,
+       `t1`.`node_key_`            AS `node_key_`,
+       `t1`.`node_path_`           AS `node_path_`,
+       `t1`.`key_`                 AS `dept_key_`,
+       `t1`.`name_`                AS `dept_name_`,
+       `t1`.`alias_`               AS `dept_alias_`,
+       `t1`.`short_name_`          AS `dept_short_name_`,
+       `t1`.`type_`                AS `dept_type_`,
+       `t1`.`usc_no_`              AS `dept_usc_no_`,
+       `t1`.`addr_no_`             AS `dept_addr_no_`
+from (`sys_user_` `t` left join `sys_dept_` `t1` on ((`t1`.`id_` = `t`.`dept_id_`)));
+
 CREATE
 OR REPLACE VIEW `v_sys_dept_member_user_` AS
 select `v_sys_user_`.`id_`                   AS `id_`,
@@ -99,55 +153,3 @@ select `t`.`id_`                   AS `id_`,
        2                           AS `owner_type`
 from ((`sys_dept_external_user_` `p` left join `sys_user_` `t`
        on ((`t`.`id_` = `p`.`user_id_`))) left join `sys_dept_` `t1` on ((`t1`.`id_` = `p`.`dept_id_`)));
-
--- ----------------------------
--- View structure for v_sys_user_
--- ----------------------------
-CREATE
-OR REPLACE VIEW `v_sys_user_` AS
-select `t`.`id_`                   AS `id_`,
-       `t`.`dept_id_`              AS `dept_id_`,
-       `t`.`dept_identity_`        AS `dept_identity_`,
-       `t`.`username_`             AS `username_`,
-       `t`.`password_`             AS `password_`,
-       `t`.`mask_v_`               AS `mask_v_`,
-       `t`.`old_password_`         AS `old_password_`,
-       `t`.`password_policy_`      AS `password_policy_`,
-       `t`.`password_expired_`     AS `password_expired_`,
-       `t`.`nickname_`             AS `nickname_`,
-       `t`.`realname_`             AS `realname_`,
-       `t`.`sex_`                  AS `sex_`,
-       `t`.`card_type_`            AS `card_type_`,
-       `t`.`card_no_`              AS `card_no_`,
-       `t`.`phone_`                AS `phone_`,
-       `t`.`email_`                AS `email_`,
-       `t`.`work_addr_`            AS `work_addr_`,
-       `t`.`work_unit_`            AS `work_unit_`,
-       `t`.`work_pos_`             AS `work_pos_`,
-       `t`.`work_rank_`            AS `work_rank_`,
-       `t`.`home_addr_`            AS `home_addr_`,
-       `t`.`home_phone_`           AS `home_phone_`,
-       `t`.`source_`               AS `source_`,
-       `t`.`sort_`                 AS `sort_`,
-       `t`.`status_`               AS `status_`,
-       `t`.`account_lock_`         AS `account_lock_`,
-       `t`.`owner_user_id_`        AS `owner_user_id_`,
-       `t`.`owner_user_account_`   AS `owner_user_account_`,
-       `t`.`owner_dept_id_`        AS `owner_dept_id_`,
-       `t`.`owner_dept_code_`      AS `owner_dept_code_`,
-       `t`.`owner_dept_name_`      AS `owner_dept_name_`,
-       `t`.`create_by_`            AS `create_by_`,
-       `t`.`create_time_`          AS `create_time_`,
-       `t`.`update_by_`            AS `update_by_`,
-       `t`.`update_time_`          AS `update_time_`,
-       `t`.`last_change_password_` AS `last_change_password_`,
-       `t1`.`node_key_`            AS `node_key_`,
-       `t1`.`node_path_`           AS `node_path_`,
-       `t1`.`key_`                 AS `dept_key_`,
-       `t1`.`name_`                AS `dept_name_`,
-       `t1`.`alias_`               AS `dept_alias_`,
-       `t1`.`short_name_`          AS `dept_short_name_`,
-       `t1`.`type_`                AS `dept_type_`,
-       `t1`.`usc_no_`              AS `dept_usc_no_`,
-       `t1`.`addr_no_`             AS `dept_addr_no_`
-from (`sys_user_` `t` left join `sys_dept_` `t1` on ((`t1`.`id_` = `t`.`dept_id_`)));
