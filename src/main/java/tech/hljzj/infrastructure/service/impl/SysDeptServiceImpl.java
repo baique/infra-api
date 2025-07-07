@@ -227,8 +227,11 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Override
     public SysDeptAncestors ancestorNodes(String deptId) {
         //查询所有后台节点
-        SysDept deptInfo = getById(deptId);
         SysDeptAncestors ancestors = new SysDeptAncestors();
+        SysDept deptInfo = getById(deptId);
+        if (deptInfo == null) {
+            return ancestors;
+        }
         ancestors.setCurrent(deptInfo);
 
         String nodePath = deptInfo.getNodePath();

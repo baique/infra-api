@@ -24,7 +24,7 @@ public class SysUserLoginServiceImpl implements SysUserLoginService {
             return Collections.emptyList();
         }
         // 用户所属部门
-        return listGrantRoleOfUserAndDept(userId, appId, appId);
+        return listGrantRoleOfUserAndDept(userId, appId, user.getDeptId());
     }
 
 
