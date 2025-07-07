@@ -1,5 +1,6 @@
 package tech.hljzj.infrastructure.compatible.vo.department;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import tech.hljzj.framework.util.tree.TreeNode;
 import tech.hljzj.infrastructure.domain.SysDept;
@@ -32,7 +33,10 @@ public class Department implements Serializable, TreeNode<Department> {
         department.setDepartmentId(f.getId());
         department.setDepartmentCode(f.getKey());
         department.setDepartmentName(f.getName());
-        department.setDepartmentParent(f.getParentId());
+        // 不设置上级
+        if (!StrUtil.equals("0", f.getParentId())) {
+            department.setDepartmentParent(f.getParentId());
+        }
         department.setDeptType(f.getType());
         department.setDeptTypeName(f.getType());
         department.setCreateTime(new Timestamp(f.getCreateTime().getTime()));
