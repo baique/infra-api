@@ -14,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import tech.hljzj.framework.logger.BusinessType;
+import tech.hljzj.framework.logger.Log;
 import tech.hljzj.framework.security.BasicAuthenticationManager;
 import tech.hljzj.framework.security.an.Anonymous;
 import tech.hljzj.framework.security.bean.LoginUser;
@@ -61,6 +63,7 @@ public class UserCompatibleController extends MController {
      * @param password 密码
      */
     @RequestMapping(value = "/app/login", method = {RequestMethod.GET, RequestMethod.POST})
+    @Log(title = "登录", operType = "应用登录",ignoreParamValue = "password")
     @Anonymous
     public R<?> appLogin(String account, String password) {
         try {
