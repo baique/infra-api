@@ -14,5 +14,4 @@ import tech.hljzj.infrastructure.vo.SysMenu.base.SysMenuQueryBaseVo;
 @Setter
 public class SysMenuQueryVo extends SysMenuQueryBaseVo {
     // 在这里可以扩展其他属性
-
 }

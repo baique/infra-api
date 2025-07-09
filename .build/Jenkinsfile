@@ -1,3 +1,7 @@
 @Library('lib') _
 
-apiBuilder()
+apiBuilder(
+    env: [
+        'spring.profiles.active='
+    ]
+)

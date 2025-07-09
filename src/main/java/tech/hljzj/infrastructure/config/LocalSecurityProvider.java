@@ -1,6 +1,5 @@
 package tech.hljzj.infrastructure.config;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -14,24 +13,21 @@ import org.springframework.stereotype.Component;
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.security.AppObtainPassword;
 import tech.hljzj.framework.security.SecurityProvider;
-import tech.hljzj.framework.security.SystemUser;
-import tech.hljzj.framework.security.bean.RoleInfo;
 import tech.hljzj.framework.security.bean.UserInfo;
 import tech.hljzj.framework.util.password.SMUtil;
 import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.domain.SysApp;
-import tech.hljzj.infrastructure.domain.SysMenu;
 import tech.hljzj.infrastructure.domain.SysUser;
 import tech.hljzj.infrastructure.domain.VSysUser;
 import tech.hljzj.infrastructure.service.*;
 import tech.hljzj.infrastructure.util.AppScopeHolder;
-import tech.hljzj.infrastructure.vo.SysMenu.SysMenuQueryVo;
-import tech.hljzj.infrastructure.vo.SysRole.SysLoginBindRole;
 import tech.hljzj.protect.password.PasswordNotSafeException;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @Component
 @Slf4j
@@ -136,39 +132,15 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
     public UserInfo buildLoginInfo(VSysUser principal, SysApp scopeApp) {
         String scopeAppId = scopeApp.getId();
         //信息拼装
-        AppLoginUserInfo loginUser = new AppLoginUserInfo();
+        AppLoginUserInfo loginUser = new AppLoginUserInfo(
+            sysUserLoginService,
+            sysRoleService,
+            sysMenuService
+        );
         loginUser.setEnabled(Objects.equals(AppConst.YES, principal.getStatus()));
         loginUser.setLock(Objects.equals(AppConst.YES, principal.getAccountLock()));
-        List<SysLoginBindRole> sysRoles = sysUserLoginService.listGrantRoleOfUserAndDept(principal.getId(), scopeAppId, principal.getDeptId());
-        Map<String, RoleInfo> roleMapping = sysRoles.stream()
-            .map(f -> {
-                RoleInfo roleInfo = new RoleInfo();
-                roleInfo.setId(f.getId());
-                roleInfo.setKey(f.getKey());
-                roleInfo.setName(f.getName());
-                roleInfo.setMainHomePage(f.getMainPagePath());
-                roleInfo.setPriority(f.getPriority());
-                roleInfo.setSource(f.getSource());
-                return roleInfo;
-            }).collect(Collectors.toMap(RoleInfo::getKey, f -> f));
-
-        Set<RoleInfo> roleInfoList = loginUser.getRoleInfos();
-        loginUser.getRole().addAll(roleMapping.keySet());
-        roleInfoList.addAll(roleMapping.values());
-
-        List<SysMenu> sysMenus;
-        if (roleMapping.containsKey(SystemUser.GLOBAL_PERM)) {
-            //这里检索全部
-            SysMenuQueryVo q = new SysMenuQueryVo();
-            q.setOwnerAppId(scopeAppId);
-            sysMenus = sysMenuService.list(q);
-        } else {
-            sysMenus = sysRoleService.listGrantOfRoles(sysRoles.stream()
-                .map(SysLoginBindRole::getId)
-                .collect(Collectors.toList()), scopeAppId, f -> f);
-        }
-
         loginUser.setLoginAppId(scopeAppId);
+        loginUser.setMainHomePath(scopeApp.getMainPagePath());
         loginUser.setId(principal.getId())
             .setAccount(principal.getUsername())
             .setName(principal.getRealname())
@@ -181,12 +153,6 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
             .setUnit(principal.getWorkUnit())
             .setPost(principal.getWorkPos())
             .setRank(principal.getWorkRank());
-
-        //设置用户主页路径
-        loginUser.setMainHomePath(CollUtil.isEmpty(roleInfoList) ? scopeApp.getMainPagePath() : roleInfoList
-            .stream().sorted().findFirst().map(RoleInfo::getMainHomePage).orElse(""));
-        loginUser.setMainHomePath(StrUtil.blankToDefault(loginUser.getMainHomePath(), scopeApp.getMainPagePath()));
-        loginUser.setPermission(sysMenus.stream().map(SysMenu::getKey).collect(Collectors.toSet()));
         return loginUser;
     }
 

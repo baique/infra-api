@@ -487,9 +487,7 @@ WITH RECURSIVE menu_cte AS (
         cast(concat('/',SUBSTRING(md5(d.id_), 1, 16)) as char(2000)) AS node_path
     FROM sys_menu_ d
     WHERE parent_id_ = '0'
-
     UNION ALL
-
     -- 子部门
     SELECT
         d.id_,
