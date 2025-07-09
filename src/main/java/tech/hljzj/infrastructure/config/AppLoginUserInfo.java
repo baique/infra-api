@@ -19,14 +19,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class AppLoginUserInfo extends UserInfo {
-    private final SysUserLoginService sysUserLoginService;
-    private final SysRoleService sysRoleService;
-    private final SysMenuService sysMenuService;
+    private SysUserLoginService sysUserLoginService;
+    private SysRoleService sysRoleService;
+    private SysMenuService sysMenuService;
 
     public AppLoginUserInfo(SysUserLoginService sysUserLoginService, SysRoleService sysRoleService, SysMenuService sysMenuService) {
         this.sysUserLoginService = sysUserLoginService;
         this.sysRoleService = sysRoleService;
         this.sysMenuService = sysMenuService;
+    }
+
+    public AppLoginUserInfo() {
+        this.roleLoaded = true;
+        this.menuLoaded = true;
     }
 
     @Getter
