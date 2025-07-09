@@ -1,0 +1,151 @@
+{
+  "server": {
+    "serverAddress": "",
+    "author": "wa",
+    "codeSelector": [
+      "new-admin"
+    ]
+  },
+  "genConfig": {
+    "perm": "sys_dept_role_",
+    "key": "sys_dept_role_",
+    "name": "部门关联角色",
+    "packageName": "tech.hljzj.infrastructure",
+    "author": "",
+    "description": "",
+    "primaryKeyColumn": "id_",
+    "dateTime": "",
+    "params": {
+      "extendBizBaseEntity": ""
+    }
+  },
+  "genColumn": [
+    {
+      "key": "id_",
+      "name": "id_",
+      "type": "String",
+      "description": null,
+      "typeNumber": false,
+      "list": false,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 32,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "id": "fs2W2MVwRNvvChvuANz5p",
+      "keep": true
+    },
+    {
+      "key": "dept_id_",
+      "name": "dept_id_",
+      "type": "String",
+      "description": null,
+      "typeNumber": false,
+      "list": false,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 128,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "id": "_zWrR4boiAED0kgrAWERQ",
+      "keep": true
+    },
+    {
+      "key": "role_id_",
+      "name": "role_id_",
+      "type": "String",
+      "description": null,
+      "typeNumber": false,
+      "list": false,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 32,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "id": "P6wIQWCDZYT9revQUjI21",
+      "keep": true
+    },
+    {
+      "key": "app_id_",
+      "name": "app_id_",
+      "type": "String",
+      "description": null,
+      "typeNumber": false,
+      "list": false,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 32,
+      "component": "Input",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "id": "BWzEvyE_Pd3nN4Dxkit0A",
+      "keep": true
+    },
+    {
+      "key": "expired_time_",
+      "name": "expired_time_",
+      "type": "Date",
+      "description": null,
+      "typeNumber": false,
+      "list": false,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 30,
+      "component": "DatePicker",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "id": "WFbUJSd5vt-Sx0Wz_EhZR",
+      "keep": true
+    },
+    {
+      "key": "scope_",
+      "name": "scope_",
+      "type": "Integer",
+      "description": null,
+      "typeNumber": true,
+      "list": false,
+      "insert": false,
+      "update": false,
+      "required": false,
+      "maxLength": 2147483647,
+      "component": "InputNumber",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": false,
+      "id": "71uKjIPoyuB6dD3MbMlZS"
+    }
+  ],
+  "serverConfig": {}
+}
