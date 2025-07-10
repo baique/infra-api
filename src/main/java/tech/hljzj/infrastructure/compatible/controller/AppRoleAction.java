@@ -1,7 +1,7 @@
 package tech.hljzj.infrastructure.compatible.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,7 +14,6 @@ import tech.hljzj.infrastructure.compatible.vo.role.Role;
 import tech.hljzj.infrastructure.compatible.vo.user.userDetails.UserDetails;
 import tech.hljzj.infrastructure.domain.SysRole;
 import tech.hljzj.infrastructure.domain.SysUser;
-import tech.hljzj.infrastructure.service.SysDeptService;
 import tech.hljzj.infrastructure.service.SysRoleService;
 import tech.hljzj.infrastructure.service.SysUserLoginService;
 import tech.hljzj.infrastructure.service.SysUserService;
@@ -29,16 +28,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/app")
 @RestController
 @Anonymous
+@RequiredArgsConstructor
 public class AppRoleAction extends MController {
 
-    @Autowired
-    private SysUserService sysUserService;
-    @Autowired
-    private SysRoleService sysRoleService;
-    @Autowired
-    private SysDeptService sysDeptService;
-    @Autowired
-    private SysUserLoginService sysUserLoginService;
+    private final SysUserService sysUserService;
+    private final SysRoleService sysRoleService;
+    private final SysUserLoginService sysUserLoginService;
 
     @PostMapping("/role/hasRoleUsers")
     @ResponseBody

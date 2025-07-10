@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.security.an.Anonymous;
@@ -38,25 +39,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/app")
 @RestController
 @Anonymous
+@RequiredArgsConstructor
 public class AppUserAction extends MController {
     private final SysUserService sysUserService;
     private final SysRoleService sysRoleService;
     private final SysDeptService sysDeptService;
-    private final SysMenuService sysMenuService;
     private final SysUserManagerDeptService sysUserManagerDeptService;
-    private final SysDeptExternalUserService sysDeptExternalUserService;
     private final SysUserLoginService sysUserLoginService;
-
-    public AppUserAction(SysUserService sysUserService, SysRoleService sysRoleService, SysDeptService sysDeptService, SysMenuService sysMenuService, SysUserManagerDeptService sysUserManagerDeptService, SysDeptExternalUserService sysDeptExternalUserService, SysUserLoginService sysUserLoginService) {
-        super();
-        this.sysUserService = sysUserService;
-        this.sysRoleService = sysRoleService;
-        this.sysDeptService = sysDeptService;
-        this.sysMenuService = sysMenuService;
-        this.sysUserManagerDeptService = sysUserManagerDeptService;
-        this.sysDeptExternalUserService = sysDeptExternalUserService;
-        this.sysUserLoginService = sysUserLoginService;
-    }
 
     /**
      * 用户信息以及用户角色权限信息

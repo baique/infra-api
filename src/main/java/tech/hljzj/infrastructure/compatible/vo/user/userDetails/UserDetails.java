@@ -141,12 +141,12 @@ public class UserDetails implements Serializable {
         userDetails.setUserAddressCounty(userInfo.getHomeAddr());
         userDetails.setUserAddressCity(userInfo.getHomeAddr());
         userDetails.setUserAddressProvince(userInfo.getHomeAddr());
-        userDetails.setUserCorporation(userInfo.getWorkAddr());
+        userDetails.setUserCorporation(userInfo.getWorkUnit());
         userDetails.setUserDeptType(userInfo.getDeptType());
         //TODO 实现是否领导功能
         userDetails.setUserLeaderFlag("0");
         userDetails.setUserCreatetime(new Timestamp(
-                userInfo.getCreateTime().getTime()
+            userInfo.getCreateTime().getTime()
         ));
 
 

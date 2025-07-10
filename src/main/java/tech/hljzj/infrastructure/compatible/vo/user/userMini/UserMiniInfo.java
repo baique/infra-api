@@ -273,14 +273,12 @@ public class UserMiniInfo implements Serializable {
         this.setUserAddressCounty(userInfo.getHomeAddr());
         this.setUserAddressCity(userInfo.getHomeAddr());
         this.setUserAddressProvince(userInfo.getHomeAddr());
-        this.setUserCorporation(userInfo.getWorkAddr());
+        this.setUserCorporation(userInfo.getWorkUnit());
         this.setUserDeptType(userInfo.getDeptType());
-        // TODO 秘密类型
-//        up.setUserSecretType(userInfo.getSecretType());
         // TODO 是否领导
         this.setUserLeaderFlag("0");
         this.setUserCreatetime(new Timestamp(
-                userInfo.getCreateTime().getTime()
+            userInfo.getCreateTime().getTime()
         ));
         //用户状态
         this.setUserState(userInfo.getStatus());

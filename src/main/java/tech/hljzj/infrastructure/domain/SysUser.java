@@ -108,15 +108,15 @@ public class SysUser extends BizBaseEntity implements ISort {
     @TableField(value = "email_")
     private String email;
     /**
-     * 工作地点
-     */
-    @TableField(value = "work_addr_")
-    private String workAddr;
-    /**
      * 工作单位
      */
     @TableField(value = "work_unit_")
     private String workUnit;
+    /**
+     * 工作地点
+     */
+    @TableField(value = "work_addr_")
+    private String workAddr;
     /**
      * 工作职务
      */
