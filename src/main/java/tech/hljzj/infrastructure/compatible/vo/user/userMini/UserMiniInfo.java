@@ -267,7 +267,7 @@ public class UserMiniInfo implements Serializable {
         this.setDepartmentName(userInfo.getDeptName());
         this.setUserPhone(userInfo.getPhone());
         this.setUserEmail(userInfo.getEmail());
-        this.setUserPosition(userInfo.getHomeAddr());
+        this.setUserPosition(userInfo.getWorkPos());
         this.setUserHomephone(userInfo.getHomePhone());
         this.setUserAddressCountries(userInfo.getHomeAddr());
         this.setUserAddressCounty(userInfo.getHomeAddr());

@@ -136,7 +136,7 @@ public class UserDetails implements Serializable {
         userDetails.setDepartmentName(userInfo.getDeptName());
         userDetails.setUserPhone(userInfo.getPhone());
         userDetails.setUserEmail(userInfo.getEmail());
-        userDetails.setUserPosition(userInfo.getHomeAddr());
+        userDetails.setUserPosition(userInfo.getWorkPos());
         userDetails.setUserAddressCountries(userInfo.getHomeAddr());
         userDetails.setUserAddressCounty(userInfo.getHomeAddr());
         userDetails.setUserAddressCity(userInfo.getHomeAddr());
