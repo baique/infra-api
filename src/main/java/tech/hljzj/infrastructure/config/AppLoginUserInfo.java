@@ -1,6 +1,7 @@
 package tech.hljzj.infrastructure.config;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.framework.security.SystemUser;
@@ -81,10 +82,10 @@ public class AppLoginUserInfo extends UserInfo {
         }
 
         if (CollUtil.isNotEmpty(this.getRole())) {
-            //设置用户主页路径
-            this.setMainHomePath(this.getRoleInfos().stream().sorted().findFirst().map(RoleInfo::getMainHomePage).orElse(
-                this.getMainHomePath()
-            ));
+            // 设置用户主页路径
+            String roleHomePath = this.getRoleInfos().stream().sorted().findFirst().map(RoleInfo::getMainHomePage).orElse(null);
+            // 保持原样
+            this.setMainHomePath(StrUtil.blankToDefault(roleHomePath, this.getMainHomePath()));
         }
         this.setPermission(sysMenus.stream().map(SysMenu::getKey).collect(Collectors.toSet()));
     }

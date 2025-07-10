@@ -278,6 +278,11 @@ SELECT
     NULL                             -- update_time_ (源表无对应字段)
 FROM tyrzxt.user_info;
 
+update sys_user_ a
+    inner join tyrzxt.user_info  b on a.id_ = b.user_id
+set a.work_unit_ = b.USER_Corporation
+where (a.work_unit_ is null or a.work_unit_ = '') and (b.USER_Corporation is not null and b.USER_Corporation <> '');
+
 COMMIT;
 
 -- =============================================
