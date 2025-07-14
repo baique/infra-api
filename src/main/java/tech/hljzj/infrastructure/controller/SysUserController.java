@@ -95,7 +95,7 @@ public class SysUserController extends BaseController {
         this.service.entityCreate(dto, entity.getAttribution());
         return R.ok(new SysUserDetailVo().fromDto(dto));
     }
-    
+
     /**
      * 修改数据
      *
@@ -109,6 +109,24 @@ public class SysUserController extends BaseController {
         SysUser dto = entity.toDto();
         this.service.entityUpdate(dto, entity.getAttribution());
         return R.ok(new SysUserDetailVo().fromDto(dto));
+    }
+
+    /**
+     * 修改用户锁定状态
+     *
+     * @param userId      用户标识
+     * @param status 锁定状态，1：锁定，0：解锁
+     * @return 修改后
+     */
+    @PreAuthorize("auth('sys:user:edit')")
+    @Log(title = MODULE_NAME, functionName = "修改状态", operType = BusinessType.UPDATE)
+    @PostMapping("/updateStatus")
+    public R<Void> updateUserStatus(@NotNull String userId, @NotNull String status) {
+        this.service.update(Wrappers.<SysUser>lambdaUpdate()
+            .eq(SysUser::getId, userId)
+            .set(SysUser::getStatus, status)
+        );
+        return R.ok();
     }
 
     /**
