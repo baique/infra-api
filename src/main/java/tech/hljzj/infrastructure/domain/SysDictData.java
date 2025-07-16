@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
+import tech.hljzj.framework.config.mybatis.JsonTypeHandler;
 import tech.hljzj.framework.service.entity.DictData;
 import tech.hljzj.framework.service.sort.ISort;
 
@@ -19,7 +20,8 @@ import java.io.Serial;
  */
 @Getter
 @Setter
-@TableName(value = "sys_dict_data_")
+@TableName(value = "sys_dict_data_", autoResultMap = true)
+
 public class SysDictData extends DictData implements ISort {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -39,7 +41,7 @@ public class SysDictData extends DictData implements ISort {
      */
     @TableField(value = "owner_type_id_")
     private String ownerTypeId;
-        /**
+    /**
      * 是否锁定
      */
     @TableField(value = "locked_")
@@ -60,5 +62,6 @@ public class SysDictData extends DictData implements ISort {
         this.setDesc(entity.getDesc());
         this.setLocked(entity.getLocked());
         this.setSort(entity.getSort());
+        this.setAttribution(entity.getAttribution());
     }
 }

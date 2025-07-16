@@ -246,7 +246,7 @@
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 25,
+      "maxLength": 30,
       "component": "DatePicker",
       "rule": [],
       "dataSource": {
@@ -288,7 +288,7 @@
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 25,
+      "maxLength": 30,
       "component": "DatePicker",
       "rule": [],
       "dataSource": {
@@ -403,6 +403,27 @@
       "hasDataSource": false,
       "keep": true,
       "id": "rIoZ_aUpDAQ3aB8lvicYa"
+    },
+    {
+      "key": "attribution_",
+      "name": "扩展属性",
+      "type": "String",
+      "description": null,
+      "typeNumber": false,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1073741824,
+      "component": "InputTextArea",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": false,
+      "id": "dl17vKLfdxj8Zgm1zfIGP"
     }
   ],
   "serverConfig": {}

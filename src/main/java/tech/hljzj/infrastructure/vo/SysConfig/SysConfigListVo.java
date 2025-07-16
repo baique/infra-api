@@ -2,7 +2,7 @@ package tech.hljzj.infrastructure.vo.SysConfig;
 
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.infrastructure.vo.SysConfig.base.*;
+import tech.hljzj.infrastructure.vo.SysConfig.base.SysConfigListBaseVo;
 
 /**
  * 系统配置 sys_config 
@@ -12,6 +12,6 @@ import tech.hljzj.infrastructure.vo.SysConfig.base.*;
  */
 @Getter
 @Setter
-public class SysConfigListVo extends  SysConfigListBaseVo {
-  // 在这里可以扩展其他属性
+public class SysConfigListVo extends SysConfigListBaseVo {
+    // 在这里可以扩展其他属性
 }

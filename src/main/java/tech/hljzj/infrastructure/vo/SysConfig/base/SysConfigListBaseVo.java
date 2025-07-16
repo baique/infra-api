@@ -9,6 +9,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import tech.hljzj.infrastructure.domain.SysConfig;
 import java.lang.*;
 import java.util.Date;
+import java.util.Map;
 
 
 /**
@@ -67,6 +68,11 @@ public class SysConfigListBaseVo implements Serializable {
      */
     @ExcelProperty(value = "是否锁定")
     private String locked;
+    /**
+     * 扩展属性
+     */
+    @ExcelProperty(value = "扩展属性")
+    private Map<String,Object> attribution;
 
     public <T extends SysConfigListBaseVo> T fromDto(SysConfig dto){
         this.setId(dto.getId());
@@ -78,6 +84,7 @@ public class SysConfigListBaseVo implements Serializable {
         this.setDesc(dto.getDesc());
         this.setSort(dto.getSort());
         this.setLocked(dto.getLocked());
+        this.setAttribution(dto.getAttribution());
         //noinspection unchecked
         return (T) this;
     }
@@ -93,6 +100,7 @@ public class SysConfigListBaseVo implements Serializable {
         dto.setDesc(this.getDesc());
         dto.setSort(this.getSort());
         dto.setLocked(this.getLocked());
+        dto.setAttribution(this.getAttribution());
         return dto;
     }
 }

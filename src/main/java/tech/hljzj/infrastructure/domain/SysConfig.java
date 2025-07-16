@@ -20,7 +20,7 @@ import java.io.Serial;
  */
 @Getter
 @Setter
-@TableName(value = "sys_config_")
+@TableName(value = "sys_config_",autoResultMap = true)
 public class SysConfig extends ConfigData implements ISort {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -37,7 +37,6 @@ public class SysConfig extends ConfigData implements ISort {
     private String ownerAppId;
 
 
-
     /**
      * 从新的实体中更新属性
      */
@@ -49,5 +48,6 @@ public class SysConfig extends ConfigData implements ISort {
         this.setDesc(entity.getDesc());
         this.setSort(entity.getSort());
         this.setLocked(entity.getLocked());
+        this.setAttribution(entity.getAttribution());
     }
 }

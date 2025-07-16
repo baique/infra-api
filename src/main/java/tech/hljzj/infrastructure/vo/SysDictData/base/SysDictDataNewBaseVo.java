@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * 字典项 sys_dict_data_ 
@@ -73,6 +74,10 @@ public class SysDictDataNewBaseVo implements Serializable {
      * 排序编号
      */
     private Integer sort;
+    /**
+     * 扩展属性
+     */
+    private Map<String,Object> attribution;
 
     /**
      * 转换为实际的数据实体
@@ -92,6 +97,7 @@ public class SysDictDataNewBaseVo implements Serializable {
         dto.setDesc(this.getDesc());
         dto.setLocked(this.getLocked());
         dto.setSort(this.getSort());
+        dto.setAttribution(this.getAttribution());
 
         return dto;
     }

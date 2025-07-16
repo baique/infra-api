@@ -2,7 +2,7 @@ package tech.hljzj.infrastructure.vo.SysDictData;
 
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.infrastructure.vo.SysDictData.base.*;
+import tech.hljzj.infrastructure.vo.SysDictData.base.SysDictDataListBaseVo;
 
 /**
  * 字典数据 sys_dict_data 
@@ -12,6 +12,6 @@ import tech.hljzj.infrastructure.vo.SysDictData.base.*;
  */
 @Getter
 @Setter
-public class SysDictDataListVo extends  SysDictDataListBaseVo {
-  // 在这里可以扩展其他属性
+public class SysDictDataListVo extends SysDictDataListBaseVo {
+    // 在这里可以扩展其他属性
 }

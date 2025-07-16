@@ -37,4 +37,9 @@
         <sqlFile relativeToChangelogFile="true" path="sql/2025-7-3-2.sql"/>
     </changeSet>
 
+    <!--    字典值扩展属性-->
+    <changeSet id="2025-7-14-1" author="wa">
+        <sqlFile relativeToChangelogFile="true" path="sql/2025-7-14-1.sql"/>
+    </changeSet>
+
 </databaseChangeLog>

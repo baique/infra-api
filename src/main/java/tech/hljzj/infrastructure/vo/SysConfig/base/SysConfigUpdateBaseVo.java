@@ -2,14 +2,12 @@ package tech.hljzj.infrastructure.vo.SysConfig.base;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serial;
-import java.io.Serializable;
-import java.lang.*;
-import java.util.Date;
 import tech.hljzj.infrastructure.domain.SysConfig;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * 系统配置 sys_config 
@@ -59,13 +57,17 @@ public class SysConfigUpdateBaseVo implements Serializable {
      * 是否锁定
      */
     private String locked;
+    /**
+     * 扩展属性
+     */
+    private Map<String, Object> attribution;
 
     /**
      * 转换为实际的数据实体
      */
-    public SysConfig toDto(){
+    public SysConfig toDto() {
         SysConfig dto = new SysConfig();
-          
+
         dto.setId(this.getId());
         dto.setKey(this.getKey());
         dto.setName(this.getName());
@@ -74,6 +76,7 @@ public class SysConfigUpdateBaseVo implements Serializable {
         dto.setDesc(this.getDesc());
         dto.setSort(this.getSort());
         dto.setLocked(this.getLocked());
+        dto.setAttribution(this.getAttribution());
 
         return dto;
     }

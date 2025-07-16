@@ -335,7 +335,7 @@
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 25,
+      "maxLength": 30,
       "component": "Input",
       "rule": [],
       "dataSource": {
@@ -343,7 +343,7 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true,
+      "keep": false,
       "id": "JiBbFfOo9wy9HV-SNrrYe"
     },
     {
@@ -377,7 +377,7 @@
       "insert": true,
       "update": true,
       "required": false,
-      "maxLength": 25,
+      "maxLength": 30,
       "component": "Input",
       "rule": [],
       "dataSource": {
@@ -385,7 +385,7 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": true,
+      "keep": false,
       "id": "bEz_B_N7usKivKTC-6mIM"
     },
     {
@@ -492,6 +492,27 @@
       "hasDataSource": false,
       "keep": true,
       "id": "ApeCFwu-Gs8-Qzq-GCTMD"
+    },
+    {
+      "key": "attribution_",
+      "name": "扩展属性",
+      "type": "String",
+      "description": null,
+      "typeNumber": false,
+      "list": true,
+      "insert": true,
+      "update": true,
+      "required": false,
+      "maxLength": 1073741824,
+      "component": "InputTextArea",
+      "rule": [],
+      "dataSource": {
+        "type": "none",
+        "param": {}
+      },
+      "hasDataSource": false,
+      "keep": false,
+      "id": "XqDDe8E5WhYob1ZbRWHlT"
     }
   ],
   "serverConfig": {}

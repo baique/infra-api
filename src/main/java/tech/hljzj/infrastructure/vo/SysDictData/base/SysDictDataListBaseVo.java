@@ -14,6 +14,7 @@ import tech.hljzj.infrastructure.domain.SysDictData;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Map;
 
 
 /**
@@ -97,6 +98,11 @@ public class SysDictDataListBaseVo implements Serializable {
      */
     @ExcelProperty(value = "排序编号")
     private Integer sort;
+    /**
+     * 扩展属性
+     */
+    @ExcelProperty(value = "扩展属性")
+    private Map<String,Object> attribution;
 
     public <T extends SysDictDataListBaseVo> T fromDto(SysDictData dto) {
         this.setId(dto.getId());
@@ -112,6 +118,7 @@ public class SysDictDataListBaseVo implements Serializable {
         this.setDesc(dto.getDesc());
         this.setLocked(dto.getLocked());
         this.setSort(dto.getSort());
+        this.setAttribution(dto.getAttribution());
         //noinspection unchecked
         return (T) this;
     }

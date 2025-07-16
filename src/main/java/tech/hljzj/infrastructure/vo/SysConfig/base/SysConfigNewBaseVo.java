@@ -7,6 +7,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.lang.*;
 import java.util.Date;
+import java.util.Map;
+
 import tech.hljzj.infrastructure.domain.SysConfig;
 
 import javax.validation.constraints.NotBlank;
@@ -58,6 +60,10 @@ public class SysConfigNewBaseVo implements Serializable {
      * 是否锁定
      */
     private String locked;
+    /**
+     * 扩展属性
+     */
+    private Map<String,Object> attribution;
 
     /**
      * 转换为实际的数据实体
@@ -73,6 +79,7 @@ public class SysConfigNewBaseVo implements Serializable {
         dto.setDesc(this.getDesc());
         dto.setSort(this.getSort());
         dto.setLocked(this.getLocked());
+        dto.setAttribution(this.getAttribution());
 
         return dto;
     }

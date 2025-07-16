@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.framework.config.mybatis.JsonTypeHandler;
-import tech.hljzj.pgdb.PGJsonTypeHandler;
 
 import java.io.Serial;
 import java.io.Serializable;
