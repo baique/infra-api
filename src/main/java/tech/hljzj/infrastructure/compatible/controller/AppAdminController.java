@@ -153,6 +153,7 @@ public class AppAdminController extends MController {
             // 此处需要将用户登录的系统转换为基座服务本身的token，所以需要登录基座服务获取token
             AppScopeHolder.setScopeAppId(AppConst.ID);
 
+            // 使用ticket拿到了token，然后需要输出token的内容
             TokenAuthentication currentServerAuth = tokenAuthenticateService.authenticate(loginInfo.getToken(), true);
 
             SysApp sysApp = sysAppService.entityGet(loginInfo.getAppId());

@@ -110,11 +110,7 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
             return null;
         }
 
-        try {
-            sysUserService.validatePasswordStorage(password, principal);
-        } catch (Exception e) {
-            throw new PasswordNotSafeException("密码强度不符合安全要求，请修改后重新登录");
-        }
+        validatePasswordStorage(password, principal);
 
         if (AppConst.PASSWORD_POLICY.EXPIRED.equals(principal.getPasswordPolicy())) {
             throw new PasswordNotSafeException("密码已过期，请修改后重新登录；或联系管理员进行解锁");
@@ -127,6 +123,14 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
         }
 
         return buildLoginInfo(principal, app, false);
+    }
+
+    protected void validatePasswordStorage(String password, VSysUser principal) throws PasswordNotSafeException {
+        try {
+            sysUserService.validatePasswordStorage(password, principal);
+        } catch (Exception e) {
+            throw new PasswordNotSafeException("密码强度不符合安全要求，请修改后重新登录");
+        }
     }
 
     public UserInfo buildLoginInfo(VSysUser principal, SysApp scopeApp, boolean grantSuperAdminPermission) {
