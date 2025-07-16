@@ -38,7 +38,7 @@ public class TokenAuthenticateService implements SecurityProvider {
     @Override
     public tech.hljzj.framework.security.bean.UserInfo login(Authentication authentication) throws Exception {
         String token = (String) authentication.getPrincipal();
-        return tokenAuth(token);
+        return tokenAuth(token, false);
     }
 
     @Override

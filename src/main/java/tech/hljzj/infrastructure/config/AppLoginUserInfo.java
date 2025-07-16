@@ -23,7 +23,6 @@ public class AppLoginUserInfo extends UserInfo {
     private SysUserLoginService sysUserLoginService;
     private SysRoleService sysRoleService;
     private SysMenuService sysMenuService;
-    private boolean grantSuperAdminPermission;
 
     public AppLoginUserInfo(SysUserLoginService sysUserLoginService,
                             SysRoleService sysRoleService,
@@ -33,6 +32,7 @@ public class AppLoginUserInfo extends UserInfo {
         this.sysUserLoginService = sysUserLoginService;
         this.sysRoleService = sysRoleService;
         this.sysMenuService = sysMenuService;
+        this.grantSuperAdminPermission = grantSuperAdminPermission;
     }
 
     public AppLoginUserInfo() {
@@ -43,7 +43,12 @@ public class AppLoginUserInfo extends UserInfo {
     @Getter
     @Setter
     private String loginAppId;
+    @Getter
+    @Setter
     private boolean roleLoaded;
+    @Getter
+    @Setter
+    private boolean grantSuperAdminPermission;
 
     private synchronized void loadRoleInfo() {
         if (roleLoaded) {
