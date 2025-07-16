@@ -126,16 +126,17 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
             throw new PasswordNotSafeException("密码已过期，请修改后重新登录；或联系管理员进行解锁");
         }
 
-        return buildLoginInfo(principal, app);
+        return buildLoginInfo(principal, app, false);
     }
 
-    public UserInfo buildLoginInfo(VSysUser principal, SysApp scopeApp) {
+    public UserInfo buildLoginInfo(VSysUser principal, SysApp scopeApp, boolean grantSuperAdminPermission) {
         String scopeAppId = scopeApp.getId();
         //信息拼装
         AppLoginUserInfo loginUser = new AppLoginUserInfo(
             sysUserLoginService,
             sysRoleService,
-            sysMenuService
+            sysMenuService,
+            grantSuperAdminPermission
         );
         loginUser.setEnabled(Objects.equals(AppConst.YES, principal.getStatus()));
         loginUser.setLock(Objects.equals(AppConst.YES, principal.getAccountLock()));

@@ -23,8 +23,13 @@ public class AppLoginUserInfo extends UserInfo {
     private SysUserLoginService sysUserLoginService;
     private SysRoleService sysRoleService;
     private SysMenuService sysMenuService;
+    private boolean grantSuperAdminPermission;
 
-    public AppLoginUserInfo(SysUserLoginService sysUserLoginService, SysRoleService sysRoleService, SysMenuService sysMenuService) {
+    public AppLoginUserInfo(SysUserLoginService sysUserLoginService,
+                            SysRoleService sysRoleService,
+                            SysMenuService sysMenuService,
+                            boolean grantSuperAdminPermission
+    ) {
         this.sysUserLoginService = sysUserLoginService;
         this.sysRoleService = sysRoleService;
         this.sysMenuService = sysMenuService;
@@ -45,6 +50,10 @@ public class AppLoginUserInfo extends UserInfo {
             return;
         }
         roleLoaded = true;
+        if (this.grantSuperAdminPermission) {
+            this.getRole().add(SystemUser.GLOBAL_PERM);
+            return;
+        }
         List<SysLoginBindRole> sysRoles = sysUserLoginService.listGrantRoleOfUserAndDept(this.getId(), this.getLoginAppId(), this.getOwnerDeptId());
         Map<String, RoleInfo> roleMapping = sysRoles.stream()
             .map(f -> {

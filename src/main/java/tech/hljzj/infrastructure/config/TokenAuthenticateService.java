@@ -43,10 +43,14 @@ public class TokenAuthenticateService implements SecurityProvider {
 
     @Override
     public UserInfo tokenLogin(String token) throws Exception {
-        return this.tokenAuth(token);
+        return this.tokenAuth(token, false);
     }
 
-    private UserInfo tokenAuth(String token) {
+    public UserInfo tokenLogin(String token, boolean grantSuperAdminPermission) throws Exception {
+        return this.tokenAuth(token, grantSuperAdminPermission);
+    }
+
+    private UserInfo tokenAuth(String token, boolean grantSuperAdminPermission) {
         Optional<TokenAuthentication> user = sessionStoreDecorator.getUserByToken(token);
         if (user.isEmpty()) {
             throw UserException.defaultError("登录动作执行失败,因为传入了一个无效的会话凭据");
@@ -55,10 +59,10 @@ public class TokenAuthenticateService implements SecurityProvider {
         TokenAuthentication existsAuthToken = user.get();
         AppLoginUserInfo u = (AppLoginUserInfo) existsAuthToken.getPrincipal().getUserInfo();
 
-
         return localSecurityProvider.buildLoginInfo(
             sysUserService.entityGet(u.getId(), true),
-            sysAppService.entityGet(AppScopeHolder.requiredScopeAppId())
+            sysAppService.entityGet(AppScopeHolder.requiredScopeAppId()),
+            grantSuperAdminPermission
         );
     }
 
@@ -69,5 +73,9 @@ public class TokenAuthenticateService implements SecurityProvider {
 
     public TokenAuthentication authenticate(String token) throws Exception {
         return this.basicAuthenticationManager.afterAuthenticate(this.tokenLogin(token), this);
+    }
+
+    public TokenAuthentication authenticate(String token, boolean grantSuperAdminPermission) throws Exception {
+        return this.basicAuthenticationManager.afterAuthenticate(this.tokenLogin(token, grantSuperAdminPermission), this);
     }
 }
