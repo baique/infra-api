@@ -23,7 +23,6 @@ import tech.hljzj.infrastructure.compatible.util.AppHelper;
 import tech.hljzj.infrastructure.compatible.vo.user.userDetails.UserDetails;
 import tech.hljzj.infrastructure.config.CompatibleSecurityProvider;
 import tech.hljzj.infrastructure.domain.VSysUser;
-import tech.hljzj.infrastructure.service.SysDeptService;
 import tech.hljzj.infrastructure.service.SysUserService;
 import tech.hljzj.infrastructure.util.AppScopeHolder;
 import tech.hljzj.protect.password.PasswordNotSafeException;
@@ -72,7 +71,7 @@ public class UserCompatibleController extends MController {
         } catch (IllegalArgumentException | AuthenticationServiceException e) {
             if (e.getCause() instanceof PasswordNotSafeException) {
                 log.warn("客户端请求登录认证失败，因为密码存在问题", e);
-                return BeanUtil.copyProperties(R.code(402).setMsg(e.getMessage()), R.class);
+                return BeanUtil.copyProperties(R.code(902).setMsg(e.getMessage()), R.class);
             }
             log.warn("客户端请求登录认证失败", e);
             return BeanUtil.copyProperties(R.code(902).setMsg(e.getMessage()), R.class);
@@ -127,7 +126,6 @@ public class UserCompatibleController extends MController {
         VSysUser user;
         if (StrUtil.isNotBlank(userId)) {
             user = sysUserService.entityGet(userId, true);
-
         } else {
             LoginUser loginInfo = AppHelper.getLoginUser(request);
             if (loginInfo == null) {

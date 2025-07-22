@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import tech.hljzj.framework.security.SessionStoreDecorator;
 import tech.hljzj.framework.security.an.Anonymous;
 import tech.hljzj.framework.security.bean.TokenAuthentication;
+import tech.hljzj.framework.util.password.ParamEncryption;
 import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.compatible.controller.bsae.MController;
 import tech.hljzj.infrastructure.compatible.controller.bsae.R;
@@ -47,8 +48,9 @@ public class AppAdminController extends MController {
     private final SysRoleService sysRoleService;
     private final SysAppService sysAppService;
     private final TokenAuthenticateService tokenAuthenticateService;
+    private final ParamEncryption paramEncryption;
 
-    public AppAdminController(SysDeptService sysDeptService, SysUserService sysUserService, SessionStoreDecorator sessionStoreDecorator, SysRoleService sysRoleService, SysAppService sysAppService, LocalSecurityProvider localSecurityProvider, TokenAuthenticateService tokenAuthenticateService) {
+    public AppAdminController(SysDeptService sysDeptService, SysUserService sysUserService, SessionStoreDecorator sessionStoreDecorator, SysRoleService sysRoleService, SysAppService sysAppService, LocalSecurityProvider localSecurityProvider, TokenAuthenticateService tokenAuthenticateService, ParamEncryption paramEncryption) {
         super();
         this.sysDeptService = sysDeptService;
         this.sysUserService = sysUserService;
@@ -56,6 +58,7 @@ public class AppAdminController extends MController {
         this.sysRoleService = sysRoleService;
         this.sysAppService = sysAppService;
         this.tokenAuthenticateService = tokenAuthenticateService;
+        this.paramEncryption = paramEncryption;
     }
 
     @PostMapping("/tyrz/departments/dp/get")
@@ -82,7 +85,7 @@ public class AppAdminController extends MController {
     @RequestMapping("/admin/updatePassWordInLogin")
     @ResponseBody
     @Anonymous
-
+    @Deprecated
     public Object updatePassword(String userAccount, String userPassword, String initialPassWord) throws PasswordNotSafeException {
         SysUser u = null;
         try {
@@ -96,6 +99,11 @@ public class AppAdminController extends MController {
         if (u == null) {
             return R.fail().setMsg("未找到用户");
         }
+        // 这里因为是兼容接口不对原密码是否加密进行检查；所以此处进行了主动加密
+        // 原密码
+        userPassword = paramEncryption.encrypt(userPassword);
+        initialPassWord = paramEncryption.encrypt(initialPassWord);
+
         sysUserService.changePassword(u.getId(), initialPassWord, userPassword);
         return R.ok();
     }
