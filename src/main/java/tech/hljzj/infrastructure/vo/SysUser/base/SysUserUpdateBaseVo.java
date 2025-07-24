@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.lang.*;
 import java.util.Date;
 import tech.hljzj.infrastructure.domain.SysUser;
 

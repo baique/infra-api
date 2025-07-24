@@ -481,7 +481,7 @@ public class SysLogQueryBaseVo extends PageDomain implements Serializable {
      * 构建查询条件
      */
     public <T extends SysLog> LambdaQueryWrapper<T> buildQueryWrapper() {
-        LambdaQueryWrapper<T> builder = Wrappers.<T>lambdaQuery();
+        LambdaQueryWrapper<T> builder = Wrappers.lambdaQuery();
         this.<T>conditionId().accept(builder);
         this.<T>conditionAppName().accept(builder);
         this.<T>conditionModuleName().accept(builder);

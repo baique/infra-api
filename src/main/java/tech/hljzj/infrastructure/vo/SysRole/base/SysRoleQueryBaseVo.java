@@ -246,7 +246,7 @@ public class SysRoleQueryBaseVo extends PageDomain implements Serializable {
      * 构建查询条件
      */
     public <T extends SysRole> LambdaQueryWrapper<T> buildQueryWrapper() {
-        LambdaQueryWrapper<T> builder = Wrappers.<T>lambdaQuery();
+        LambdaQueryWrapper<T> builder = Wrappers.lambdaQuery();
         this.<T>conditionId().accept(builder);
         this.<T>conditionOwnerAppId().accept(builder);
         this.<T>conditionKey().accept(builder);

@@ -110,7 +110,7 @@ public class AppUserAction extends MController {
             query.setBelongDeptId(userInfo.getUserDepartment());
         }
         List<VSysUser> userList;
-        long size = 0;
+        long size;
         if (page.isPage()) {
             Page<VSysUser> userPage = sysUserService.page(query);
             userList = userPage.getRecords();

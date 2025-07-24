@@ -84,7 +84,7 @@ public interface SysDictTypeService extends IService<SysDictType> {
 
     void cloneToApp(SysDictTypeClone cloneInfo);
 
-    void exportData(SysDictTypeQueryVo query, OutputStream outputStream) throws Exception;
+    void exportData(SysDictTypeQueryVo query, OutputStream outputStream);
 
     void importData(ExcelTypeEnum typeEnum, InputStream inputStream) throws Exception;
 

@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.framework.pojo.dto.BizBaseEntity;
 import tech.hljzj.framework.service.entity.ConfigData;
 import tech.hljzj.framework.service.sort.ISort;
 

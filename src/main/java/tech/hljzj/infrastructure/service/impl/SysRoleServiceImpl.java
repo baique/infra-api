@@ -145,28 +145,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void grant(String roleId, String appId, List<String> menuId) {
-        List<String> queryMenuFind = new ArrayList<>();
-
-        List<SysMenu> menus = menuService.listByIds(menuId);
-        for (SysMenu f : menus) {
-            SysRoleMenu roleMenu = new SysRoleMenu();
-            roleMenu.setRoleId(roleId);
-            roleMenu.setAppId(appId);
-            roleMenu.setMenuId(f.getId());
-            // 寻觅子集
-            queryMenuFind.add(f.getNodePath() + "%");
-        }
-
-        List<SysRoleMenu> roleMenus = menuId.stream().map(f -> {
-            SysRoleMenu roleMenu = new SysRoleMenu();
-            roleMenu.setRoleId(roleId);
-            roleMenu.setAppId(appId);
-            roleMenu.setMenuId(f);
-            return roleMenu;
-        }).toList();
-        // 授权动作，需要查询出信息如下
-
-
         //保存用户选中的菜单列表
         menuId.stream().map(f -> {
             SysRoleMenu roleMenu = new SysRoleMenu();

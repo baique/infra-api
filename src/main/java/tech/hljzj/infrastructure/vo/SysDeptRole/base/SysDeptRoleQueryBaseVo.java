@@ -1,15 +1,12 @@
 package tech.hljzj.infrastructure.vo.SysDeptRole.base;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
 import lombok.Getter;
 import lombok.Setter;
 import java.io.Serializable;
-import java.lang.*;
-import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 

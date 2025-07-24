@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import tech.hljzj.framework.security.SessionStoreDecorator;
 import tech.hljzj.framework.security.bean.LoginUser;
 import tech.hljzj.framework.security.bean.TokenAuthentication;
-import tech.hljzj.infrastructure.compatible.vo.AppInfo;
 import tech.hljzj.infrastructure.domain.SysApp;
 import tech.hljzj.infrastructure.util.AppScopeHolder;
 

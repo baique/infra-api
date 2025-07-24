@@ -9,8 +9,8 @@ import java.io.Serializable;
  * 署名：王澳
  */
 public class Credentials  implements Serializable {
-    private String token;
-    private String ticket;
+    private final String token;
+    private final String ticket;
     public Credentials(String token, String ticket){
         this.token = token;
         this.ticket = ticket;

@@ -36,17 +36,17 @@ public class TokenAuthenticateService implements SecurityProvider {
     }
 
     @Override
-    public tech.hljzj.framework.security.bean.UserInfo login(Authentication authentication) throws Exception {
+    public tech.hljzj.framework.security.bean.UserInfo login(Authentication authentication) {
         String token = (String) authentication.getPrincipal();
         return tokenAuth(token, false);
     }
 
     @Override
-    public UserInfo tokenLogin(String token) throws Exception {
+    public UserInfo tokenLogin(String token) {
         return this.tokenAuth(token, false);
     }
 
-    public UserInfo tokenLogin(String token, boolean grantSuperAdminPermission) throws Exception {
+    public UserInfo tokenLogin(String token, boolean grantSuperAdminPermission) {
         return this.tokenAuth(token, grantSuperAdminPermission);
     }
 

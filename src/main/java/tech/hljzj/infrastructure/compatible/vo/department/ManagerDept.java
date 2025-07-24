@@ -26,8 +26,7 @@ public class ManagerDept  implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ManagerDept)) return false;
-        ManagerDept that = (ManagerDept) o;
+        if (!(o instanceof ManagerDept that)) return false;
         return Objects.equals(getId(), that.getId());
     }
 

@@ -70,7 +70,7 @@ public class CompatibleSecurityProvider extends LocalSecurityProvider {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         log.info("[统一认证兼容认证器]注册成功");
     }
 }

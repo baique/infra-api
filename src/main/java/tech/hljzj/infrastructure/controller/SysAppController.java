@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tech.hljzj.framework.base.BaseController;
 import tech.hljzj.framework.bean.R;
-import tech.hljzj.framework.config.AppBanner;
 import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.logger.BusinessType;
 import tech.hljzj.framework.logger.Log;
@@ -43,13 +42,11 @@ public class SysAppController extends BaseController {
     private final SysAppService service;
     private final SwapEncoder swapEncoder;
     private final SysAppService sysAppService;
-    private final AppBanner appBanner;
 
-    public SysAppController(SysAppService service, SwapEncoder swapEncoder, SysAppService sysAppService, AppBanner appBanner) {
+    public SysAppController(SysAppService service, SwapEncoder swapEncoder, SysAppService sysAppService) {
         this.service = service;
         this.swapEncoder = swapEncoder;
         this.sysAppService = sysAppService;
-        this.appBanner = appBanner;
     }
 
     /**
@@ -198,4 +195,5 @@ public class SysAppController extends BaseController {
             throw UserException.defaultError("文件内容解析失败", e);
         }
     }
+
 }

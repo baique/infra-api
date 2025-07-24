@@ -1,7 +1,6 @@
 package tech.hljzj.infrastructure.vo.SysDictType.base;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
@@ -10,8 +9,6 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.lang.*;
-import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -229,7 +226,7 @@ public class SysDictTypeQueryBaseVo extends PageDomain implements Serializable {
      * 构建查询条件
      */
     public <T extends SysDictType> LambdaQueryWrapper<T> buildQueryWrapper() {
-        LambdaQueryWrapper<T> builder = Wrappers.<T>lambdaQuery();
+        LambdaQueryWrapper<T> builder = Wrappers.lambdaQuery();
         this.<T>conditionId().accept(builder);
         this.<T>conditionOwnerAppId().accept(builder);
         this.<T>conditionKey().accept(builder);

@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.lang.*;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -143,7 +142,7 @@ public class SysDeptExternalUserQueryBaseVo extends PageDomain implements Serial
      * 构建查询条件
      */
     public <T extends SysDeptExternalUser> LambdaQueryWrapper<T> buildQueryWrapper() {
-        LambdaQueryWrapper<T> builder = Wrappers.<T>lambdaQuery();
+        LambdaQueryWrapper<T> builder = Wrappers.lambdaQuery();
         this.<T>conditionId().accept(builder);
         this.<T>conditionDeptId().accept(builder);
         this.<T>conditionUserId().accept(builder);

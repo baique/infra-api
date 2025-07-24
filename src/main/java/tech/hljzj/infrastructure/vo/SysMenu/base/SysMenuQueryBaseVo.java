@@ -423,7 +423,7 @@ public class SysMenuQueryBaseVo extends PageDomain implements Serializable {
      * 构建查询条件
      */
     public <T extends SysMenu> LambdaQueryWrapper<T> buildQueryWrapper() {
-        LambdaQueryWrapper<T> builder = Wrappers.<T>lambdaQuery();
+        LambdaQueryWrapper<T> builder = Wrappers.lambdaQuery();
         this.<T>conditionId().accept(builder);
         this.<T>conditionOwnerAppId().accept(builder);
         this.<T>conditionNodeKey().accept(builder);

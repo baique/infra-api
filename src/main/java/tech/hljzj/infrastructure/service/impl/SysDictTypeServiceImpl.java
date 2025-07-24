@@ -25,7 +25,6 @@ import tech.hljzj.framework.service.SortService;
 import tech.hljzj.framework.service.entity.IDictData;
 import tech.hljzj.framework.util.excel.ExcelUtil;
 import tech.hljzj.framework.util.web.MsgUtil;
-import tech.hljzj.framework.util.web.ReqUtil;
 import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.domain.SysDictData;
 import tech.hljzj.infrastructure.domain.SysDictType;
@@ -38,7 +37,6 @@ import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeClone;
 import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeListVo;
 import tech.hljzj.infrastructure.vo.SysDictType.SysDictTypeQueryVo;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Validator;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -244,7 +242,7 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
     }
 
     @Override
-    public void exportData(SysDictTypeQueryVo query, OutputStream outputStream) throws Exception {
+    public void exportData(SysDictTypeQueryVo query, OutputStream outputStream) {
         List<String> loadDictData = new ArrayList<>();
         // 这里
         List<SysDictTypeListVo> list = this.list(query.buildQueryWrapper()).stream().map(f -> {

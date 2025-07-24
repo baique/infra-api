@@ -1,7 +1,6 @@
 package tech.hljzj.infrastructure.vo.SysDictData.base;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
@@ -10,8 +9,6 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.lang.*;
-import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 

@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.infrastructure.util.AppScopeHolder;
 
 /**
  * 应用管理 sys_app

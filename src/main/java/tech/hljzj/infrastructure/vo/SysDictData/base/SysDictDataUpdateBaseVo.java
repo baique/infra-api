@@ -7,7 +7,6 @@ import tech.hljzj.infrastructure.domain.SysDictData;
 import javax.validation.constraints.NotBlank;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Map;
 
 /**

@@ -190,7 +190,7 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         log.info("[数据库认证]注册成功");
     }
 }

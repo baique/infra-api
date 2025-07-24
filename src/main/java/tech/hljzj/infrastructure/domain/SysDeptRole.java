@@ -6,9 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
-import java.lang.*;
+
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
-import tech.hljzj.framework.pojo.dto.BizBaseEntity;
 
 /**
  * 部门关联角色 sys_dept_role_
@@ -19,7 +20,8 @@ import tech.hljzj.framework.pojo.dto.BizBaseEntity;
 @Getter
 @Setter
 @TableName(value = "sys_dept_role_")
-public class SysDeptRole  {
+public class SysDeptRole implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

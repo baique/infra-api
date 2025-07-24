@@ -154,7 +154,7 @@ public interface SysUserService extends IService<SysUser> {
      * @param userId 用户标识
      * @return 应用角色信息
      */
-    public List<GrantAppRoleVo> grantAppWithRole(String userId, String appId);
+    List<GrantAppRoleVo> grantAppWithRole(String userId, String appId);
 
     /**
      * 修改角色的过期时间
@@ -163,7 +163,7 @@ public interface SysUserService extends IService<SysUser> {
      * @param expiredTime 过期时间
      * @return 是否成功修改
      */
-    public boolean updateGrantRoleExpiredTime(String userId, String roleId, Date expiredTime);
+    boolean updateGrantRoleExpiredTime(String userId, String roleId, Date expiredTime);
 
     /**
      * 获取某个应用中分配给某个用户的所有角色

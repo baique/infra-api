@@ -1,6 +1,5 @@
 package tech.hljzj.infrastructure.vo.SysDictType;
 
-import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.infrastructure.vo.SysDictType.base.*;

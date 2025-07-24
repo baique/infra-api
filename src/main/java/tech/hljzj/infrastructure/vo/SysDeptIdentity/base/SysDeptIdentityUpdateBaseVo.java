@@ -3,8 +3,7 @@ package tech.hljzj.infrastructure.vo.SysDeptIdentity.base;
 import lombok.Getter;
 import lombok.Setter;
 import java.io.Serializable;
-import java.lang.*;
-import java.util.Date;
+
 import tech.hljzj.infrastructure.domain.SysDeptIdentity;
 
 /**

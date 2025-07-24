@@ -3,7 +3,6 @@ package tech.hljzj.infrastructure.vo.SysDeptExternalUser;
 import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.infrastructure.vo.SysDeptExternalUser.base.*;
-import tech.hljzj.infrastructure.vo.SysDeptExternalUser.base.SysDeptExternalUserUpdateBaseVo;
 
 /**
  * 外部编入人员 sys_dept_external_user_ 

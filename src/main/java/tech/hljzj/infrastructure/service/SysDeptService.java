@@ -148,7 +148,7 @@ public interface SysDeptService extends IService<SysDept> {
      * @param deptId 部门标识
      * @return 应用角色信息
      */
-    public List<GrantAppRoleVo> grantDeptAppWithRole(String deptId, String appId);
+    List<GrantAppRoleVo> grantDeptAppWithRole(String deptId, String appId);
 
     /**
      * 修改角色的过期时间
@@ -157,7 +157,7 @@ public interface SysDeptService extends IService<SysDept> {
      * @param expiredTime 过期时间
      * @return 是否成功修改
      */
-    public boolean updateGrantRoleExpiredTime(String deptId, String roleId, Date expiredTime);
+    boolean updateGrantRoleExpiredTime(String deptId, String roleId, Date expiredTime);
 
     /**
      * 修改角色的授权范围

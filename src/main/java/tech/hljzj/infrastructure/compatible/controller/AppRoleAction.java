@@ -52,8 +52,8 @@ public class AppRoleAction extends MController {
     public Object pageAll(Role roleInfo, PageUtil page) {
         SysRoleQueryVo query = roleInfo.toQuery();
         query.setOwnerAppId(AppHelper.getLoginApp(request));
-        long size = 0;
-        List<Role> roles = null;
+        long size;
+        List<Role> roles;
         if (page.isPage()) {
             query.setPageNum(page.getPage());
             query.setPageSize(page.getLimit());

@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import tech.hljzj.infrastructure.domain.SysDeptIdentity;
 import tech.hljzj.infrastructure.vo.SysDeptIdentity.*;
-import java.lang.*;
-import java.util.Date;
+
 import java.util.List;
 import java.io.Serializable;
 import java.util.Collection;

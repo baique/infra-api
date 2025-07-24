@@ -88,7 +88,7 @@ public class AppPermissionAction extends MController {
     public Object pageAll(Permission ps, PageUtil page) {
         SysMenuQueryVo query = ps.toQuery();
         query.setOwnerAppId(AppHelper.getLoginApp(request));
-        long size = 0;
+        long size;
         List<SysMenu> menuList;
         if (page.isPage()) {
             query.setPageNum(page.getPage());

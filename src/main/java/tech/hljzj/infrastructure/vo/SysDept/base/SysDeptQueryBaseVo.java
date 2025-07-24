@@ -1,7 +1,6 @@
 package tech.hljzj.infrastructure.vo.SysDept.base;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
@@ -10,8 +9,6 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.lang.*;
-import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -429,7 +426,7 @@ public class SysDeptQueryBaseVo extends PageDomain implements Serializable {
      * 构建查询条件
      */
     public <T extends SysDept> LambdaQueryWrapper<T> buildQueryWrapper() {
-        LambdaQueryWrapper<T> builder = Wrappers.<T>lambdaQuery();
+        LambdaQueryWrapper<T> builder = Wrappers.lambdaQuery();
         this.<T>conditionId().accept(builder);
         this.<T>conditionParentId().accept(builder);
         this.<T>conditionNodeKey().accept(builder);
