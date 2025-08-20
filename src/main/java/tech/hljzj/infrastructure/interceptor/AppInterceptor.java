@@ -35,11 +35,15 @@ public class AppInterceptor implements BaseInterceptor {
         this.sysAppService = sysAppService;
     }
 
+
     private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher(
         "/token",
         "POST"
     );
-
+    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER2 = new AntPathRequestMatcher(
+        "/authenticate",
+        "POST"
+    );
 
     private static final AntPathRequestMatcher GET_TOKEN_REQUEST_MATCHER = new AntPathRequestMatcher(
         "/tyrz/getToken",
@@ -103,6 +107,8 @@ public class AppInterceptor implements BaseInterceptor {
     }
 
     private static boolean isCrossSystemLogin(HttpServletRequest request) {
-        return DEFAULT_ANT_PATH_REQUEST_MATCHER.matcher(request).isMatch() || GET_TOKEN_REQUEST_MATCHER.matcher(request).isMatch();
+        return DEFAULT_ANT_PATH_REQUEST_MATCHER.matcher(request).isMatch()
+            || GET_TOKEN_REQUEST_MATCHER.matcher(request).isMatch()
+            || DEFAULT_ANT_PATH_REQUEST_MATCHER2.matcher(request).isMatch();
     }
 }
