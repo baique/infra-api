@@ -51,6 +51,8 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
     private SysUserLockService sysUserLockService;
     @Autowired
     private SysUserLoginService sysUserLoginService;
+    @Autowired
+    private TokenAuthenticateService tokenAuthenticateService;
 
 
     @Override
@@ -123,6 +125,11 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
         }
 
         return buildLoginInfo(principal, app, false);
+    }
+
+    @Override
+    public UserInfo tokenLogin(String token) {
+        return tokenAuthenticateService.tokenLogin(token);
     }
 
     protected void validatePasswordStorage(String password, VSysUser principal) throws PasswordNotSafeException {
