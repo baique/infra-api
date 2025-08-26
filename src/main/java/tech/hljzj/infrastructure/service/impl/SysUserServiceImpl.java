@@ -121,6 +121,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean entityCreate(SysUser entity, Map<String, Object> attrs) {
+        try {
+            entity.setMaskV(swapEncoder.encode(entity.getPassword()));
+        } catch (Exception e) {
+            throw UserException.defaultError("密码设置失败");
+        }
         if (entityCreate(entity)) {
             updateAttribution(entity.getId(), attrs);
             return true;
