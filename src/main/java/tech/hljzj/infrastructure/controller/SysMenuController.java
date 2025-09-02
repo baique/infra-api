@@ -16,6 +16,7 @@ import tech.hljzj.infrastructure.domain.SysDictData;
 import tech.hljzj.infrastructure.domain.SysMenu;
 import tech.hljzj.infrastructure.service.SysMenuService;
 import tech.hljzj.infrastructure.vo.SysMenu.*;
+import tech.hljzj.protect.anno.Xss;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -50,6 +51,7 @@ public class SysMenuController extends BaseController {
     @PreAuthorize("auth({'sys:menu:query','sys:menu:edit'})")
     @GetMapping("/{id}")
     @Log(title = MODULE_NAME, operType = BusinessType.DETAIL)
+    @Xss(enable = false)
     public R<SysMenuDetailVo> entityGet(@PathVariable Serializable id) {
         SysMenu dto = this.service.entityGet(id);
         return R.ok(new SysMenuDetailVo().fromDto(dto));
@@ -133,6 +135,7 @@ public class SysMenuController extends BaseController {
     @PostMapping("/import")
     @PreAuthorize("auth('sys:menu:import')")
     @Log(title = MODULE_NAME, operType = BusinessType.IMPORT)
+    @Xss(enable = false)
     public R<List<ExcelUtil.FailRowWrap<SysMenuListVo>>> importData(String appId, @RequestPart(name = "files") MultipartFile file) throws IOException {
         List<ExcelUtil.FailRowWrap<SysMenuListVo>> d = service.importData(appId, file);
         if (CollUtil.isNotEmpty(d)) {
@@ -150,6 +153,7 @@ public class SysMenuController extends BaseController {
      */
     @PostMapping("/list")
 //    @PreAuthorize("auth('sys:menu:list')")
+    @Xss(enable = false)
     public R<R.PageResult<SysMenuListVo>> page(@RequestBody SysMenuQueryVo query) {
         Page<SysMenu> page = this.service.page(query);
         Page<SysMenuListVo> pageVo = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
@@ -171,6 +175,7 @@ public class SysMenuController extends BaseController {
      */
     @PostMapping("/list/all")
 //    @PreAuthorize("auth('sys:menu:list')")
+    @Xss(enable = false)
     public R<?> listAll(@RequestBody SysMenuQueryVo query) {
         List<SysMenu> page = this.service.list(query);
         List<SysMenuListVo> list = page.stream().map((Function<SysMenu, SysMenuListVo>) entity -> {
