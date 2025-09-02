@@ -1,8 +1,13 @@
 package tech.hljzj.infrastructure.vo.SysApp;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.functions.T;
+import tech.hljzj.framework.security.bean.UserInfo;
+import tech.hljzj.framework.util.web.AuthUtil;
 import tech.hljzj.infrastructure.domain.SysApp;
 import tech.hljzj.infrastructure.vo.SysApp.base.*;
 
@@ -14,6 +19,7 @@ import java.util.function.Consumer;
  *
  * @author wa
  */
+@Slf4j
 @Getter
 @Setter
 public class SysAppQueryVo extends SysAppQueryBaseVo<SysApp> {
@@ -29,5 +35,10 @@ public class SysAppQueryVo extends SysAppQueryBaseVo<SysApp> {
     }
 
 
-    // 在这里可以扩展其他属性
+    @Override
+    public <R extends SysApp> LambdaQueryWrapper<R> buildQueryWrapper() {
+        LambdaQueryWrapper<R> d = super.buildQueryWrapper();
+
+        return d;
+    }
 }

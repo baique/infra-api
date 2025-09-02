@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.framework.util.excel.dict.DictConvertHandle;
 import tech.hljzj.framework.util.excel.dict.UseDict;
+import tech.hljzj.framework.util.excel.other.JsonMapConverter;
 import tech.hljzj.infrastructure.domain.SysDictData;
 
 import java.io.Serial;
@@ -74,7 +75,7 @@ public class SysDictDataListBaseVo implements Serializable {
     /**
      * 字典状态
      */
-    @ExcelProperty(value = "字典状态",converter = DictConvertHandle.class)
+    @ExcelProperty(value = "字典状态", converter = DictConvertHandle.class)
     @UseDict("status")
     private String status;
     /**
@@ -90,7 +91,7 @@ public class SysDictDataListBaseVo implements Serializable {
     /**
      * 是否锁定
      */
-    @ExcelProperty(value = "是否锁定",converter = DictConvertHandle.class)
+    @ExcelProperty(value = "是否锁定", converter = DictConvertHandle.class)
     @UseDict("yes_no")
     private String locked;
     /**
@@ -101,8 +102,8 @@ public class SysDictDataListBaseVo implements Serializable {
     /**
      * 扩展属性
      */
-    @ExcelProperty(value = "扩展属性")
-    private Map<String,Object> attribution;
+    @ExcelProperty(value = "扩展属性", converter = JsonMapConverter.class)
+    private Map<String, Object> attribution;
 
     public <T extends SysDictDataListBaseVo> T fromDto(SysDictData dto) {
         this.setId(dto.getId());

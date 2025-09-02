@@ -1,5 +1,6 @@
 package tech.hljzj.infrastructure.compatible.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import tech.hljzj.framework.security.SessionStoreDecorator;
 import tech.hljzj.framework.security.an.Anonymous;
 import tech.hljzj.framework.security.bean.TokenAuthentication;
+import tech.hljzj.framework.security.bean.UserInfo;
 import tech.hljzj.framework.util.password.ParamEncryption;
 import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.compatible.controller.bsae.MController;
@@ -18,6 +20,7 @@ import tech.hljzj.infrastructure.compatible.util.AppHelper;
 import tech.hljzj.infrastructure.compatible.vo.AppInfo;
 import tech.hljzj.infrastructure.compatible.vo.department.Department;
 import tech.hljzj.infrastructure.compatible.vo.role.Role;
+import tech.hljzj.infrastructure.config.AppLoginUserInfo;
 import tech.hljzj.infrastructure.config.LocalSecurityProvider;
 import tech.hljzj.infrastructure.config.TokenAuthenticateService;
 import tech.hljzj.infrastructure.domain.*;
@@ -155,15 +158,28 @@ public class AppAdminController extends MController {
 
     @RequestMapping("/tyrz/getToken")
     @ResponseBody
-    public Object getToken(String ticket) {
+    public Object getToken(String token, String ticket) {
         try {
-            AppHelper.Info loginInfo = AppHelper.getLoginInfo(ticket);
-            // 此处需要将用户登录的系统转换为基座服务本身的token，所以需要登录基座服务获取token
-            AppScopeHolder.setScopeAppId(AppConst.ID);
+
+            TokenAuthentication currentServerAuth;
+            AppHelper.Info loginInfo;
+            if (StrUtil.isNotBlank(ticket)) {
+                loginInfo = AppHelper.getLoginInfo(ticket);
+                // 此处需要将用户登录的系统转换为基座服务本身的token，所以需要登录基座服务获取token
+                AppScopeHolder.setScopeAppId(AppConst.ID);
+                currentServerAuth = tokenAuthenticateService.authenticate(loginInfo.getToken(), true);
+            } else {
+                currentServerAuth = tokenAuthenticateService.authenticate(token, true);
+                loginInfo = new AppHelper.Info();
+                loginInfo.setToken(currentServerAuth.getToken());
+                UserInfo userInfo = currentServerAuth.getPrincipal().getUserInfo();
+                if (userInfo instanceof AppLoginUserInfo u) {
+                    loginInfo.setAppId(u.getLoginAppId());
+                }
+            }
+
 
             // 使用ticket拿到了token，然后需要输出token的内容
-            TokenAuthentication currentServerAuth = tokenAuthenticateService.authenticate(loginInfo.getToken(), true);
-
             SysApp sysApp = sysAppService.entityGet(loginInfo.getAppId());
             // 这里变更了登录指向
             loginInfo.setAppId(AppConst.ID);
