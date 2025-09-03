@@ -2,7 +2,6 @@ package tech.hljzj.infrastructure.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
@@ -163,12 +162,7 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
 
         //此处需要判定，如果应用本身提供了字典，那么就使用应用的字典
         //反之，如果应用本身没有提供字典，那么就使用基座服务的字典
-        String appId = AppScopeHolder.getScopeAppId();
-        if (StrUtil.isBlank(appId)) {
-            return Collections.emptyMap();
-        }
-
-        appId = StrUtil.blankToDefault(appId, AppConst.ID);
+        String appId = AppScopeHolder.getScopeAppIdOrDefault();
 
         List<SysDictType> dictTypeList = list(
             Wrappers.<SysDictType>lambdaQuery()
@@ -252,7 +246,16 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
             return d;
         }).collect(Collectors.toList());
 
-        Map<String, List<IDictData>> dd = getDictData(loadDictData);
+        // 模拟应用切换
+        String scopeAppId = AppScopeHolder.getScopeAppId();
+        
+        Map<String, List<IDictData>> dd;
+        try {
+            AppScopeHolder.setScopeAppId(query.getOwnerAppId());
+            dd = getDictData(loadDictData);
+        } finally {
+            AppScopeHolder.setScopeAppId(scopeAppId);
+        }
 
 
         Map<WriteSheet, List<?>> writeMap = new LinkedHashMap<>();
