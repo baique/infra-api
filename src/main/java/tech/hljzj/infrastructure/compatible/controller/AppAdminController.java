@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.security.SessionStoreDecorator;
 import tech.hljzj.framework.security.an.Anonymous;
 import tech.hljzj.framework.security.bean.TokenAuthentication;
@@ -35,10 +36,7 @@ import tech.hljzj.infrastructure.vo.SysRole.SysRoleQueryVo;
 import tech.hljzj.infrastructure.vo.VSysDeptMemberUser.VSysDeptMemberUserQueryVo;
 import tech.hljzj.protect.password.PasswordNotSafeException;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Anonymous
@@ -169,11 +167,17 @@ public class AppAdminController extends MController {
                 AppScopeHolder.setScopeAppId(AppConst.ID);
                 currentServerAuth = tokenAuthenticateService.authenticate(loginInfo.getToken(), true);
             } else {
+                Optional<TokenAuthentication> user = sessionStoreDecorator.getUserByToken(token);
+                if (user.isEmpty()) {
+                    throw UserException.defaultError("用户会话已失效");
+                }
+                TokenAuthentication oldUserAuth = user.get();
                 currentServerAuth = tokenAuthenticateService.authenticate(token, true);
                 loginInfo = new AppHelper.Info();
                 loginInfo.setToken(currentServerAuth.getToken());
-                UserInfo userInfo = currentServerAuth.getPrincipal().getUserInfo();
+                UserInfo userInfo = oldUserAuth.getPrincipal().getUserInfo();
                 if (userInfo instanceof AppLoginUserInfo u) {
+                    // 这里要解析之前的用户信息
                     loginInfo.setAppId(u.getLoginAppId());
                 }
             }
