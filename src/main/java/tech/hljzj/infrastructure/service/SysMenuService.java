@@ -85,4 +85,6 @@ public interface SysMenuService extends IService<SysMenu> {
 
     @Transactional(rollbackFor = Exception.class)
     List<ExcelUtil.FailRowWrap<SysMenuListVo>> importData(String appId, MultipartFile file) throws IOException;
+
+    void entityCreateGroup(String menuKey, String menuName, String ownerAppId);
 }

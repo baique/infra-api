@@ -101,6 +101,80 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return save(entity);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void entityCreateGroup(String menuKey, String menuName, String ownerAppId) {
+        SysMenu group = new SysMenu();
+        group.setKey(menuKey + ":list");
+        group.setName(menuName + "管理");
+        group.setParentId("0");
+        group.setOwnerAppId(ownerAppId);
+        group.setStatus("1");
+        group.setVisible("1");
+        group.setMenuType("F");
+        group.setPath("/" + menuKey);
+        this.entityCreate(group);
+
+        SysMenu detail = new SysMenu();
+        detail.setKey(menuKey + ":query");
+        detail.setName(menuName + "详情");
+        detail.setParentId(group.getId());
+        detail.setOwnerAppId(ownerAppId);
+        detail.setStatus("1");
+        detail.setVisible("1");
+        detail.setMenuType("B");
+        detail.setSort(100);
+
+        this.entityCreate(detail);
+
+        SysMenu insert = new SysMenu();
+        insert.setKey(menuKey + ":add");
+        insert.setName(menuName + "新增");
+        insert.setParentId(group.getId());
+        insert.setOwnerAppId(ownerAppId);
+        insert.setStatus("1");
+        insert.setVisible("1");
+        insert.setMenuType("B");
+        insert.setSort(200);
+
+        this.entityCreate(insert);
+
+        SysMenu update = new SysMenu();
+        update.setKey(menuKey + ":edit");
+        update.setName(menuName + "修改");
+        update.setParentId(group.getId());
+        update.setOwnerAppId(ownerAppId);
+        update.setStatus("1");
+        update.setVisible("1");
+        update.setMenuType("B");
+        update.setSort(300);
+
+        this.entityCreate(update);
+
+        SysMenu delete = new SysMenu();
+        delete.setKey(menuKey + ":delete");
+        delete.setName(menuName + "删除");
+        delete.setParentId(group.getId());
+        delete.setOwnerAppId(ownerAppId);
+        delete.setStatus("1");
+        delete.setVisible("1");
+        delete.setMenuType("B");
+        delete.setSort(400);
+
+        this.entityCreate(delete);
+
+        SysMenu export = new SysMenu();
+        export.setKey(menuKey + ":export");
+        export.setName(menuName + "导出");
+        export.setParentId(group.getId());
+        export.setOwnerAppId(ownerAppId);
+        export.setStatus("1");
+        export.setVisible("1");
+        export.setMenuType("B");
+        export.setSort(500);
+
+        this.entityCreate(export);
+    }
 
     @Override
     public boolean entityUpdate(SysMenu entity) {

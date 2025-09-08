@@ -73,6 +73,22 @@ public class SysMenuController extends BaseController {
         return R.ok(new SysMenuDetailVo().fromDto(dto));
     }
 
+    /**
+     * 新增菜单组
+     *
+     * @param key 菜单标识
+     * @param name 菜单名称
+     * @param ownerAppId 所属应用
+     * @return 创建结果
+     */
+    @PreAuthorize("auth('sys:menu:add')")
+    @Log(title = MODULE_NAME, operType = BusinessType.INSERT)
+    @PostMapping("/insert-group")
+    public R<Boolean> entityCreateGroup(String key, String name, String ownerAppId) {
+        this.service.entityCreateGroup(key, name, ownerAppId);
+        return R.ok(true);
+    }
+
 
     /**
      * 修改数据
