@@ -54,8 +54,12 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
     @Override
     public boolean entityCreate(SysConfig entity) {
+        String appId = AppScopeHolder.requiredScopeAppId();
+        entity.setOwnerAppId(StrUtil.blankToDefault(entity.getOwnerAppId(), appId));
+
         if (baseMapper.exists(Wrappers.<SysConfig>query().lambda()
             .eq(SysConfig::getKey, entity.getKey())
+            .eq(SysConfig::getOwnerAppId, entity.getOwnerAppId())
         )) {
             throw UserException.defaultError(MsgUtil.t("data.exists", "标识"));
         }
@@ -67,10 +71,13 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     public boolean entityUpdate(SysConfig entity) {
         // 这里必须要先做一个检查，配置可以被读取出去，但是它的所属应用应该由发起操作的应用提供
         String appId = AppScopeHolder.requiredScopeAppId();
+
         // 那么此时需要对比，配置是不是属于那个目标应用，如果是，正常更新，如果不是
         SysConfig mergeFromEntity = getById(entity.getId());
+        entity.setOwnerAppId(mergeFromEntity.getOwnerAppId());
 
-        if (!appId.equals(mergeFromEntity.getOwnerAppId())) {
+        if (!appId.equals(AppConst.ID) && !appId.equals(mergeFromEntity.getOwnerAppId())) {
+            // 这里是为了防止配置从应用系统发起的修改，如果应用系统发起修改，则将数据拷贝到目标应用
             // 防止受到orm框架生命周期追踪
             SysConfig mergeEntity = BeanUtil.copyProperties(mergeFromEntity, SysConfig.class);
             mergeEntity.setId(null);
@@ -79,7 +86,6 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             // 后续执行的就成为了新增的代码逻辑
             return entityCreate(mergeEntity);
         } else {
-
             if (baseMapper.exists(Wrappers.<SysConfig>query().lambda()
                 .eq(SysConfig::getKey, entity.getKey())
                 .eq(SysConfig::getOwnerAppId, entity.getOwnerAppId())
@@ -101,7 +107,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
     @Override
     public boolean entityDelete(SysConfig entity) {
-        SysConfig existsEntity = entityGet(entity);
+        SysConfig existsEntity = entityGet(entity.getId());
         if (Objects.equals(AppConst.YES, existsEntity.getLocked())) {
             throw UserException.defaultError(MsgUtil.t("data.locked", "配置项"));
         }
