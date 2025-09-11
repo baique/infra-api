@@ -98,7 +98,7 @@ public class SysDeptListBaseVo implements Serializable {
     /**
      * 允许用户加入
      */
-    @ExcelProperty(value = "允许用户加入")
+//    @ExcelProperty(value = "允许用户加入")
     private String allowUserJoin;
     /**
      * 排序编号

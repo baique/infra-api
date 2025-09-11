@@ -2,6 +2,7 @@ package tech.hljzj.infrastructure.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +15,7 @@ import tech.hljzj.framework.logger.Log;
 import tech.hljzj.framework.util.excel.ExcelUtil;
 import tech.hljzj.infrastructure.domain.SysDept;
 import tech.hljzj.infrastructure.domain.VSysDeptMemberUser;
+import tech.hljzj.infrastructure.service.SysDeptImportService;
 import tech.hljzj.infrastructure.service.SysDeptService;
 import tech.hljzj.infrastructure.vo.SysDept.*;
 import tech.hljzj.infrastructure.vo.SysRole.GrantAppRoleVo;
@@ -24,6 +26,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
@@ -41,6 +44,8 @@ import java.util.stream.Collectors;
 public class SysDeptController extends BaseController {
     private final SysDeptService service;
     public static final String MODULE_NAME = "组织管理";
+    @Autowired
+    private SysDeptImportService importService;
 
     public SysDeptController(SysDeptService service) {
         this.service = service;
@@ -257,12 +262,22 @@ public class SysDeptController extends BaseController {
      * @return 导入失败的数据
      */
     @PostMapping("/import")
-    @PreAuthorize("auth('sys:dept:import')")
+    @PreAuthorize("auth('sys:dept:add')")
     @Log(title = MODULE_NAME, operType = BusinessType.IMPORT)
-    public R<List<ExcelUtil.FailRowWrap<SysDeptListVo>>> importData(@RequestPart MultipartFile file) throws IOException {
-        return R.ok(ExcelUtil.readExcel(ExcelUtil.getType(file.getOriginalFilename()), file.getInputStream(), SysDeptListVo.class, SysDeptListVo -> {
-            this.service.entityCreate(SysDeptListVo.toDto());
-        }));
+    public R<Void> importData(@RequestPart MultipartFile file) throws IOException {
+        importService.read(ExcelUtil.getType(file.getOriginalFilename()), file.getInputStream());
+        return R.ok();
+    }
+
+    /**
+     * 下载模板
+     *
+     */
+    @PostMapping("/downloadTemplate")
+    @PreAuthorize("auth('sys:dept:add')")
+    @Log(title = MODULE_NAME, operType = BusinessType.IMPORT)
+    public void downloadTemplate() {
+        ExcelUtil.exportExcel(response, Collections.emptyList(), "数据", SysDeptImportVo.class);
     }
 
 

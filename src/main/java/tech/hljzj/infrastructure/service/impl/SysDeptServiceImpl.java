@@ -407,7 +407,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
             return Collections.emptyList();
         }
         SysDept current = deptAncestors.getCurrent();
-        
+
         Map<String, String> deptNameMapping = deptList.stream().collect(Collectors.toMap(SysDept::getId, SysDept::getName));
         Map<String, String> sourceMapping = new HashMap<>();
         // 获取当前时间，确认需要删减的角色
@@ -516,4 +516,5 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
                 .orderByDesc(SysDept::getId)
         ));
     }
+
 }
