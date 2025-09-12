@@ -1,5 +1,10 @@
 package tech.hljzj.infrastructure.vo.SysUser;
 
+import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
+import com.alibaba.excel.annotation.write.style.ContentFontStyle;
+import com.alibaba.excel.annotation.write.style.ContentRowHeight;
+import com.alibaba.excel.annotation.write.style.HeadRowHeight;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +23,11 @@ import java.util.Map;
 @Getter
 @Setter
 @JsonIgnoreProperties({"password", "oldPassword"})
+@HeadRowHeight(30)
+@ContentRowHeight(15)
+@ColumnWidth(18)
+@ContentFontStyle(fontHeightInPoints = (short) 12)
+@ExcelIgnoreUnannotated
 public class SysUserListVo extends SysUserListBaseVo {
     // 在这里可以扩展其他属性
     private String deptKey;

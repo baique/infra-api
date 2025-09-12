@@ -9,6 +9,7 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.read.listener.ReadListener;
 import com.alibaba.excel.read.metadata.ReadSheet;
 import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -23,6 +24,7 @@ import tech.hljzj.framework.service.IDictService;
 import tech.hljzj.framework.service.SortService;
 import tech.hljzj.framework.service.entity.IDictData;
 import tech.hljzj.framework.util.excel.ExcelUtil;
+import tech.hljzj.framework.util.excel.bind.DataContextBinder;
 import tech.hljzj.framework.util.web.MsgUtil;
 import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.domain.SysDictData;
@@ -248,7 +250,7 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
 
         // 模拟应用切换
         String scopeAppId = AppScopeHolder.getScopeAppId();
-        
+
         Map<String, List<IDictData>> dd;
         try {
             AppScopeHolder.setScopeAppId(query.getOwnerAppId());
@@ -258,13 +260,8 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
         }
 
 
-        Map<WriteSheet, List<?>> writeMap = new LinkedHashMap<>();
-        writeMap.put(
-            EasyExcel.writerSheet("字典组数据")
-                .head(SysDictTypeListVo.class)
-                .build()
-            , (list)
-        );
+        Map<ExcelWriterSheetBuilder, List<?>> writeMap = new LinkedHashMap<>();
+        writeMap.put(EasyExcel.writerSheet("字典组数据").head(SysDictTypeListVo.class), list);
 
         for (SysDictTypeListVo d : list) {
             List<IDictData> dictDataList = dd.get(d.getKey());
@@ -277,12 +274,19 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
                 return v;
             }).collect(Collectors.toList());
 
-            writeMap.put(EasyExcel.writerSheet(d.getName() + "数据")
-                .head(SysDictDataListVo.class)
-                .build(), dictData);
+            writeMap.put(EasyExcel.writerSheet(d.getName() + "数据").head(SysDictDataListVo.class), dictData);
         }
-        try (ExcelWriter writer = EasyExcel.write(outputStream).build()) {
-            writeMap.forEach((s, v) -> writer.write(v, s));
+        try (DataContextBinder binder = new DataContextBinder();
+             ExcelWriter writer = EasyExcel.write(outputStream).build()) {
+            binder.init(SysDictTypeListVo.class);
+            binder.init(SysDictDataListVo.class);
+
+            writeMap.forEach((s, v) -> {
+                s.registerWriteHandler(binder);
+                writer.write(v, s.build());
+            });
+        } catch (Exception e) {
+            throw UserException.defaultError("数据导出失败", e);
         }
     }
 
@@ -291,7 +295,10 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
 
     @Override
     public void importData(ExcelTypeEnum typeEnum, InputStream inputStream) throws Exception {
-        try (ExcelReader reader = EasyExcel.read(inputStream).excelType(typeEnum).build()) {
+        try (
+            DataContextBinder binder = new DataContextBinder();
+            ExcelReader reader = EasyExcel.read(inputStream).excelType(typeEnum).build()) {
+            binder.init(SysDictDataListVo.class);
             SysDictTypeService typeService = this;
             List<ReadSheet> afterReadSheets = new ArrayList<>();
             ReadSheet indexSheet = EasyExcel.readSheet("字典组数据")

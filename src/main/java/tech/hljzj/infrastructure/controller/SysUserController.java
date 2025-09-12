@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -15,16 +16,14 @@ import tech.hljzj.framework.exception.UserException;
 import tech.hljzj.framework.logger.BusinessType;
 import tech.hljzj.framework.logger.Log;
 import tech.hljzj.framework.security.an.Anonymous;
+import tech.hljzj.framework.service.IDictService;
 import tech.hljzj.framework.util.excel.ExcelUtil;
 import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.domain.SysDictData;
 import tech.hljzj.infrastructure.domain.SysUser;
 import tech.hljzj.infrastructure.domain.SysUserManagerDept;
 import tech.hljzj.infrastructure.domain.VSysUser;
-import tech.hljzj.infrastructure.service.SysUserExtAttrService;
-import tech.hljzj.infrastructure.service.SysUserLockService;
-import tech.hljzj.infrastructure.service.SysUserManagerDeptService;
-import tech.hljzj.infrastructure.service.SysUserService;
+import tech.hljzj.infrastructure.service.*;
 import tech.hljzj.infrastructure.vo.SysRole.GrantAppRoleVo;
 import tech.hljzj.infrastructure.vo.SysUser.*;
 import tech.hljzj.infrastructure.vo.VSysUser.VSysUserQueryVo;
@@ -48,19 +47,18 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/infrastructure/sys_user")
+@RequiredArgsConstructor
 public class SysUserController extends BaseController {
     private final SysUserService service;
     private final SysUserManagerDeptService sysUserManagerDeptService;
-    public static final String MODULE_NAME = "用户管理";
     private final SysUserExtAttrService sysUserExtAttrService;
     private final SysUserLockService sysUserLockService;
+    private final IDictService dictService;
 
-    public SysUserController(SysUserService service, SysUserManagerDeptService sysUserManagerDeptService, SysUserExtAttrService sysUserExtAttrService, SysUserLockService sysUserLockService) {
-        this.service = service;
-        this.sysUserManagerDeptService = sysUserManagerDeptService;
-        this.sysUserExtAttrService = sysUserExtAttrService;
-        this.sysUserLockService = sysUserLockService;
-    }
+    public static final String MODULE_NAME = "用户管理";
+    private final SysDeptService sysDeptService;
+    private final SysConfigService sysConfigService;
+
 
     /**
      * 获取数据
@@ -181,7 +179,11 @@ public class SysUserController extends BaseController {
             listVo.add(vo.fromDto(item));
         }
 
-        ExcelUtil.exportExcel(response, listVo, "数据", SysUserListVo.class);
+        try {
+            ExcelUtil.exportExcel(response, listVo, "数据", SysUserListVo.class);
+        } catch (Exception e) {
+            throw UserException.defaultError("导出失败", e);
+        }
     }
 
 
@@ -192,11 +194,23 @@ public class SysUserController extends BaseController {
      * @return 导入失败的数据
      */
     @PostMapping("/import")
-    @PreAuthorize("auth('sys:user:import')")
+    @PreAuthorize("auth('sys:user:add')")
     @Log(title = MODULE_NAME, operType = BusinessType.IMPORT)
     public R<List<ExcelUtil.FailRowWrap<SysUserListVo>>> importData(@RequestPart MultipartFile file) throws IOException {
-        return R.ok(ExcelUtil.readExcel(ExcelUtil.getType(file.getOriginalFilename()), file.getInputStream(), SysUserListVo.class, SysUserListVo -> {
-            this.service.entityCreate(SysUserListVo.toDto());
+        return R.ok(ExcelUtil.readExcel(ExcelUtil.getType(file.getOriginalFilename()), file.getInputStream(), SysUserListVo.class, sysUserListVo -> {
+            SysUser existsUser = this.service.getOne(Wrappers.<SysUser>lambdaQuery()
+                .eq(SysUser::getUsername, sysUserListVo.getUsername())
+            );
+            if (existsUser != null) {
+                sysUserListVo.setId(existsUser.getId());
+                this.service.entityUpdate(sysUserListVo.toDto(), null);
+            } else {
+                SysUser dto = sysUserListVo.toDto();
+                dto.setPassword(sysConfigService.getValueByKey(AppConst.CONFIG_DEFAULT_PASSWORD));
+                dto.setStatus(AppConst.YES);
+                dto.setAccountLock(AppConst.NOT);
+                this.service.entityCreate(dto, null);
+            }
         }));
     }
 

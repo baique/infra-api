@@ -3,8 +3,12 @@ package tech.hljzj.infrastructure.vo.SysUser.base;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import tech.hljzj.framework.util.excel.dict.DictConvertHandle;
+import tech.hljzj.framework.util.excel.dict.UseDict;
 import tech.hljzj.infrastructure.domain.SysUser;
+import tech.hljzj.infrastructure.vo.SysUser.convert.DeptDictLoader;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
@@ -24,52 +28,47 @@ public class SysUserListBaseVo implements Serializable {
     /**
      * id_
      */
-    @ExcelProperty(value = "id_")
     private String id;
     /**
      * 所属部门
      */
-    @ExcelProperty(value = "所属部门")
+    @ExcelProperty(value = "所属部门", converter = DictConvertHandle.class)
+    @UseDict(value = "dept", loader = DeptDictLoader.class)
+    @NotBlank(message = "所属组织不能为空")
     private String deptId;
     /**
      * 岗位
      */
-    @ExcelProperty(value = "岗位")
     private String deptIdentity;
     /**
      * 账号
      */
     @ExcelProperty(value = "账号")
+    @NotBlank(message = "账号不能为空")
     private String username;
-    /**
-     * 密码策略
-     */
-    @ExcelProperty(value = "密码策略")
-    private String passwordPolicy;
-    /**
-     * 现有密码过期时间
-     */
-    @ExcelProperty(value = "现有密码过期时间")
-    private Date passwordExpired;
     /**
      * 昵称
      */
     @ExcelProperty(value = "昵称")
+    @NotBlank(message = "昵称不为空")
     private String nickname;
     /**
      * 真实姓名
      */
     @ExcelProperty(value = "真实姓名")
+    @NotBlank(message = "真实姓名不能为空")
     private String realname;
     /**
      * 性别
      */
-    @ExcelProperty(value = "性别")
+    @ExcelProperty(value = "性别", converter = DictConvertHandle.class)
+    @UseDict(value = "sex")
     private String sex;
     /**
      * 证件类型
      */
-    @ExcelProperty(value = "证件类型")
+    @ExcelProperty(value = "证件类型", converter = DictConvertHandle.class)
+    @UseDict(value = "card_type")
     private String cardType;
     /**
      * 证件号码
@@ -119,7 +118,6 @@ public class SysUserListBaseVo implements Serializable {
     /**
      * 用户来源
      */
-    @ExcelProperty(value = "用户来源")
     private String source;
     /**
      * 排序编号
@@ -129,20 +127,28 @@ public class SysUserListBaseVo implements Serializable {
     /**
      * 用户状态
      */
-    @ExcelProperty(value = "用户状态")
     private String status;
     /**
      * 账户是否锁定
      */
-    @ExcelProperty(value = "账户是否锁定")
     private String accountLock;
+    /**
+     * 密码策略
+     */
+//    @ExcelProperty(value = "密码策略", converter = DictConvertHandle.class)
+//    @UseDict(value = "sys_user_password_expired_policy")
+    private String passwordPolicy;
+    /**
+     * 现有密码过期时间
+     */
+//    @ExcelProperty(value = "过期时间")
+    private Date passwordExpired;
     /**
      * 上一次修改密码时间（这里配置了一段时间仍然可以使用旧密码来登录）
      */
-    @ExcelProperty(value = "上一次修改密码时间（这里配置了一段时间仍然可以使用旧密码来登录）")
     private Date lastChangePassword;
 
-    public <T extends SysUserListBaseVo> T fromDto(SysUser dto){
+    public <T extends SysUserListBaseVo> T fromDto(SysUser dto) {
         this.setId(dto.getId());
         this.setDeptId(dto.getDeptId());
         this.setDeptIdentity(dto.getDeptIdentity());
@@ -171,7 +177,7 @@ public class SysUserListBaseVo implements Serializable {
         return (T) this;
     }
 
-    public SysUser toDto(){
+    public SysUser toDto() {
         SysUser dto = new SysUser();
         dto.setId(this.getId());
         dto.setDeptId(this.getDeptId());

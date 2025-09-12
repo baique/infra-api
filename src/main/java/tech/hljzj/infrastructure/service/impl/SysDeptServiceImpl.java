@@ -144,7 +144,6 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
             baseMapper.updateNodePath(currentOldNodePath, currentNewNodePath);
         }
 
-
         return updateById(existsEntity);
     }
 

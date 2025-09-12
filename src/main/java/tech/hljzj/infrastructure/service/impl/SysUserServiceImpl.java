@@ -159,6 +159,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Transactional(rollbackFor = Exception.class)
     public boolean entityUpdate(SysUser entity, Map<String, Object> attrs) {
         entityUpdate(entity);
+
         updateAttribution(entity.getId(), attrs);
         return false;
     }

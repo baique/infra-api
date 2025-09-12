@@ -1,12 +1,15 @@
 package tech.hljzj.infrastructure.vo.SysDept.base;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import tech.hljzj.framework.util.excel.dict.DictConvertHandle;
+import tech.hljzj.framework.util.excel.dict.UseDict;
+import tech.hljzj.infrastructure.domain.SysDept;
+import tech.hljzj.infrastructure.vo.SysUser.convert.DeptDictLoader;
 
 import java.io.Serial;
 import java.io.Serializable;
-import com.alibaba.excel.annotation.ExcelProperty;
-import tech.hljzj.infrastructure.domain.SysDept;
 
 
 /**
@@ -23,22 +26,23 @@ public class SysDeptListBaseVo implements Serializable {
     /**
      * id_
      */
-    @ExcelProperty(value = "id_")
+//    @ExcelProperty(value = "id_")
     private String id;
     /**
      * 上级组织
      */
-    @ExcelProperty(value = "上级组织")
+    @ExcelProperty(value = "上级组织", converter = DictConvertHandle.class)
+    @UseDict(value = "dept", loader = DeptDictLoader.class)
     private String parentId;
     /**
      * 本级节点标识
      */
-    @ExcelProperty(value = "本级节点标识")
+//    @ExcelProperty(value = "本级节点标识")
     private String nodeKey;
     /**
      * 祖先节点路径
      */
-    @ExcelProperty(value = "祖先节点路径")
+//    @ExcelProperty(value = "祖先节点路径")
     private String nodePath;
     /**
      * 组织标识
@@ -63,12 +67,13 @@ public class SysDeptListBaseVo implements Serializable {
     /**
      * 组织类型
      */
-    @ExcelProperty(value = "组织类型")
+    @ExcelProperty(value = "组织类型", converter = DictConvertHandle.class)
+    @UseDict("org_type")
     private String type;
     /**
      * 组织责任说明
      */
-    @ExcelProperty(value = "组织责任说明")
+    @ExcelProperty(value = "组织职责说明")
     private String duty;
     /**
      * 统一社会信用代码
@@ -88,12 +93,12 @@ public class SysDeptListBaseVo implements Serializable {
     /**
      * 状态
      */
-    @ExcelProperty(value = "状态")
+//    @ExcelProperty(value = "状态")
     private String status;
     /**
      * 是否启用
      */
-    @ExcelProperty(value = "是否启用")
+//    @ExcelProperty(value = "是否启用")
     private String enable;
     /**
      * 允许用户加入
@@ -111,7 +116,7 @@ public class SysDeptListBaseVo implements Serializable {
     @ExcelProperty(value = "是否临时组织")
     private String tmp;
 
-    public <T extends SysDeptListBaseVo> T fromDto(SysDept dto){
+    public <T extends SysDeptListBaseVo> T fromDto(SysDept dto) {
         this.setId(dto.getId());
         this.setParentId(dto.getParentId());
         this.setNodeKey(dto.getNodeKey());
@@ -134,7 +139,7 @@ public class SysDeptListBaseVo implements Serializable {
         return (T) this;
     }
 
-    public SysDept toDto(){
+    public SysDept toDto() {
         SysDept dto = new SysDept();
         dto.setId(this.getId());
         dto.setParentId(this.getParentId());
