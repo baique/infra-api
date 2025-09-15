@@ -168,7 +168,7 @@ public class SysUserController extends BaseController {
      * @param query 数据查询
      */
     @PostMapping("/export")
-    @PreAuthorize("auth('sys:user:export')")
+    @PreAuthorize("auth('sys:user:add')")
     @Log(title = MODULE_NAME, operType = BusinessType.EXPORT)
     public void export(@RequestBody VSysUserQueryVo query, HttpServletResponse response) {
         List<VSysUser> listDto = this.service.list(query);

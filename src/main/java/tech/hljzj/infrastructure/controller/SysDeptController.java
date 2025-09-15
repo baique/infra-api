@@ -240,7 +240,7 @@ public class SysDeptController extends BaseController {
      * @return 导出结果
      */
     @PostMapping("/export")
-    @PreAuthorize("auth('sys:dept:export')")
+    @PreAuthorize("auth('sys:user:add')")
     @Log(title = MODULE_NAME, operType = BusinessType.EXPORT)
     public void export(@RequestBody SysDeptQueryVo query, HttpServletResponse response) {
         List<SysDept> listDto = this.service.list(query);
