@@ -240,7 +240,7 @@ public class SysDeptController extends BaseController {
      * @return 导出结果
      */
     @PostMapping("/export")
-    @PreAuthorize("auth('sys:user:add')")
+    @PreAuthorize("auth('sys:dept:export')")
     @Log(title = MODULE_NAME, operType = BusinessType.EXPORT)
     public void export(@RequestBody SysDeptQueryVo query, HttpServletResponse response) {
         List<SysDept> listDto = this.service.list(query);
@@ -262,7 +262,7 @@ public class SysDeptController extends BaseController {
      * @return 导入失败的数据
      */
     @PostMapping("/import")
-    @PreAuthorize("auth('sys:dept:add')")
+    @PreAuthorize("auth('sys:dept:import')")
     @Log(title = MODULE_NAME, operType = BusinessType.IMPORT)
     public R<Void> importData(@RequestPart MultipartFile file) throws IOException {
         importService.read(ExcelUtil.getType(file.getOriginalFilename()), file.getInputStream());
@@ -274,7 +274,7 @@ public class SysDeptController extends BaseController {
      *
      */
     @PostMapping("/downloadTemplate")
-    @PreAuthorize("auth('sys:dept:add')")
+    @PreAuthorize("auth('sys:dept:import')")
     @Log(title = MODULE_NAME, operType = BusinessType.IMPORT)
     public void downloadTemplate() {
         ExcelUtil.exportExcel(response, Collections.emptyList(), "数据", SysDeptImportVo.class);

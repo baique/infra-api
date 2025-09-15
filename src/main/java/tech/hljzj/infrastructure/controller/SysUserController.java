@@ -168,7 +168,7 @@ public class SysUserController extends BaseController {
      * @param query 数据查询
      */
     @PostMapping("/export")
-    @PreAuthorize("auth('sys:user:add')")
+    @PreAuthorize("auth('sys:user:export')")
     @Log(title = MODULE_NAME, operType = BusinessType.EXPORT)
     public void export(@RequestBody VSysUserQueryVo query, HttpServletResponse response) {
         List<VSysUser> listDto = this.service.list(query);
@@ -194,7 +194,7 @@ public class SysUserController extends BaseController {
      * @return 导入失败的数据
      */
     @PostMapping("/import")
-    @PreAuthorize("auth('sys:user:add')")
+    @PreAuthorize("auth('sys:user:import')")
     @Log(title = MODULE_NAME, operType = BusinessType.IMPORT)
     public R<List<ExcelUtil.FailRowWrap<SysUserListVo>>> importData(@RequestPart MultipartFile file) throws IOException {
         return R.ok(ExcelUtil.readExcel(ExcelUtil.getType(file.getOriginalFilename()), file.getInputStream(), SysUserListVo.class, sysUserListVo -> {
