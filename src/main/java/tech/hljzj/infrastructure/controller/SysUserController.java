@@ -209,7 +209,7 @@ public class SysUserController extends BaseController {
                 dto.setPassword(sysConfigService.getValueByKey(AppConst.CONFIG_DEFAULT_PASSWORD));
                 dto.setStatus(AppConst.YES);
                 // 密码策略设为永不过期
-                dto.setPasswordPolicy(sysConfigService.getValueByKey(AppConst.PASSWORD_POLICY.NEVER));
+                dto.setPasswordPolicy(AppConst.PASSWORD_POLICY.NEVER);
                 dto.setAccountLock(AppConst.NOT);
                 this.service.entityCreate(dto, null);
             }
