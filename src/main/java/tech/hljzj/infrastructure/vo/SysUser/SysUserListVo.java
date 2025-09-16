@@ -26,7 +26,7 @@ import java.util.Map;
 @HeadRowHeight(30)
 @ContentRowHeight(15)
 @ColumnWidth(18)
-@ContentFontStyle(fontHeightInPoints = (short) 12)
+@ContentFontStyle(fontHeightInPoints = 12)
 @ExcelIgnoreUnannotated
 public class SysUserListVo extends SysUserListBaseVo {
     // 在这里可以扩展其他属性

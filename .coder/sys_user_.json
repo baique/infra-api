@@ -3,8 +3,8 @@
     "serverAddress": "",
     "author": "wa",
     "codeSelector": [
-      "new-admin",
-      "web-new"
+      "web-new",
+      "new-admin"
     ]
   },
   "genConfig": {
@@ -193,7 +193,7 @@
       },
       "hasDataSource": false,
       "id": "mJ_Khu4I4pBJj-KGhbjYW",
-      "keep": false
+      "keep": true
     },
     {
       "key": "old_password_",
@@ -599,7 +599,7 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": false,
+      "keep": true,
       "id": "ihC-LtN9eYQrO6CSnJ1Tw"
     },
     {
@@ -641,7 +641,7 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": false,
+      "keep": true,
       "id": "Bryx9eAkmQW_fJ1CD9H9a"
     },
     {
@@ -683,7 +683,7 @@
         "param": {}
       },
       "hasDataSource": false,
-      "keep": false,
+      "keep": true,
       "id": "DHfs95axCHBYpkBxKoEYD"
     },
     {
