@@ -158,7 +158,7 @@ public class SysDeptIdentityController extends BaseController {
      * @return 查询结果
      */
     @PostMapping("/list")
-    @PreAuthorize("auth('sys:identity:list')")
+//    @PreAuthorize("auth('sys:identity:list')")
     public R<R.PageResult<SysDeptIdentityListVo>> page(@RequestBody SysDeptIdentityQueryVo query) {
         Page<SysDeptIdentity> page = this.service.page(query);
         Page<SysDeptIdentityListVo> pageVo = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());

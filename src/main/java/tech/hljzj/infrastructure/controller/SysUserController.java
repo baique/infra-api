@@ -248,7 +248,7 @@ public class SysUserController extends BaseController {
      * @return 查询结果
      */
     @PostMapping("/list/all")
-    @PreAuthorize("auth('sys:user:list')")
+//    @PreAuthorize("auth('sys:user:list')")
     public R<?> listAll(@RequestBody VSysUserQueryVo query) {
         List<VSysUser> page = this.service.list(query);
 

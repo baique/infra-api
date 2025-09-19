@@ -148,7 +148,7 @@ public class SysConfigController extends BaseController {
      * @return 查询结果
      */
     @PostMapping("/list")
-    @PreAuthorize("auth('sys:config:list')")
+//    @PreAuthorize("auth('sys:config:list')")
     public R<R.PageResult<SysConfigListVo>> page(@RequestBody SysConfigQueryVo query) {
         Page<SysConfig> page = this.service.page(query);
         Page<SysConfigListVo> pageVo = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());

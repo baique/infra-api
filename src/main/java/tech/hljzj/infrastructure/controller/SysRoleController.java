@@ -216,7 +216,7 @@ public class SysRoleController extends BaseController {
      * @param appId  应用标识
      */
     @PostMapping("/access/menu/list")
-    @PreAuthorize("auth('sys:role:grant')")
+//    @PreAuthorize("auth('sys:role:grant')")
     @Log(title = MODULE_NAME, functionName = "查看角色可访问菜单", operType = BusinessType.UPDATE)
     public R<?> grantList(
         @NotBlank String roleId,
