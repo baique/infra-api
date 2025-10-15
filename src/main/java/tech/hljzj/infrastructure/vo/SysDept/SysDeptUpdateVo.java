@@ -2,7 +2,7 @@ package tech.hljzj.infrastructure.vo.SysDept;
 
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.infrastructure.vo.SysDept.base.*;
+import tech.hljzj.infrastructure.vo.SysDept.base.SysDeptUpdateBaseVo;
 
 /**
  * 组织管理 sys_dept 

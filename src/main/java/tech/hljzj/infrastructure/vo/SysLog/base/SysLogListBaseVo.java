@@ -1,13 +1,11 @@
 package tech.hljzj.infrastructure.vo.SysLog.base;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serial;
-import java.io.Serializable;
-import com.alibaba.excel.annotation.ExcelProperty;
 import tech.hljzj.infrastructure.domain.SysLog;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -20,7 +18,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class SysLogListBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /**
      * id_

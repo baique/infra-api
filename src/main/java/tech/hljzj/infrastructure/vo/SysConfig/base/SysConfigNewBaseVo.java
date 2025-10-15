@@ -2,14 +2,11 @@ package tech.hljzj.infrastructure.vo.SysConfig.base;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.Map;
-
 import tech.hljzj.infrastructure.domain.SysConfig;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * 系统配置 sys_config 
@@ -20,7 +17,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class SysConfigNewBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /**
      * 所属应用标识

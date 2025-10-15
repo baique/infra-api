@@ -41,7 +41,8 @@ public class SysUserListVo extends SysUserListBaseVo {
 
     @Override
     public <T extends SysUserListBaseVo> T fromDto(SysUser dto) {
-        if (dto instanceof VSysUser po) {
+        if (dto instanceof VSysUser) {
+            VSysUser po = (VSysUser) dto;
             this.setDeptKey(po.getDeptKey());
             this.setDeptName(po.getDeptName());
             this.setDeptAlias(po.getDeptAlias());

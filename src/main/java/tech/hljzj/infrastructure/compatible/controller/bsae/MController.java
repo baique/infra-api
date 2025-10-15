@@ -10,7 +10,8 @@ public class MController extends BaseController {
         R<T> d = new R<>();
         d.setCode(200);
         d.setData(data);
-        if (data instanceof Collection<?> collection) {
+        if (data instanceof Collection<?>) {
+            Collection<?> collection = (Collection<?>) data;
             d.addProperty("count", collection.size());
         }
         return d;

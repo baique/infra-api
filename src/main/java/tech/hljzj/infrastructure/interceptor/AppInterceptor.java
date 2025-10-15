@@ -92,7 +92,8 @@ public class AppInterceptor implements BaseInterceptor {
             }
             LoginUser loginUser = AuthUtil.getLoginUser();
             UserInfo info = loginUser.getUserInfo();
-            if (info instanceof AppLoginUserInfo userInfo) {
+            if (info instanceof AppLoginUserInfo) {
+                AppLoginUserInfo userInfo = (AppLoginUserInfo) info;
                 String s = userInfo.getLoginAppId();
                 if (!StrUtil.equals(s, id)) {
                     ReqUtil.writeResponse(response, R.fail().setMsg("非法的请求:用户会话与登录凭据不匹配"));

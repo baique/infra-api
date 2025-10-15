@@ -18,7 +18,7 @@
 
     <properties>
         <!-- 实际用于编译的jdk版本 -->
-        <java.version>17</java.version>
+        <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,9 +29,16 @@
             <groupId>tech.hljzj.zaf</groupId>
             <artifactId>zaf-starter</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>tech.hljzj.zaf</groupId>
             <artifactId>zaf-module-db-pg</artifactId>
         </dependency>
     </dependencies>
+
 </project>

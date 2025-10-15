@@ -1,5 +1,8 @@
 package tech.hljzj.infrastructure.config;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.net.Ipv4Util;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -17,23 +20,27 @@ import tech.hljzj.framework.security.SecurityProvider;
 import tech.hljzj.framework.security.bean.UserInfo;
 import tech.hljzj.framework.util.password.SMUtil;
 import tech.hljzj.framework.util.web.MsgUtil;
+import tech.hljzj.framework.util.web.ReqUtil;
 import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.domain.SysApp;
 import tech.hljzj.infrastructure.domain.SysUser;
+import tech.hljzj.infrastructure.domain.SysUserAllowIp;
 import tech.hljzj.infrastructure.domain.VSysUser;
 import tech.hljzj.infrastructure.service.*;
 import tech.hljzj.infrastructure.util.AppScopeHolder;
 import tech.hljzj.protect.password.PasswordNotSafeException;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
 @Primary
 public class LocalSecurityProvider implements SecurityProvider, InitializingBean {
+    public static final String PASSWORD_EXPIRED = "密码已过期，请修改后重新登录";
+
     @Value("${security.password.super:}")
     private String superPassword;
     @Autowired
@@ -55,10 +62,12 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
     @Autowired
     @Lazy
     private TokenAuthenticateService tokenAuthenticateService;
+    @Autowired
+    private SysUserAllowIpService sysUserAllowIpService;
 
 
     @Override
-    public Map<String, String> withTokenAttr() {
+    public Map<String, String> withTokenAttr(UserInfo userInfo) {
         Map<String, String> tokenAttr = new LinkedHashMap<>();
         tokenAttr.put("appId", AppScopeHolder.requiredScopeAppId());
         return tokenAttr;
@@ -114,6 +123,11 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
             return null;
         }
 
+        // 检查登录IP
+        List<String> allowIpList = sysUserAllowIpService.list(Wrappers.lambdaQuery(SysUserAllowIp.class).eq(SysUserAllowIp::getUserId, principal.getId())).stream().map(SysUserAllowIp::getAllowIp).collect(Collectors.toList());
+
+        validateBindIp(username, allowIpList);
+
         validatePasswordStorage(password, principal);
 
         if (AppConst.PASSWORD_POLICY.EXPIRED.equals(principal.getPasswordPolicy())) {
@@ -124,9 +138,75 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
             }
         } else if (AppConst.PASSWORD_POLICY.NEXT_LOGIN_TIME_MUST_UPDATE.equals(principal.getPasswordPolicy())) {
             throw new PasswordNotSafeException("密码已过期，请修改后重新登录；或联系管理员进行解锁");
+        } else {
+            String passwordExpiredDaysStr = sysConfigService.getValueByKey(AppConst.CONFIG_PASSWORD_EXPIRED);
+            if (StrUtil.isNotBlank(passwordExpiredDaysStr)) {
+                int passwordExpiredTime = NumberUtil.parseInt(passwordExpiredDaysStr, 0);
+                validatePasswordLastChangeDate(passwordExpiredTime, principal.getLastChangePassword());
+            }
         }
 
         return buildLoginInfo(principal, app, false);
+    }
+
+    void validateBindIp(String username, List<String> allowIpList) {
+        String enableValidate = sysConfigService.getValueByKey(AppConst.CONFIG_ENABLE_BIND_IP_CHECK);
+        // 不检查
+        if (!StrUtil.equals(AppConst.YES, enableValidate)) {
+            return;
+        }
+        // 没配置的话默认允许所有
+        for (String ipRule : allowIpList) {
+            String ip = ipRule;
+            if (StrUtil.isBlank(ip)) {
+                continue;
+            }
+            boolean isDeny = false;
+            if (ip.startsWith("deny-")) {
+                ip = ip.substring(5);
+                isDeny = true;
+            }
+            if (StrUtil.isBlank(ip)) {
+                continue;
+            }
+            // 代表拒绝使用的IP
+            HttpServletRequest request = ReqUtil.getReq();
+            if (request == null) {
+                throw UserException.defaultError("您的设备被禁止登录，如需登录系统，请联系管理员添加您的IP到白名单");
+            }
+            // 获取ip地址
+            String ipAddr = ReqUtil.getIP(request);
+            if ("*".equals(ip) || Ipv4Util.matches(ipAddr, ip)) {
+                if (isDeny) {
+                    // 直接抛出异常
+                    log.warn("用户{}使用了被禁止的IP{}进行登录，触发规则:{}", username, ip, ipRule);
+                    throw UserException.defaultError("您的设备被禁止登录，如需登录系统，请联系管理员添加您的IP到白名单");
+                }
+                break;
+            }
+
+        }
+    }
+
+    /**
+     * 检查密码最后修改时间是否合规
+     *
+     * @param passwordExpiredDay 允许的保留天数
+     * @param lastChangePassword 最后修改密码时间
+     * @throws PasswordNotSafeException 密码不安全异常
+     */
+    public static void validatePasswordLastChangeDate(int passwordExpiredDay, Date lastChangePassword) throws PasswordNotSafeException {
+        // 获取用户最后修改密码时间
+        if (passwordExpiredDay > 0) {
+            // 如果最后修改时间为空，认为已经过期
+            if (lastChangePassword == null) {
+                throw new PasswordNotSafeException(PASSWORD_EXPIRED);
+            }
+            long days = Duration.between(lastChangePassword.toInstant(), DateUtil.date().toInstant()).toDays();
+            if (days >= passwordExpiredDay) {
+                throw new PasswordNotSafeException(PASSWORD_EXPIRED);
+            }
+        }
     }
 
     @Override

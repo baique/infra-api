@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -20,7 +19,7 @@ import java.io.Serializable;
 @Setter
 @TableName(value = "sys_role_menu_")
 public class SysRoleMenu implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
 
     /**

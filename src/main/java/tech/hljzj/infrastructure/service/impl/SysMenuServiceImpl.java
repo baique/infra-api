@@ -310,7 +310,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void entityUpdateSort(String rowId, String prevRowId, String nextRowId) {
-        updateBatchById(sortService.applySort(
+        List<SysMenu> menus = sortService.applySort(
             rowId,
             prevRowId,
             nextRowId,
@@ -321,7 +321,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 .orderByAsc(SysMenu::getSort)
                 .orderByDesc(SysMenu::getCreateTime)
                 .orderByDesc(SysMenu::getId)
-        ));
+        );
+        updateBatchById(menus);
     }
 
     @Override

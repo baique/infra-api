@@ -1,15 +1,11 @@
 package tech.hljzj.infrastructure.vo.SysApp;
 
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.formula.functions.T;
-import tech.hljzj.framework.security.bean.UserInfo;
-import tech.hljzj.framework.util.web.AuthUtil;
 import tech.hljzj.infrastructure.domain.SysApp;
-import tech.hljzj.infrastructure.vo.SysApp.base.*;
+import tech.hljzj.infrastructure.vo.SysApp.base.SysAppQueryBaseVo;
 
 import java.util.function.Consumer;
 

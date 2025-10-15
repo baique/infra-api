@@ -2,13 +2,10 @@ package tech.hljzj.infrastructure.vo.SysDictType.base;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serial;
-import java.io.Serializable;
-
 import tech.hljzj.infrastructure.domain.SysDictType;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 /**
  * 字典类型 sys_dict_type 
@@ -19,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class SysDictTypeNewBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /**
      * 所属应用标识

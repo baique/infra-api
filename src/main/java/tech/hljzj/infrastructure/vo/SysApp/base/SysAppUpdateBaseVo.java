@@ -5,7 +5,6 @@ import lombok.Setter;
 import tech.hljzj.infrastructure.domain.SysApp;
 
 import javax.validation.constraints.NotBlank;
-import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -17,7 +16,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class SysAppUpdateBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
 
     /**

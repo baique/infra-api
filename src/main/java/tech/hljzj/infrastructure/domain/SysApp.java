@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.framework.pojo.dto.BizBaseEntity;
 
-import java.io.Serial;
+
 
 /**
  * 应用管理 sys_app
@@ -20,7 +20,7 @@ import java.io.Serial;
 @Setter
 @TableName(value = "sys_app_")
 public class SysApp extends BizBaseEntity {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
 
     /**

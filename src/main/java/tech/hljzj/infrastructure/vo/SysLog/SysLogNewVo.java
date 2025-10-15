@@ -2,7 +2,7 @@ package tech.hljzj.infrastructure.vo.SysLog;
 
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.infrastructure.vo.SysLog.base.*;
+import tech.hljzj.infrastructure.vo.SysLog.base.SysLogNewBaseVo;
 
 /**
  * 操作日志 sys_log_ 

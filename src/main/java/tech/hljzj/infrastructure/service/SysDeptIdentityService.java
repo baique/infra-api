@@ -3,11 +3,11 @@ package tech.hljzj.infrastructure.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import tech.hljzj.infrastructure.domain.SysDeptIdentity;
-import tech.hljzj.infrastructure.vo.SysDeptIdentity.*;
+import tech.hljzj.infrastructure.vo.SysDeptIdentity.SysDeptIdentityQueryVo;
 
-import java.util.List;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 岗位管理 sys_dept_identity_ 

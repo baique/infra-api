@@ -9,7 +9,7 @@ import lombok.Setter;
 import tech.hljzj.framework.pojo.dto.BizBaseEntity;
 import tech.hljzj.framework.service.sort.ISort;
 
-import java.io.Serial;
+
 
 /**
  * 角色管理 sys_role
@@ -21,7 +21,7 @@ import java.io.Serial;
 @Setter
 @TableName(value = "sys_role_")
 public class SysRole extends BizBaseEntity implements ISort {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
 
     /**

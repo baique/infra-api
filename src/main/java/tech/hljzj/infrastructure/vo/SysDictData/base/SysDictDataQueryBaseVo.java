@@ -1,19 +1,16 @@
 package tech.hljzj.infrastructure.vo.SysDictData.base;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.Getter;
 import lombok.Setter;
+import tech.hljzj.framework.pojo.form.PageDomain;
+import tech.hljzj.infrastructure.domain.SysDictData;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.function.Consumer;
-
-import tech.hljzj.infrastructure.domain.SysDictData;
-import tech.hljzj.framework.pojo.form.PageDomain;
 
 /**
  * 字典项 sys_dict_data_ 
@@ -24,7 +21,7 @@ import tech.hljzj.framework.pojo.form.PageDomain;
 @Getter
 @Setter
 public class SysDictDataQueryBaseVo<T extends SysDictData> extends PageDomain implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /** bigint     */
     private String id,idNot,idLike,idPrefix,idSuffix;

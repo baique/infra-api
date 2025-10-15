@@ -168,7 +168,7 @@ public class AppAdminController extends MController {
                 currentServerAuth = tokenAuthenticateService.authenticate(loginInfo.getToken(), true);
             } else {
                 Optional<TokenAuthentication> user = sessionStoreDecorator.getUserByToken(token);
-                if (user.isEmpty()) {
+                if (!user.isPresent()) {
                     throw UserException.defaultError("用户会话已失效");
                 }
                 TokenAuthentication oldUserAuth = user.get();
@@ -176,7 +176,8 @@ public class AppAdminController extends MController {
                 loginInfo = new AppHelper.Info();
                 loginInfo.setToken(currentServerAuth.getToken());
                 UserInfo userInfo = oldUserAuth.getPrincipal().getUserInfo();
-                if (userInfo instanceof AppLoginUserInfo u) {
+                if (userInfo instanceof AppLoginUserInfo) {
+                    AppLoginUserInfo u = (AppLoginUserInfo) userInfo;
                     // 这里要解析之前的用户信息
                     loginInfo.setAppId(u.getLoginAppId());
                 }

@@ -6,7 +6,6 @@ import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.domain.SysRole;
 
 import javax.validation.constraints.NotBlank;
-import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -18,7 +17,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class SysRoleNewBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /**
      * 所属应用标识

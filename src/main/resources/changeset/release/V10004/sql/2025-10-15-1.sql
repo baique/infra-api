@@ -1,0 +1,10 @@
+INSERT IGNORE INTO `sys_config_` (`id_`, `owner_app_id_`, `key_`, `name_`, `value_`, `status_`, `desc_`, `sort_`, `locked_`, `create_by_`, `create_time_`, `update_by_`, `update_time_`, `owner_user_id_`, `owner_user_account_`, `owner_dept_id_`, `owner_dept_code_`, `owner_dept_name_`, `attribution_`) VALUES ('faa446e18457300b9e24240dab20bb49', '0', 'password_not_eq', '新旧密码禁止相同', '0', '1', '设置为1表示不允许新旧密码相同', 900, '0', '系统运维', '2025-05-23 20:42:37', '系统运维', '2025-07-16 17:09:08', '08c13e778cbd40826f394a515cb0f6c0', 'devops', 'ed7386f15e8860834583cd0552a3630c', 'system_devops_user', '系统运维管理', '{\"attrs\": [{}]}');
+INSERT IGNORE INTO `sys_config_` (`id_`, `owner_app_id_`, `key_`, `name_`, `value_`, `status_`, `desc_`, `sort_`, `locked_`, `create_by_`, `create_time_`, `update_by_`, `update_time_`, `owner_user_id_`, `owner_user_account_`, `owner_dept_id_`, `owner_dept_code_`, `owner_dept_name_`, `attribution_`) VALUES ('669e9be65a17371cf685d708a940e098', '0', 'password_expired', '全局密码过期时间', '0', '1', '单位是天，配置为0表示不限。配置为任意大于0数值，则当密码后第N天（含N天）将要求用户再次修改。', 800, '0', '王澳', '2025-10-15 09:21:12', '系统运维', '2025-07-16 17:09:08', '08c13e778cbd40826f394a515cb0f6c0', 'devops', 'ed7386f15e8860834583cd0552a3630c', 'system_devops_user', '系统运维管理', '{\"attrs\": [{}]}');
+INSERT IGNORE INTO `sys_config_` (`id_`, `owner_app_id_`, `key_`, `name_`, `value_`, `status_`, `desc_`, `sort_`, `locked_`, `create_by_`, `create_time_`, `update_by_`, `update_time_`, `owner_user_id_`, `owner_user_account_`, `owner_dept_id_`, `owner_dept_code_`, `owner_dept_name_`, `attribution_`) VALUES ('d5be98166cadd59b0cc5595841009c69', '0', 'enable_bind_ip_check', '是否开启登录IP检查', '0', '1', '是否开启登录IP检查，1表示开启', 1000, '0', '系统运维', '2025-10-15 10:05:32', '系统运维', '2025-10-15 10:05:32', '08c13e778cbd40826f394a515cb0f6c0', 'devops', 'ed7386f15e8860834583cd0552a3630c', 'system_devops_user', '系统运维管理', '{\"attrs\": [{}]}');
+
+create table if not exists sys_user_allow_ip_ (
+    id_ char(32) primary key,
+    user_id_ char(128) comment '用户标识',
+    allow_ip_ varchar(500) comment '允许登录的IP地址\n*表示不限',
+    INDEX `idx_user_id`(`user_id_` ASC) USING BTREE
+) comment '用户IP绑定信息表'

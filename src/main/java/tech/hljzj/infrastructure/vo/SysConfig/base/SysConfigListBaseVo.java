@@ -1,13 +1,11 @@
 package tech.hljzj.infrastructure.vo.SysConfig.base;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serial;
-import java.io.Serializable;
-import com.alibaba.excel.annotation.ExcelProperty;
 import tech.hljzj.infrastructure.domain.SysConfig;
 
+import java.io.Serializable;
 import java.util.Map;
 
 
@@ -20,7 +18,7 @@ import java.util.Map;
 @Getter
 @Setter
 public class SysConfigListBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /**
      * bigint

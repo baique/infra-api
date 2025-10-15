@@ -15,6 +15,7 @@ import tech.hljzj.infrastructure.vo.SysDept.SysDeptNewVo;
 
 import java.io.InputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -62,7 +63,7 @@ public class SysDeptImportService {
 
     private SysDept resolveRowData(SysDeptImportVo node, Set<SysDeptImportVo> unionNode) {
         if (!unionNode.add(node)) {
-            String link = String.join("/", unionNode.stream().map(SysDeptImportVo::getName).toList());
+            String link = unionNode.stream().map(SysDeptImportVo::getName).collect(Collectors.joining("/"));
             throw UserException.defaultError(
                 "[" + link + "/" + node.getName() + "]上下级关系设置错误，可能导致组织树出现死循环"
             );

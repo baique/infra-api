@@ -3,11 +3,11 @@ package tech.hljzj.infrastructure.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import tech.hljzj.infrastructure.domain.SysDeptRole;
-import tech.hljzj.infrastructure.vo.SysDeptRole.*;
+import tech.hljzj.infrastructure.vo.SysDeptRole.SysDeptRoleQueryVo;
 
-import java.util.List;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 部门关联角色 sys_dept_role_ 

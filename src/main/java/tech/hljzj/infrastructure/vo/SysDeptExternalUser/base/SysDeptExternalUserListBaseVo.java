@@ -1,12 +1,11 @@
 package tech.hljzj.infrastructure.vo.SysDeptExternalUser.base;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serial;
-import java.io.Serializable;
-import com.alibaba.excel.annotation.ExcelProperty;
 import tech.hljzj.infrastructure.domain.SysDeptExternalUser;
+
+import java.io.Serializable;
 
 
 /**
@@ -18,7 +17,7 @@ import tech.hljzj.infrastructure.domain.SysDeptExternalUser;
 @Getter
 @Setter
 public class SysDeptExternalUserListBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /**
      * id_

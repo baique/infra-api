@@ -2,7 +2,7 @@ package tech.hljzj.infrastructure.vo.SysDictType;
 
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.infrastructure.vo.SysDictType.base.*;
+import tech.hljzj.infrastructure.vo.SysDictType.base.SysDictTypeNewBaseVo;
 
 /**
  * 字典类型 sys_dict_type 

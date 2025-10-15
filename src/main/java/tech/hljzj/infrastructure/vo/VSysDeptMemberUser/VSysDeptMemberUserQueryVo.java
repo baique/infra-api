@@ -7,14 +7,13 @@ import lombok.Setter;
 import tech.hljzj.infrastructure.domain.VSysDeptMemberUser;
 import tech.hljzj.infrastructure.vo.VSysUser.base.VSysUserQueryBaseVo;
 
-import java.io.Serial;
 import java.util.Objects;
 import java.util.function.Consumer;
 
 @Getter
 @Setter
 public class VSysDeptMemberUserQueryVo extends VSysUserQueryBaseVo<VSysDeptMemberUser> {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /**
      * 这里可以让用户自行组合

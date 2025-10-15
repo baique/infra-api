@@ -2,9 +2,9 @@ package tech.hljzj.infrastructure.vo.SysDeptIdentity.base;
 
 import lombok.Getter;
 import lombok.Setter;
-import java.io.Serializable;
-
 import tech.hljzj.infrastructure.domain.SysDeptIdentity;
+
+import java.io.Serializable;
 
 /**
  * 岗位管理 sys_dept_identity_ 

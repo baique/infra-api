@@ -1,10 +1,11 @@
 package tech.hljzj.infrastructure.vo.SysDeptIdentity.base;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import java.io.Serializable;
-import com.alibaba.excel.annotation.ExcelProperty;
 import tech.hljzj.infrastructure.domain.SysDeptIdentity;
+
+import java.io.Serializable;
 
 
 /**

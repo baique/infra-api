@@ -284,8 +284,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     /**
      * 修改角色的过期时间
-     * @param userId 用户标识
-     * @param roleId 角色标识
+     *
+     * @param userId      用户标识
+     * @param roleId      角色标识
      * @param expiredTime 过期时间
      * @return 是否成功修改
      */
@@ -387,7 +388,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 return true;
             }
             return f.getExpiredTime().after(loginDate);
-        }).toList();
+        }).collect(Collectors.toList());
 
         SysRoleQueryVo q = new SysRoleQueryVo();
         LambdaQueryWrapper<SysRole> queryWrapper = q.buildQueryWrapper();
@@ -450,9 +451,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public void mandatoryLogout(String userId) {
         Collection<String> tokenList = sessionStoreDecorator.getUserTokens(userId);
-        tokenList.forEach(f -> {
-            sessionStoreDecorator.removeToken(f);
-        });
+        tokenList.forEach(sessionStoreDecorator::removeToken);
     }
 
     @Override
@@ -485,6 +484,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (user == null) {
             throw UserException.defaultError("用户名或密码错误导致失败");
         }
+
+        // 检查新旧密码是否相同
+        if (StrUtil.equals(AppConst.YES, sysConfigService.getValueByKey(AppConst.CONFIG_VALIDATE_PASSWORD_EQ))) {
+            if (oldPassword.equals(newPassword)) {
+                throw UserException.defaultError("新旧密码不允许相同");
+            }
+        }
+
         // 临时设置为不检查
         user.setPasswordPolicy(AppConst.PASSWORD_POLICY.NEVER);
         validatePasswordStorage(newPassword, user);

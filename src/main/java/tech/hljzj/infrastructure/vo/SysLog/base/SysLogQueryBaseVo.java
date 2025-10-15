@@ -8,7 +8,6 @@ import lombok.Setter;
 import tech.hljzj.framework.pojo.form.PageDomain;
 import tech.hljzj.infrastructure.domain.SysLog;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.function.Consumer;
 @Getter
 @Setter
 public class SysLogQueryBaseVo extends PageDomain implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /**
      * id_

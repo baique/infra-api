@@ -9,7 +9,7 @@ import lombok.Setter;
 import tech.hljzj.framework.service.entity.ConfigData;
 import tech.hljzj.framework.service.sort.ISort;
 
-import java.io.Serial;
+
 
 /**
  * 系统配置 sys_config
@@ -21,7 +21,7 @@ import java.io.Serial;
 @Setter
 @TableName(value = "sys_config_",autoResultMap = true)
 public class SysConfig extends ConfigData implements ISort {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
 
     /**

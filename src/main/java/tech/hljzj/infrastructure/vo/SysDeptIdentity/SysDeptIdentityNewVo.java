@@ -2,7 +2,7 @@ package tech.hljzj.infrastructure.vo.SysDeptIdentity;
 
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.infrastructure.vo.SysDeptIdentity.base.*;
+import tech.hljzj.infrastructure.vo.SysDeptIdentity.base.SysDeptIdentityNewBaseVo;
 
 /**
  * 岗位管理 sys_dept_identity_ 

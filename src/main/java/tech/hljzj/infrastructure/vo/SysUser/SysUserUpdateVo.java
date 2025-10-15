@@ -2,7 +2,7 @@ package tech.hljzj.infrastructure.vo.SysUser;
 
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.infrastructure.vo.SysUser.base.*;
+import tech.hljzj.infrastructure.vo.SysUser.base.SysUserUpdateBaseVo;
 
 import java.util.Map;
 

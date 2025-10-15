@@ -2,7 +2,7 @@ package tech.hljzj.infrastructure.vo.SysMenu;
 
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.infrastructure.vo.SysMenu.base.*;
+import tech.hljzj.infrastructure.vo.SysMenu.base.SysMenuNewBaseVo;
 
 /**
  * 菜单管理 sys_menu 

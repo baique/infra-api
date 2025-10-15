@@ -2,9 +2,9 @@ package tech.hljzj.infrastructure.vo.SysDeptRole.base;
 
 import lombok.Getter;
 import lombok.Setter;
-import java.io.Serializable;
-
 import tech.hljzj.infrastructure.domain.SysDeptRole;
+
+import java.io.Serializable;
 
 /**
  * 部门关联角色 sys_dept_role_ 

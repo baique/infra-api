@@ -12,6 +12,9 @@ public class AppConst {
     public static final String CONFIG_PASSWORD_STRENGTH = "password_strength";
     public static final String CONFIG_PASSWORD_SCORE = "password_score";
     public static final String CONFIG_PASSWORD_STRENGTH_DESC = "password_strength_desc";
+    public static final String CONFIG_PASSWORD_EXPIRED = "password_expired";
+    public static final String CONFIG_VALIDATE_PASSWORD_EQ = "password_not_eq";
+    public static final String CONFIG_ENABLE_BIND_IP_CHECK = "enable_bind_ip_check";
 
     /**
      * 密码策略

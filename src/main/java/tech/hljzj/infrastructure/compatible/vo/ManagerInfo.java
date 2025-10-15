@@ -26,7 +26,8 @@ public class ManagerInfo {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ManagerInfo that)) return false;
+        if (!(o instanceof ManagerInfo)) return false;
+        ManagerInfo that = (ManagerInfo) o;
         return Objects.equals(getId(), that.getId());
     }
 

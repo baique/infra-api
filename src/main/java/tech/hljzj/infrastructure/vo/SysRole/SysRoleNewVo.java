@@ -2,7 +2,7 @@ package tech.hljzj.infrastructure.vo.SysRole;
 
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.infrastructure.vo.SysRole.base.*;
+import tech.hljzj.infrastructure.vo.SysRole.base.SysRoleNewBaseVo;
 
 /**
  * 角色管理 sys_role 

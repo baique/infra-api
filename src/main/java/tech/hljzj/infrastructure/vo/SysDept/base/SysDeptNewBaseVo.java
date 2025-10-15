@@ -2,13 +2,10 @@ package tech.hljzj.infrastructure.vo.SysDept.base;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serial;
-import java.io.Serializable;
-
 import tech.hljzj.infrastructure.domain.SysDept;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 /**
  * 组织机构 sys_dept_ 
@@ -19,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class SysDeptNewBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /**
      * 上级组织

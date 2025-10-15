@@ -52,7 +52,7 @@ public class TokenAuthenticateService implements SecurityProvider {
 
     private UserInfo tokenAuth(String token, boolean grantSuperAdminPermission) {
         Optional<TokenAuthentication> user = sessionStoreDecorator.getUserByToken(token);
-        if (user.isEmpty()) {
+        if (!user.isPresent()) {
             throw UserException.defaultError("登录动作执行失败,因为传入了一个无效的会话凭据");
         }
 

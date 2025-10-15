@@ -5,7 +5,6 @@ import lombok.Setter;
 import tech.hljzj.infrastructure.domain.SysMenu;
 
 import javax.validation.constraints.NotBlank;
-import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -17,7 +16,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class SysMenuNewBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /**
      * 所属应用标识

@@ -2,11 +2,10 @@ package tech.hljzj.infrastructure.vo.SysLog.base;
 
 import lombok.Getter;
 import lombok.Setter;
+import tech.hljzj.infrastructure.domain.SysLog;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
-import tech.hljzj.infrastructure.domain.SysLog;
 
 /**
  * 操作日志 sys_log_ 
@@ -17,7 +16,7 @@ import tech.hljzj.infrastructure.domain.SysLog;
 @Getter
 @Setter
 public class SysLogUpdateBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
 
     /**

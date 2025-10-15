@@ -8,4 +8,5 @@
     <include file="V10001/index.xml" relativeToChangelogFile="true"/>
     <include file="V10002/index.xml" relativeToChangelogFile="true"/>
     <include file="V10003/index.xml" relativeToChangelogFile="true"/>
+    <include file="V10004/index.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

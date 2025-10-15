@@ -2,7 +2,7 @@ package tech.hljzj.infrastructure.vo.SysDictData;
 
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.infrastructure.vo.SysDictData.base.*;
+import tech.hljzj.infrastructure.vo.SysDictData.base.SysDictDataUpdateBaseVo;
 
 /**
  * 字典数据 sys_dict_data 

@@ -1,7 +1,6 @@
 package tech.hljzj.infrastructure.vo.SysMenu.base;
 
 import com.alibaba.excel.annotation.ExcelProperty;
-import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.framework.util.excel.dict.DictConvertHandle;
@@ -9,7 +8,7 @@ import tech.hljzj.framework.util.excel.dict.UseDict;
 import tech.hljzj.infrastructure.code.AppConst;
 import tech.hljzj.infrastructure.domain.SysMenu;
 
-import java.io.Serial;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 
@@ -22,7 +21,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class SysMenuListBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /**
      * bigint

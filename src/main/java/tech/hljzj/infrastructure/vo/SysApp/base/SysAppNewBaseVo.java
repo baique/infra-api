@@ -2,13 +2,10 @@ package tech.hljzj.infrastructure.vo.SysApp.base;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serial;
-import java.io.Serializable;
-
 import tech.hljzj.infrastructure.domain.SysApp;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 /**
  * 应用管理 sys_app 
@@ -19,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class SysAppNewBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /**
      * 应用标识

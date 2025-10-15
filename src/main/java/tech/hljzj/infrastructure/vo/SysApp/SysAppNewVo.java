@@ -2,7 +2,7 @@ package tech.hljzj.infrastructure.vo.SysApp;
 
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.infrastructure.vo.SysApp.base.*;
+import tech.hljzj.infrastructure.vo.SysApp.base.SysAppNewBaseVo;
 
 /**
  * 应用管理 sys_app 

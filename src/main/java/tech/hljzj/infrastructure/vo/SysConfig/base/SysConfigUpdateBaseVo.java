@@ -5,7 +5,6 @@ import lombok.Setter;
 import tech.hljzj.infrastructure.domain.SysConfig;
 
 import javax.validation.constraints.NotBlank;
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -18,7 +17,7 @@ import java.util.Map;
 @Getter
 @Setter
 public class SysConfigUpdateBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
 
     /**

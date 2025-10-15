@@ -8,7 +8,6 @@ import tech.hljzj.framework.util.excel.dict.UseDict;
 import tech.hljzj.infrastructure.domain.SysDept;
 import tech.hljzj.infrastructure.vo.SysUser.convert.DeptDictLoader;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 
@@ -21,7 +20,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class SysDeptListBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /**
      * id_

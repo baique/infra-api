@@ -435,7 +435,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
             .peek(f -> {
                 sourceMapping.put(f.getRoleId(), deptNameMapping.get(f.getDeptId()));
             })
-            .toList();
+            .collect(Collectors.toList());
         SysRoleQueryVo q = new SysRoleQueryVo();
         LambdaQueryWrapper<SysRole> queryWrapper = q.buildQueryWrapper();
         if (CollUtil.isEmpty(sysDeptRoles)) {

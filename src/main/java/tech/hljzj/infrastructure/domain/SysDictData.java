@@ -9,7 +9,7 @@ import lombok.Setter;
 import tech.hljzj.framework.service.entity.DictData;
 import tech.hljzj.framework.service.sort.ISort;
 
-import java.io.Serial;
+
 
 /**
  * 字典数据 sys_dict_data
@@ -22,7 +22,7 @@ import java.io.Serial;
 @TableName(value = "sys_dict_data_", autoResultMap = true)
 
 public class SysDictData extends DictData implements ISort {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
 
     /**

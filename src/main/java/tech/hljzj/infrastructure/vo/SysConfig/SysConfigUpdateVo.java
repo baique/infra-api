@@ -2,7 +2,7 @@ package tech.hljzj.infrastructure.vo.SysConfig;
 
 import lombok.Getter;
 import lombok.Setter;
-import tech.hljzj.infrastructure.vo.SysConfig.base.*;
+import tech.hljzj.infrastructure.vo.SysConfig.base.SysConfigUpdateBaseVo;
 
 /**
  * 系统配置 sys_config 

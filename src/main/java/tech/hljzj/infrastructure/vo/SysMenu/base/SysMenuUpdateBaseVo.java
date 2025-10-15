@@ -2,13 +2,10 @@ package tech.hljzj.infrastructure.vo.SysMenu.base;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serial;
-import java.io.Serializable;
-
 import tech.hljzj.infrastructure.domain.SysMenu;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 /**
  * 菜单管理 sys_menu 
@@ -19,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class SysMenuUpdateBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
 
     /**

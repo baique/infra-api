@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.framework.config.mybatis.JsonTypeHandler;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -21,7 +20,7 @@ import java.util.Map;
 @Setter
 @TableName(value = "sys_user_ext_attr_")
 public class SysUserExtAttr implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
 
     /**

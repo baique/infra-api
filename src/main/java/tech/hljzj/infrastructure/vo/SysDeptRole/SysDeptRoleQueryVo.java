@@ -1,10 +1,11 @@
 package tech.hljzj.infrastructure.vo.SysDeptRole;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.infrastructure.domain.SysDeptRole;
-import tech.hljzj.infrastructure.vo.SysDeptRole.base.*;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import tech.hljzj.infrastructure.vo.SysDeptRole.base.SysDeptRoleQueryBaseVo;
+
 import java.util.function.Consumer;
 
 /**

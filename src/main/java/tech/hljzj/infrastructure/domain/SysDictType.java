@@ -1,12 +1,15 @@
 package tech.hljzj.infrastructure.domain;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 import tech.hljzj.framework.pojo.dto.BizBaseEntity;
 import tech.hljzj.framework.service.sort.ISort;
 
-import java.io.Serial;
+
 
 /**
  * 字典组 sys_dict_type
@@ -18,7 +21,7 @@ import java.io.Serial;
 @Setter
 @TableName(value = "sys_dict_type_")
 public class SysDictType extends BizBaseEntity implements ISort {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
 
     /**

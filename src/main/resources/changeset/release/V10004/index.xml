@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!--    增加用户绑定IP检查，登录密码全局过期策略-->
+    <changeSet id="2025-10-15-1" author="wa">
+        <sqlFile relativeToChangelogFile="true" path="sql/2025-10-15-1.sql"/>
+    </changeSet>
+</databaseChangeLog>

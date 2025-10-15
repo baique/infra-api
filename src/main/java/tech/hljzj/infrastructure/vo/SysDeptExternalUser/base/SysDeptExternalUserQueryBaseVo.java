@@ -1,19 +1,16 @@
 package tech.hljzj.infrastructure.vo.SysDeptExternalUser.base;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.Getter;
 import lombok.Setter;
+import tech.hljzj.framework.pojo.form.PageDomain;
+import tech.hljzj.infrastructure.domain.SysDeptExternalUser;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.function.Consumer;
-
-import tech.hljzj.infrastructure.domain.SysDeptExternalUser;
-import tech.hljzj.framework.pojo.form.PageDomain;
 
 /**
  * 外部编入人员 sys_dept_external_user_ 
@@ -24,7 +21,7 @@ import tech.hljzj.framework.pojo.form.PageDomain;
 @Getter
 @Setter
 public class SysDeptExternalUserQueryBaseVo extends PageDomain implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /** id_     */
     private String id,idNot,idLike,idPrefix,idSuffix;

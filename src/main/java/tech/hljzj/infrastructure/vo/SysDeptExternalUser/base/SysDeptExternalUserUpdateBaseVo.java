@@ -2,11 +2,9 @@ package tech.hljzj.infrastructure.vo.SysDeptExternalUser.base;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serial;
-import java.io.Serializable;
-
 import tech.hljzj.infrastructure.domain.SysDeptExternalUser;
+
+import java.io.Serializable;
 
 /**
  * 外部编入人员 sys_dept_external_user_ 
@@ -17,7 +15,7 @@ import tech.hljzj.infrastructure.domain.SysDeptExternalUser;
 @Getter
 @Setter
 public class SysDeptExternalUserUpdateBaseVo implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
 
     /**

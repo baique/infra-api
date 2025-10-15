@@ -1,6 +1,8 @@
 package tech.hljzj.infrastructure.util.dict;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 //@Target({ElementType.TYPE,ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)

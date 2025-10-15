@@ -8,7 +8,6 @@ import lombok.Setter;
 import tech.hljzj.framework.pojo.form.PageDomain;
 import tech.hljzj.infrastructure.domain.SysMenu;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.function.Consumer;
@@ -22,7 +21,7 @@ import java.util.function.Consumer;
 @Getter
 @Setter
 public class SysMenuQueryBaseVo extends PageDomain implements Serializable {
-    @Serial
+    
     private static final long serialVersionUID = 1L;
     /** bigint     */
     private String id, idNot, idLike, idPrefix, idSuffix;
