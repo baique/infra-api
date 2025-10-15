@@ -517,12 +517,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         oldPassword = getRawPassword(oldPassword);
         newPassword = getRawPassword(newPassword);
         SysUser user = getById(userId);
+
+        // 检查新旧密码是否相同
+        if (StrUtil.equals(AppConst.YES, sysConfigService.getValueByKey(AppConst.CONFIG_VALIDATE_PASSWORD_EQ))) {
+            if (oldPassword.equals(newPassword)) {
+                throw UserException.defaultError("新旧密码不允许相同");
+            }
+        }
+
         validatePasswordStorage(newPassword, user);
+
+        // 临时设为不检查
+        user.setPasswordPolicy(AppConst.PASSWORD_POLICY.NEVER);
         //这里需要使用登录认证的类似逻辑
         if (localSecurity.validatePassword(oldPassword, user)) {
             try {
                 update(Wrappers.lambdaUpdate(SysUser.class)
                     .eq(SysUser::getId, user.getId())
+                    .set(SysUser::getPasswordPolicy, AppConst.PASSWORD_POLICY.NEVER)
                     .set(SysUser::getPassword, SMUtil.sm3(newPassword))
                     .set(SysUser::getMaskV, swapEncoder.encode(newPassword))
                     .set(SysUser::getLastChangePassword, new Date())
@@ -532,7 +544,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             }
             return;
         }
-        throw UserException.defaultError("原密码错误");
+        throw UserException.defaultError("用户名或密码错误导致失败");
     }
 
 
