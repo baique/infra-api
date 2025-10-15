@@ -71,7 +71,7 @@ public class UserCompatibleController extends MController {
         } catch (IllegalArgumentException | AuthenticationServiceException e) {
             if (e.getCause() instanceof PasswordNotSafeException) {
                 log.warn("客户端请求登录认证失败，因为密码存在问题", e);
-                return BeanUtil.copyProperties(R.code(902).setMsg(e.getMessage()), R.class);
+                return BeanUtil.copyProperties(R.code(902).setMsg(e.getMessage()), R.class).setSubCode(402);
             }
             log.warn("客户端请求登录认证失败", e);
             return BeanUtil.copyProperties(R.code(902).setMsg(e.getMessage()), R.class);
