@@ -1,5 +1,6 @@
 package tech.hljzj.infrastructure.config;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.net.Ipv4Util;
 import cn.hutool.core.util.NumberUtil;
@@ -155,6 +156,12 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
         if (!StrUtil.equals(AppConst.YES, enableValidate)) {
             return;
         }
+        // 保留非空项
+        allowIpList = allowIpList.stream().filter(StrUtil::isNotBlank).collect(Collectors.toList());
+
+        if (CollUtil.isEmpty(allowIpList)) {
+            return;
+        }
         // 没配置的话默认允许所有
         for (String ipRule : allowIpList) {
             String ip = ipRule;
@@ -182,10 +189,10 @@ public class LocalSecurityProvider implements SecurityProvider, InitializingBean
                     log.warn("用户{}使用了被禁止的IP{}进行登录，触发规则:{}", username, ip, ipRule);
                     throw UserException.defaultError("您的设备被禁止登录，如需登录系统，请联系管理员添加您的IP到白名单");
                 }
-                break;
+                return;
             }
-
         }
+        throw UserException.defaultError("您的设备被禁止登录，如需登录系统，请联系管理员添加您的IP到白名单");
     }
 
     /**
